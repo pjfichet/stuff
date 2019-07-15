@@ -1,36 +1,23 @@
 # Shell scripts
 
 Here are kept safe some shell scripts that I find useful.
+They're almost all written in fish, the friendly interactif shell.
 
-`book` is a simple addressbook.
-
-`color` prints some colors in the terminal. That's useful to remind
-about shell color codes and test the configuration of some terminal
-emulators.
-
-`fcul` displays the urls of some programs of the french radio France
-Culture. 
-
-`lorem` prints a lorem ipsum.
-
-`lum` sets the backlight of my screen.
-
-`mimer` display the mimetype of a file, in a format compatible with
-`mhn` from mailutils-mu.
-
-`ripdvd` uses mencoder to rip a dvd.
-
-`showfont.sh` produces a pdf of a glyphs in a font, using heirloom
-troff.
-
-`translate.sh` searches in wordreference.com for some translation. It
-must be renamed to actually work: `enfr`, for instance, will translate
-from english to french.
-
-`urldecode` a url decoder.
-
-`ydl` is a wrapper for youtube-dl, which retrieves the url from the
-X clipboard, download the video, and uses `mpv` to play it.
+- backupusb: backups file in a usb stick.
+- color: prints the color names.
+- lorem: prints a lorem ipsum.
+- lum: change the screen light.
+- m: wrapper for neatmail.
+- mimer.py: build mime files for `m`
+- mimer.sh: how to build mime files.
+- menubar: dmenu2 bar.
+- ripdvd: rip a dvd with mencoder.
+- smartmail: a simple mailer for smartmoontool.
+- statusbar: print a statusbar.
+- temp: show the hardware tempearature.
+- translate.fish: fetch translations in wordreference.com
+- typo: fix typography.
+- ydl: wrapper for youtube-dl.
 
 # installation
 
