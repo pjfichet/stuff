@@ -1,0 +1,23 @@
+#! /usr/bin/fish
+
+sed -e "
+	# espace fine insécable
+	s/:/ :/g
+	s/!/ !/g
+	s/?/ ?/g
+	s/;/ ;/g
+	s/%/ %/g
+	s/€/ €/g
+	# espace insécable
+	#s/:/ :/g
+	s/«/« /g
+	s/»/ »/g
+	# supprime espace + espace fine insécable
+	s/  / /g
+	# supprime espace fine insécable + espace
+	s/  / /g
+	# supprime espace + espace insécable
+	s/  / /g
+	# supprime espace insécable + espace
+	s/  / /g
+" $argv[1]

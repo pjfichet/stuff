@@ -1,0 +1,97 @@
+#!/bin/fish
+
+# ripdvd: copy dvd to harddisk
+
+set ISO "/dev/sr0"
+set MPLAYER_VERBOSE -5
+set DVDCSS_VERBOSE 0
+
+function usage
+	echo "Usage:"
+	echo "    " (basename (status -f)) " -t title -f file [-c codec] [-l language] [-s subtitle]"
+	exit 1
+end
+
+argparse "t/title=" "f/file=" "c/codec=" "l/language=" "s/subtitle=" -- $argv
+or usage
+
+if test -n "$_flag_title" -o -z "$_flag_file"
+	set TITLE "$_flag_title"
+else
+	usage
+end
+
+if test -n "$_flag_file"
+	set FILE "$XDG_VIDEOS_DIR/$_flag_file"
+else
+	usage
+end
+
+if test -n "$_flag_codec"
+	set CODEC "$_flag_codec"
+else
+	set CODEC "x264"
+end
+
+if test -n "$_flag_language"
+	set ALANG "-alang $_flag_language"
+else
+	set ALANG "-alang fr"
+end
+
+if test -n "$_flag_subtitle"
+	set SLANG "-slang $_flag_subtitle"
+else
+	set SLANG "-nosub"
+end
+
+echo "mencoder dvd://$TITLE $ALANG $SLANG -ovc $CODEC -o $FILE"
+
+if test "$CODEC" = "x264"
+	#http://www.mplayerhq.hu/DOCS/HTML/en/menc-feat-x264.html
+	# First pass: we are just collecting information, so the normal output is thrown away.
+	mencoder -dvd-device "$ISO" dvd://"$TITLE" $ALANG $SLANG \
+	-msglevel all=0:statusline=5 \
+	-nosound \
+	-ovc x264 -x264encopts \
+	threads=auto:pass=1:log=0:bitrate=800:subq=1:frameref=1 \
+	-o $FILE.avi.1
+	# Second pass: here we compress the video track using the information from the first step.
+	mencoder -dvd-device "$ISO" dvd://"$TITLE" $ALANG $SLANG \
+	-msglevel all=0:statusline=5 \
+	-oac mp3lame -lameopts br=320 \
+	-ovc x264 -x264encopts \
+	threads=auto:pass=2:log=0:bitrate=800:subq=5:frameref=2:8x8dct:bframes=3:b_pyramid=normal:weight_b \
+	-vf scale=-1:-10,harddup \
+	-o $FILE.avi
+	rm divx2pass.log divx2pass.log.mbtree
+end
+
+if test $CODEC = q
+	mencoder -dvd-device "$ISO" dvd://"$TITLE" $ALANG $SLANG \
+	-oac mp3lame -lameopts br=160 \
+	-ovc x264 -x264encopts \
+	threads=auto:subq=1:frameref=1 \
+	-o $FILE.avi
+end
+
+
+if test $CODEC = mp3
+	echo "mencoder dvd://$TITLE $ALANG $SLANG -ovc $CODEC -o $FILE"
+	# If n passed, use normal quality (recommended)
+	mencoder dvd://$TITLE $ALANG $SLANG \
+	-msglevel all=0:statusline=5 \
+	-oac mp3lame -lameopts br=160:cbr \
+	-ovc lavc -lavcopts vcodec=mpeg4:vhq \
+	-vf scale -zoom -xy 640 \
+	-o $FILE.avi
+	# -ni \
+end
+
+echo ""
+exit
+
+# mplayer dvd:// -identify -frames 0 | grep LENGTH
+# mplayer dvd://$TITLE -dumpstream -dumpfile $TITLE.vob
+# mencoder dvd://$TITLE -ovc copy -oac copy -of mpeg -mpegopts format=dvd:tsaf $FILE.mpg
+# lavcopts vhq:aspect=16/9

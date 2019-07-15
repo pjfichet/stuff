@@ -1,0 +1,6 @@
+#! /bin/fish
+
+echo $XAPPS | sed 's/ /\n/g' | sort \
+	| dmenu -fn liberation-mono-11 -h 25 -x 100 -w 1275 -nb '#282c34' -nf '#abb2bf' -sb '#61afef' -sf '#ffffff' \
+	-p '>' -r \
+	| xargs sh -c

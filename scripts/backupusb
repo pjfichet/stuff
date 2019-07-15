@@ -1,0 +1,36 @@
+#! /usr/bin/fish
+
+set USB sdb1
+set BUP_DIR /media/$USB/$USER/bup
+
+function backup
+	echo -- backup $argv[1]
+	set -l before (du -sh $BUP_DIR | cut -d '	' -f 1)
+	bup index $argv[1]
+	bup save -n (basename $argv[1]) $argv[1]
+	set -l after (du -sh $BUP_DIR | cut -d '	' -f 1)
+	echo $BUP_DIR/$argv[1]: $before '->' $after
+end
+
+function restore
+	bup ls -d $argv[1]
+	bup restore -C $HOME/bup $argv[1]/latest
+end
+
+
+udevil mount /dev/$USB /media/$USB; or exit 1
+test -d $BUP_DIR; or mkdir -p $BUP_DIR; or exit 1
+
+if test (count $argv) -gt 1; and test $argv[1] = "-r"
+	for dir in $argv[2..-1]
+		restore $dir
+	end
+else
+	for dir in $BACKUP
+		backup $dir
+	end
+end
+
+udevil umount /media/$USB
+echo unmounted /media/$USB
+

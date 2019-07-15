@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/pj/dev/src/jeux/awa/src'
+let g:netrw_dirhist_2='/home/pj/var/doc/coop'
+let g:netrw_dirhist_3='/home/pj/var/mud/ithir/Theleria'
+let g:netrw_dirhist_4='/home/pj/dev/src/sql-bp/old/20190701'
+let g:netrw_dirhist_5='/home/pj/dev/src/neat/neatrefer'
+let g:netrw_dirhist_6='/home/pj'
+let g:netrw_dirhist_7='/home/pj/.config/waybar'

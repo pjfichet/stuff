@@ -1,0 +1,3 @@
+#! /bin/fish
+
+cat /sys/class/thermal/*/temp

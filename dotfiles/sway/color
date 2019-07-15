@@ -1,0 +1,17 @@
+set $bg_dark #282C34
+set $bg_light #3C414F
+set $fg_dark #5C6370
+set $fg_normal #abb2bf
+set $fg_light #ffffff
+set $yellow #D19A66
+set $orange #orange
+set $red #BE5046
+set $pink #pink
+set $purple #purple
+set $blue #61afef
+set $teal #teal
+set $green #98c379
+set $brown #brown
+set $light_blue #88BFFF
+set $beige #beige
+

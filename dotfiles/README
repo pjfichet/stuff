@@ -1,0 +1,7 @@
+# dotfiles
+
+shell: fish
+editor: vis and vim
+window manager: sway
+terminal: termite
+music player: mpc

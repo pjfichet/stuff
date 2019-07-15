@@ -1,0 +1,45 @@
+# Font
+[options]
+font = Liberation Mono 12
+allow_bold = false
+bold_is_bright = true
+mouse_autohide = true
+
+[colors]
+#base03 base0
+background = #background1
+foreground = #foreground2
+foreground_bold = #foreground3
+
+# Black, Gray
+# base02 base01
+color0 = #background2
+color8 = #foreground1
+
+# Red (31)
+color1 = #red
+color9 = #light_red
+
+# Green (32)
+color2 = #green
+color10 = #light_green
+
+# Yellow (33)
+color3 = #yellow
+color11 = #light_yellow
+
+# Blue (34)
+color4 = #blue
+color12 = #light_blue
+
+# magenta (35)
+color5 = #magenta
+color13 = #light_magenta
+
+# cyan (36)
+color6 = #cyan
+color14 = #light_cyan
+
+# Silver white (37)
+color7 = #foreground2
+color15 = #foreground3

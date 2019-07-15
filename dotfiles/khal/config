@@ -1,0 +1,32 @@
+[calendars]
+
+[[default]]
+path = ~/var/dav/cal/default
+color = light green
+
+[[airbnb]]
+path = ~/var/dav/cal/airbnb
+color = light magenta
+
+[[birthdays]]
+path = ~/var/dav/card/default
+type = birthdays
+color = yellow
+
+[default]
+default_calendar = default
+highlight_event_days = true
+print_new = event
+timedelta = 7d
+
+[locale]
+timeformat = %H:%M
+dateformat = %d/%m
+longdateformat = %d/%m/%Y
+datetimeformat = %d/%m %Hh%M
+longdatetimeformat = %d/%m/%Y %Hh%M
+
+[keybindings]
+save = S
+external_edit = e
+export = E

@@ -1,0 +1,129 @@
+#! /usr/bin/fish 
+
+set date
+set wifi
+set cpu
+set memory
+set temp
+set vol
+set light
+set mpd
+
+function getdate
+	set date (date +'%A %d %B %Y, %H:%M')
+end
+
+function getwifi
+	set wifi (awk 'NR==3 {print substr($3, 1, 2)}''' /proc/net/wireless)
+	if test $wifi -lt 40
+		set wifi " $wifi%  "
+	else
+		set wifi
+	end
+end
+
+function getcpu
+	set cpu (grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {split(usage, a, "."); print a[1]}')
+	if test $cpu -lt 75
+		set cpu
+	else
+		set cpu " $cpu%  "
+	end
+end
+
+function getmemory
+	set memtotal (sed -n 's/MemTotal: *\(.*\) kB/\1/p' /proc/meminfo)
+	set memavail (sed -n 's/MemAvailable: *\(.*\) kB/\1/p' /proc/meminfo)
+	set memory (math "$memavail/$memtotal*100" | sed "s/\..*//")
+	if test $memory -gt 25
+		set memory
+	else
+		set memory " $memory%  "
+	end
+end
+
+function gettemp
+	set temp (cat /sys/class/thermal/thermal_zone2/temp | sed 's/...$//' )
+	if test $temp -gt 50
+		set temp " $temp°C  "
+	else if test $temp -gt 45
+		set temp " $temp°C  "
+	else
+		set temp
+	end
+end
+
+function getvol
+	set vol (amixer sget Master | awk '/%/ {gsub(/[\[%\]]/,""); print $4}')
+	if test $vol = 0
+		set vol " $vol%  "
+	else if test $vol -lt 35
+		set vol " $vol%  "
+	else
+		set vol
+		#  $vol%
+	end
+end
+
+function getlight
+	set light (awk '{light=$1/937*100} END {split(light, a, "."); print a[1]}' < /sys/class/backlight/intel_backlight/brightness)
+	if test $light -lt 50
+		set light " $light%  "
+	else if test $light -lt 80
+		set light " $light%  "
+	else
+		set light
+	end
+end
+
+function getmpd
+	set mpd (mpc | awk 'NR==1 && $1 != "volume:" {v=$0}
+	END { if (length(v)>50) {v=substr(v,1,47)"..."}; print v}')
+end
+
+
+function show
+	set -l infolength (echo "$wifi$cpu$memory$temp$vol$light$mpd" | wc -m)
+	set -l spacelength "%"(math 108 - $infolength)"s"
+	echo "$wifi$cpu$memory$temp$vol$light$mpd"(printf "$spacelength" "")"$date "
+	#echo "$wifi  $cpu  $memory  $temp  $vol  $light      $mpd                                    $date "
+end
+
+
+while true
+	getdate
+	show
+	sleep 1
+
+	getvol
+	getlight
+	getmpd
+	show
+	sleep 1
+
+	getwifi
+	getvol
+	getlight
+	show
+	sleep 1
+
+	getcpu
+	getvol
+	getlight
+	show
+	sleep 1
+
+	getmemory
+	getvol
+	getlight
+	show
+	sleep 1
+
+	gettemp
+	getvol
+	getlight
+	show
+	sleep 1
+
+end
+

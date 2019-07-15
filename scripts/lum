@@ -1,0 +1,35 @@
+#! /bin/fish
+
+set FILE "/sys/class/backlight/intel_backlight/brightness"
+set LUM (cat $FILE)
+
+set MAX 937
+set MORE (math $LUM + 100)
+set LESS (math $LUM - 100)
+
+if test $MORE -gt $MAX
+	set MORE $MAX
+end
+if test $LESS -lt 0
+	set LESS 0
+end
+
+if test (count $argv) = 0
+	if test $LUM = 0
+		echo $MAX > $FILE
+	else
+		echo 0 > $FILE
+	end
+	exit 0
+end
+
+switch $1
+	case "show"
+		echo "cur: $LUM, more: $MORE, less: $LESS"
+	case "more"
+		echo $MORE > $FILE
+	case "less"
+		echo $LESS > $FILE
+	case '*'
+		echo "lum [show|more|less]"
+end
