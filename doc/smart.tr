@@ -1,0 +1,46 @@
+.H2 SmartMonTools
+.H3 Options courantes
+.PI "smartctl -i -d ata /dev/sda"
+check if sata disk support smart
+.PI "smartctl -s on -d ata /dev/sda"
+enable smart
+.PI "smartctl -c /dev/sda"
+know which tests are available
+.PI "smartctl -t conveyance /dev/sda"
+run a r*d test
+.PI "smartctl -t short /dev/sda"
+run the test
+.PI "smartctl -l selftest /dev/sda"
+check the test
+.PI "smartctl -H /dev/sda"
+check health status
+.PI "smartctl -l error /dev/sda"
+check if there are errors
+.PI "smartctl -a /dev/sda"
+check all smart details
+.PI "smartctl --smart=on --offlineauto=on --saveauto=on /dev/sda"
+init script
+.H3 Output format
+.PI "VALUE"
+value mesurée sur le disque.
+.PI "WORST"
+plus petite valeur mesurée.
+.PI "TRESH"
+valeur en deça de laquelle les problèmes arrivent.
+.PI "Old-age"
+si WORST < TRESH, le disque est simplement vieux.
+.PI "Pre-fail"
+si WORST < TRESH, une panne est imminente.
+.H3 /etc/smartd.conf
+.vS sh
+# -a: monitor all attributes
+# -o on: enable automatic offline data collection
+# -S on: enable automatic attribute autosave
+# -n standby,q: do not run test nor send lods when in standby
+# -s ...: schedule test
+# (S/../.././10): short test every day at 10:00.
+# (L/../../6/11): long test saturday at 11:00.
+# -W 4,40,40: warn when temperatures reach 40°C
+# -M exec script: exec script to warn.
+/dev/sda -a -o on -S on -n standby,q -s (S/../.././10|L/../../6/11) -W 4,38,40 -m <nomailer> -M exec /home/pj/.local/bin/smartmail
+.vE

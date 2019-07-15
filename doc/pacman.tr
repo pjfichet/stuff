@@ -1,0 +1,46 @@
+.H2 Pacman
+.H3 Options courantes
+.PI "\*B-Sy\*B"
+met à jour la base
+.PI "\*B-Syu\*B"
+met à jour le système
+.PI "\*B-S\*B \*Ipaquet\*I"
+install paquet
+.PI "\*B-Rcsn\*B \*Ipaquet\*I"
+supprime paquet et ses dépendances inusités
+.PI "\*B-Ss\*B \*Imotif\*I"
+recherche motif dans le dépot
+.PI "\*B-Qs\*B \*Imotif\*I"
+recherche motif dans les paquets installés
+.PI "\*B-Sc\*B"
+vide le cache de pacman (paquet inusités)
+.PI "\*B-Scc*\*B"
+vide tout le cache de pacman
+.PI "\*B-Qdt\*B"
+liste les paquets orphelins
+.PI "\*B-Ql\*B \*Ipaquet\*I"
+liste des fichiers d'un paquet installé
+.PI "\*B-Qo\*B \*I/chemin/fichier\*I"
+donne le nom du paquet contenant ce fichier
+.PI "\*B-Si\*B \*Ipaquet\*I"
+donne des informations sur le paquet du dépôt
+.PI "\*B-Qi\*B \*Ipaquet\*I"
+donne des informations sur le paquet installé
+.H3 Aide vimdiff
+.PI "\*Bdo\*B"
+Get changes from other window into the current window.
+.PI "\*Bdp\*B"
+Put the changes from current window into the other window.
+.PI "\*B]\*B"
+Jump to the next change.
+.PI "\*B[c\*B"
+Jump to the previous change.
+.PI "\*BCtrl W + Ctrl W\*B"
+Switch to the other split window.
+.H3 Makepkg
+.vS sh
+vi PKGBUILD
+makepkg
+su -
+pacman -U package*.pkg.tar.xz
+.vE

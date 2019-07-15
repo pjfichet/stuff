@@ -1,0 +1,37 @@
+.H2 Contextual Regular expressions
+.H3 Commands
+.PI x/pattern/
+extract all patterns
+.PI y/pattern/
+rejects all patterns
+.PI g/pattern/
+Run the following command if the context contains pattern.
+.PI v/pattern/
+Run the following command if the context does not contain
+pattern.
+.PI c/pattern/
+Change context by pattern.
+.PI a/pattern/
+Append pattern to the context.
+.PI i/pattern/
+Insert pattern before the context.
+.PI =
+Print line and character numbers.
+.PI ! command
+Execute a shell command.
+.PI > command
+Pipe context to the shell command.
+.PI < command
+Replaces context by the output of the shell command.
+.PI | command
+Pipe context to the shell command, and replaces it
+by the output of the command.
+.PI m address
+Move context to address.
+.PI t address
+Copy (type) the context to address.
+.PI s/pattern/replacement
+Substitute the first occurence of pattern by replacement.
+An '&' in the replacement stands for the matching pattern.
+.PI s3/pattern/replacement
+Substitute the third occurence of pattern by replacement.

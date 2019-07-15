@@ -1,0 +1,18 @@
+.H2 Github
+.H3 New directory
+.vS sh
+vi .gitignore
+git init
+git add
+git commit -m "message"
+.vE
+.H3 New repository
+.PP
+Go to
+.LU http://github.com ,
+log in, click \*Inew repository\*I, click \*Icreate repository\*I.
+.H3 Push the repository
+.vS sh
+git remote add origin git@github.com:username/<new_repo>
+git push -u origin master
+.vE

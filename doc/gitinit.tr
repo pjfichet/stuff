@@ -1,0 +1,67 @@
+.H2 Git init
+.H3 Creating a repository
+.PP
+Create a new git repository.
+.vS sh
+	mkdir <project>
+	cd <project>
+	git init
+.vE
+Configure the repository.
+.vS sh
+	git config user.name <name>
+	git config user.name
+	git config user.email <mail>
+	git config user.emal
+.vE
+If you have not cloned an existing repository and want to connect
+your repository to a remote server, you need to add it.
+.vS sh
+	git remote add origin <server>
+.vE
+.H3 Pushing changes
+.PP
+your local repository consists of three "trees" maintained by git.
+the first one is your Working Directory which holds the actual
+files. the second one is the Index which acts as a staging area
+and finally the HEAD which points to the last commit you've made.
+.vS sh
+	# Add changes to the index
+	git add <file>
+	git add *
+	# actually commit these changes
+	git commit -m "Commit message"
+.vE
+Now the file is committed to the head of the local repository,
+but need to be pushed to the remote repository.
+.vS sh
+	# push changes of the master branch to the remote repository
+	git push origin master
+.vE
+.H3 Working with branches
+.vS sh
+	# create a new branch named "feature_x" and switch to it using
+	git checkout -b <branch>
+	# switch back to master
+	git checkout master
+	#push the branch to your remote repository
+	git push origin <branch>
+	# delete the branch 
+	git branch -d <branch>
+	git push origin --delete <branch>
+.vE
+Before merging changes, you can also preview them by using
+.vS sh
+	git diff <source_branch> <target_branch>
+.vE
+To merge another branch into your active branch (e.g. master), use
+.vS sh
+	git merge <branch>
+.vE
+In both cases git tries to auto-merge changes. Unfortunately, this
+is not always possible and results in conflicts. You are
+responsible to merge those conflicts manually by editing the files
+shown by git. After changing, you need to mark them as merged with
+.vS sh
+	git add <filename>
+.vE
