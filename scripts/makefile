@@ -18,11 +18,11 @@ uninstall:
 	-rm $(ALL)
 
 $(BINDIR):
-	mkdir -r $@
+	mkdir -p $@
 
 $(LANG:%=$(BINDIR)/%): $(BINDIR)/translate.fish
 	cd $(BINDIR) && ln -s translate.fish $(@F)
 
-$(BINDIR)/%: %
+$(BINDIR)/%: % $(BINDIR)
 	install -c -m 755 $< $@
 
