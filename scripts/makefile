@@ -23,6 +23,6 @@ $(BINDIR):
 $(LANG:%=$(BINDIR)/%): $(BINDIR)/translate.fish
 	cd $(BINDIR) && ln -s translate.fish $(@F)
 
-$(BINDIR)/%: % $(BINDIR)
-	install -c -m 755 $< $@
+$(BINDIR)/%: % | $(BINDIR)
+	install -m 755 $< $@
 
