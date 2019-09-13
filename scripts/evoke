@@ -1,0 +1,145 @@
+#! /usr/bin/env python
+
+import sys
+
+rituals = {
+	"Refrain of the Morning Sun": [0, 0, 0, 0, 1],
+	"Song of the Three Sisters": [0, 0, 2, 2, '2'],
+	"Lament of the Last Child": [0, 0, 1, 0, -2],
+	"Ballad of the Last Knight": [-1, 0, 0, 0, 3],
+	"An'ell Nectrac": [0, '1', 0, 0, 0],
+	"Bellatuus Mortana": [0, 1, -1, 0, 0],
+	"The Six Circles": [0, 0, 1, 0, 0],
+	"Dance of the Harvest": [0, 0, -2, 0, 0],
+	"The Nine Drops": [1, 0, 0, 0, 0],
+	"The Shorn Soul": [-3, 1, 0, 0, 0],
+	"Coin of the Realm": ['3', 0, 2, 0, 0],
+	"The Dark Rune": [0, 0, 0, 1, 0],
+	"Sign of the Snake": [0, 0, 1, 2, 0],
+	"Mark of the Claw": [0, 0, 0, 3, 0]
+}
+
+spells = {
+	"Aquiel's Auspex": [-2, 0, 1, -4, 3],
+	"Aquiel's Portent": [1, -1, 2, 4, 3],
+	"Aquiel's Stalker": [-2, 4, -5, 4, 2],
+	"Attunement": [3, -4, -2, 1, 1],
+	"Blacksight": [1, 0, -1, -2, 1],
+	"Dreamweave": [-2, 1, 0, -3, 2],
+	"Hex": [1, -2, 2, 3, 0],
+	"Lenoir's Abrogation": [3, 2, 2, 5, 2],
+	"Peripheral Visions": [1, -1, 0, 2, -1],
+	"Riddle of Babel": [-2, 3, 0, 3, 0],
+	"Slithershade": [2, -3, -1, -5, 3],
+	"Sphere of Lenoir": [2, 2, 3, 5, -2],
+	"Tanios' Quiescence": [0, 0, -4, 3, 4],
+	"Void of Fire": [-2, 1, 0, 2, 0],
+	"Void Messenger": [0, 3, 2, -3, 0],
+	"Voidsense": [0, 2, 0, 3, -3],
+	"Voidtouch": [0, 2, 0, -3, 3]
+}
+
+
+full = rituals.copy()
+for ritual in rituals:
+	name="invert " + ritual
+	array = [0, 0, 0, 0, 0]
+	for num in (0, 1, 2, 3, 4):
+		if isinstance(rituals[ritual][num], str):
+			array[num] = rituals[ritual][num]
+		else:
+			array[num] = -rituals[ritual][num]
+	full[name] = array
+
+rituals = full
+
+def search(path, ritual, shift):
+	if ritual is not None:
+		path.append(ritual)
+		if len(path) > limit:
+			return
+		if limit >= 5 and len(pathlist) > 0:
+			return
+		for i in range(5):
+			value=rituals[ritual][i]
+			if isinstance(value, str):
+				if shift[i] < 0:
+					value = - int(value)
+				if shift[i] >= 0:
+					value = int(value)
+				if ritual.startswith('invert'):
+						value = -value
+			if shift[i] != 0:
+				shift[i] = shift[i] + value	
+	if shift[0] == 0 and shift[1] == 0 and shift[2] == 0 \
+		and shift[3] == 0 and shift[4] == 0:
+		pathlist.append(path)
+		return
+	for ritual in rituals:
+		search(path.copy(), ritual, shift.copy())
+
+def shortest(pathlist):	
+	if pathlist != []:
+		shortest=pathlist[0]
+		for path in pathlist:
+			if len(shortest) > len(path):
+				shortest=path
+		print(shortest)
+
+def shift(focus, spell):	
+	moons = [0, 0, 0, 0, 0]
+	moons[0] = focus[0] + spells[spell][0]	
+	moons[1] = focus[1] + spells[spell][1]	
+	moons[2] = focus[2] + spells[spell][2]	
+	moons[3] = focus[3] + spells[spell][3]	
+	moons[4] = focus[4] + spells[spell][4]
+	return moons
+
+def usage():
+	print("evoke <focus>")
+	print("evoke <spell> <focus>")
+	print("    Focus: Arien Bala Circ Luna Elli")
+	print("    Spells:")
+	for spell in spells:
+		print("        " + spell)
+	sys.exit()
+
+
+focus = [0, 0, 0, 0, 0]
+spell=None
+
+if len(sys.argv) < 6:
+	usage()
+	sys.exit()
+del(sys.argv[0])
+if len(sys.argv) == 6:
+	spell=sys.argv[0]
+	del(sys.argv[0])
+	if spell not in spells:
+		usage()
+if len(sys.argv) != 5:
+	usage()
+for i in range(5):
+	try:
+		focus[i] = int(sys.argv[i])
+	except ValueError:
+		usage()
+
+
+if spell is None:
+	for spell in spells:
+		limit=3
+		pathlist=[]
+		moons = shift(focus, spell)
+		print(spell, moons)
+		search([], None, moons)
+		shortest(pathlist)
+else:
+	limit=7
+	pathlist=[]
+	moons = shift(focus, spell)
+	print(spell, moons)
+	search([], None, moons)
+	shortest(pathlist)
+
+	

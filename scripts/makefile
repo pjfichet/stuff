@@ -5,7 +5,7 @@ LANG=enfr fren
 
 FILES=statusbar backupusb m mimer.py smartmail \
 	lum menubar temp ripdvd translate.fish \
-	ydl typo
+	ydl typo evoke
 
 ALL=$(FILES:%=$(BINDIR)/%) $(LANG:%=$(BINDIR)/%)
 
