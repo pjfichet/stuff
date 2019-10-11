@@ -53,7 +53,8 @@ if test "$CMD" = "box"
 		echo $MAILDIR/box/$argv[2] > $MAILDIR/.box
 		set BOX $MAILDIR/box/$argv[2]
 	end
-	eval $NEATMAIL mk -r -st $MFMT $BOX | sed -e "/^O/d" >$LIST
+	# -st sort thread, sd sort date
+	eval $NEATMAIL mk -r -sd $MFMT $BOX | sed -e "/^O/d" >$LIST
 	sed "$COLORSET" $LIST
 	exit
 end
