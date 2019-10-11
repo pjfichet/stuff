@@ -159,6 +159,17 @@ for letter in A D I M N O R
 		exit
 	end
 end
+
+# edit a new mail
+if test "$CMD" = "draft"
+	if test -f $DRAFT
+		eval $EDITOR $DRAFT
+	else
+ 		echo "No draft <$DRAFT>"
+		exit 1
+	end
+	exit
+end 
 	
 # write a new mail
 if test "$CMD" = "new"
@@ -171,6 +182,7 @@ if test "$CMD" = "new"
 	eval $EDITOR $DRAFT
 	exit
 end
+
 
 # reply to a mail
 if test "$CMD" = "repl"
@@ -284,6 +296,7 @@ m A|D|M|O|R|N   mark the current message
   Answered, Delete, Mark, Old, Read, N
 m next        show the next mail
 m prev        show the previous mail
+m draft       edit the current draft
 m new         write a new mail
 m repl msg     write a reply to msg
 m forw msg     forward msg
