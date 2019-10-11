@@ -24,7 +24,7 @@ set FROMESC "2,\$s/^From />From /"
 set COLORSET "s/^\(N[^\t]*\)/[1;32m\1[0;0m/g; s/^\(I[^\t]*\)/[1;33m\1[0;0m/g"
 
 set BOX (cat $MAILDIR/.box)
-set CUR (cat $MAILDIR/.cur)
+set CUR (cat $MAILDIR/.cur | sed -e "s/\(....\).*/\1/g")
 set BOXES (ls $MAILDIR/box)
 set CMD $argv[1]
 
@@ -87,7 +87,8 @@ end
 # show the next message
 if test "$CMD" = "next"
 	set NUMBER (printf "%04d" $CUR)
-	set NUM (sed -n "/^.$NUMBER/{n;p}" $LIST | sed -e "s/^.0*\([^\t]*\).*/\1/g")
+	# get next line
+	set NUM (awk "/^.$NUMBER/ {getline; print substr(\$1, 3)}" $LIST)
 	if test -z "$NUM"
 		echo "No more messages."
 		exit
@@ -100,7 +101,8 @@ end
 # show the previous message
 if test "$CMD" = "prev"
 	set NUMBER (printf "%04d" $CUR)
-	set NUM (sed -n "/^.$NUMBER/{x;p;d}" $LIST | sed -e "s/^.0*\([^\t]*\).*/\1/g")
+	# get previous line
+	set NUM (awk "/^.$NUMBER/ {print prev} {prev = substr(\$1, 3)}" $LIST)
 	if test -z "$NUM"
 		echo "No previous messages."
 		exit
