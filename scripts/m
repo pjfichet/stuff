@@ -89,7 +89,7 @@ if test "$CMD" = "next"
 	set NUMBER (printf "%04d" $CUR)
 	# get next line
 	set NUM (awk "/^.$NUMBER/ {getline; print substr(\$1, 3)}" $LIST)
-	if test -z "$NUM"
+	if test "$NUM" = "$CUR"
 		echo "No more messages."
 		exit
 	end
@@ -103,7 +103,7 @@ if test "$CMD" = "prev"
 	set NUMBER (printf "%04d" $CUR)
 	# get previous line
 	set NUM (awk "/^.$NUMBER/ {print prev} {prev = substr(\$1, 3)}" $LIST)
-	if test -z "$NUM"
+	if test "$NUM" = "$CUR"
 		echo "No previous messages."
 		exit
 	end
