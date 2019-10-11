@@ -119,10 +119,10 @@ if test "$CMD" = "vi"
 		set CUR $argv[2]
 	end
 	set NUMBER (printf "%04d" $CUR)
-	sed -n "/^.$NUMBER/p" $LIST
+	#sed -n "/^.$NUMBER/p" $LIST
 	eval $NEATMAIL pg -m -h $HDRS $BOX $CUR > $MSG
 	eval $EDITOR $MSG
-	exit
+	set CMD R
 end
 
 # output raw message $argv[2]
