@@ -52,6 +52,7 @@ autocmd BufEnter * if getline(1) =~ '^\.' | set ft=troff | endif
 autocmd BufEnter *.mh,*.ms,*.tr set ft=troff
 autocmd BufEnter *.tin set ft=tintin
 autocmd BufEnter *.fish set ft=fish
+autocmd BufEnter do set tw=0 wm=1
 autocmd filetype troff colorscheme troff
 autocmd filetype sql colorscheme troff
 autocmd filetype tintin colorscheme troff
