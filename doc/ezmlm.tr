@@ -1,0 +1,72 @@
+.H2 ezmlm
+.H3 Synopsis
+.PP
+list\*B-command\*B[\*I.argument\*I]@example.org
+.PP
+Commands of the form \*B-command\*B are added to the list name,
+and optionnal arguments of the form \*I.argument\*I are added to the
+command, to form the address to which send the command. Email can
+be empty.
+.H3 General commands
+.PI \*B-owner\*B
+Contact owner.
+.H3 moderator commands
+.PI \*B-subscribe-\*B\*Iuser=host.dom\*I
+Subscribe \*Iuser@host.dom\*I.
+To subscribe any address of type \*Iuser@host.dom\*I just replace the
+\*I@\*I in the address with \*I=\*I and add it after a hyphen to the command.
+Of course, ezmlm will ask \*Iuser@host.dom\*I to confirm the request.
+.PI \*B-unsubscribe-\*B\*Iuser=host.dom\*I
+Unsubscribe \*Iuser@host.dom\*I
+.PI \*B-edit\*B
+Edit files. \*B-edit\*B\*I.fn\*I returns \*IDIR/text/fn\*I for
+editing, where any underscore (\*I_\*I) in \*Ifile\*I is replaced by a
+hyphen (\*I-\*I) in \*Ifn\*I.
+.PI \*B-list\*B
+Retrieves a list of subscribers addresses.
+.PI \*B-log\*B
+Retrieve the subscription log. \*B-log\*B\*I.xxx\*I returns only lines
+matching \*Ixxx\*I in a case-insensitive search with \*I_\*I as a wild card.
+.H3 user commands
+.PI \*B-digest-subscribe\*B
+Subscribe to the digest list, provided there is one. Digest are usually
+sent about every other day, but this also depends on the message
+volume and settings adjusted by the list owner.
+.PI \*B-digest-unsubscribe\*B
+Unsubscribe the digest list.
+.PI \*B-faq\*B
+Send a list of frequently asked questions and answers specific for this list.
+.PI \*B-get\*B
+Get a message or range of messages from the archive. Without argument
+it returns the messages since the latest digest. To retrieve a range
+of messages, use \*B-get\*B\*I.123_234\*I. At most 100 messages are
+returned. Without ezmlm-idx, individual messages can still be
+retrieved by sending mail to \*B-get\*B\*I.123\*I.
+.PI \*B-help\*B
+Returns general command help for the list.
+.PI \*B-index\*B
+Returns a subject/author index for the messages. Without arguments,
+the entries for at least the latest 100 messages is returned. At most
+2000 entries are returned per request.
+.PI \*B-info\*B
+Return information about this list.
+.PI \*B-query\*B
+Tells you if your address (or the target address) is a subscriber or
+not. It's always returned to the address in question, so it cannot be
+used to determine the subscriber status of others. You can also use
+\*B-query-\*B\*Iuser=host\*I, where \*Iuser@host\*I is the
+address that should be tested. The reply is sent to that address, so
+you can't use this to test the subscriber status of addresses that you
+do not control.
+.PI \*B-subscribe\*B
+Subscribe me. Ezmlm will send you a confirmation request, and once you
+reply to it a message confirming that you are a subscriber.
+.PI \*B-unsubscribe\*B
+Unsubscribe me.
+.PI \*B-thread\*B\*I.xxx\*I
+Return the thread containing the message number given as the argument.
+The message number \*I.xxx\*I is required.
+.H3 See also
+.PP
+The full manual is available at
+.LU https://untroubled.org/ezmlm/manual/
