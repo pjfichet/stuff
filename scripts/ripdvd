@@ -8,11 +8,11 @@ set DVDCSS_VERBOSE 0
 
 function usage
 	echo "Usage:"
-	echo "    " (basename (status -f)) " -t title -f file [-c codec] [-l language] [-s subtitle]"
+	echo "    " (basename (status -f)) " -t title -f file [-c codec] [-l language] [-s subtitle] [-n]"
 	exit 1
 end
 
-argparse "t/title=" "f/file=" "c/codec=" "l/language=" "s/subtitle=" -- $argv
+argparse "t/title=" "f/file=" "c/codec=" "l/language=" "s/subtitle=" "n/ni" -- $argv
 or usage
 
 if test -n "$_flag_title" -o -z "$_flag_file"
@@ -45,20 +45,30 @@ else
 	set SLANG -nosub
 end
 
-echo "mencoder dvd://$TITLE $ALANG $SLANG -ovc $CODEC -o $FILE"
+if test -n "$_flag_ni"
+	set NI -ni
+else
+	set NI
+end
+
+if test -e $FILE
+	echo "$FILE exists yet."
+	exit 1
+end
+
+echo "mencoder dvd://$TITLE $ALANG $SLANG -ovc $CODEC -o $FILE $NI"
 
 if test "$CODEC" = "x264"
 	#http://www.mplayerhq.hu/DOCS/HTML/en/menc-feat-x264.html
 	# First pass: we are just collecting information, so the normal output is thrown away.
-	mencoder -dvd-device $ISO dvd://$TITLE $ALANG $SLANG \
+		mencoder -dvd-device $ISO dvd://$TITLE $ALANG $SLANG $NI \
 	-msglevel all=0:statusline=5 \
 	-nosound \
 	-ovc x264 -x264encopts \
 	threads=auto:pass=1:log=0:bitrate=800:subq=1:frameref=1 \
-	-o $FILE.avi.1
+	-o /dev/null
 	# Second pass: here we compress the video track using the information from the first step.
-	and
-	mencoder -dvd-device "$ISO" dvd://"$TITLE" $ALANG $SLANG \
+	mencoder -dvd-device "$ISO" dvd://"$TITLE" $ALANG $SLANG $NI \
 	-msglevel all=0:statusline=5 \
 	-oac mp3lame -lameopts br=320 \
 	-ovc x264 -x264encopts \
@@ -69,7 +79,7 @@ if test "$CODEC" = "x264"
 end
 
 if test $CODEC = q
-	mencoder -dvd-device "$ISO" dvd://"$TITLE" $ALANG $SLANG \
+	mencoder -dvd-device "$ISO" dvd://"$TITLE" $ALANG $SLANG $NI \
 	-oac mp3lame -lameopts br=160 \
 	-ovc x264 -x264encopts \
 	threads=auto:subq=1:frameref=1 \
@@ -80,13 +90,12 @@ end
 if test $CODEC = mp3
 	echo "mencoder dvd://$TITLE $ALANG $SLANG -ovc $CODEC -o $FILE"
 	# If n passed, use normal quality (recommended)
-	mencoder dvd://$TITLE $ALANG $SLANG \
+	mencoder dvd://$TITLE $ALANG $SLANG $NI \
 	-msglevel all=0:statusline=5 \
 	-oac mp3lame -lameopts br=160:cbr \
 	-ovc lavc -lavcopts vcodec=mpeg4:vhq \
 	-vf scale -zoom -xy 640 \
 	-o $FILE.avi
-	# -ni \
 end
 
 echo ""
