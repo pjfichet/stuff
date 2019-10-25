@@ -40,7 +40,8 @@ output $output bg /home/pj/var/pic/background.jpg fill
 #
 
 # swayidle
-	exec swayidle timeout 60 'swaylock -c 000000' timeout 90 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -c 000000'
+set $swayidle swayidle timeout 60 'swaylock -c 000000' timeout 90 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -c 000000'
+exec $swayidle
 
 
 
@@ -61,6 +62,9 @@ output $output bg /home/pj/var/pic/background.jpg fill
 	bindsym $mod+x exec firefox -P safe
     # menu launcher
     bindsym $mod+m exec menubar
+	# swayidle
+	bindsym $mod+s exec $swayidle
+	bindsym $mod+Shift+s exec killall swayidle
 	# sound
 	bindsym $mod+Page_Up exec amixer set Master 5%+
 	bindsym $mod+Page_Down exec amixer set Master 5%-
