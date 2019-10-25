@@ -22,7 +22,7 @@ install: $(COLORIZE) $(CONFDIR:%=$(HOME)/.config/%) $(HOMEDIR:%=$(HOME)/.%)
 clean:
 	rm -f $(COLORIZE)
 
-$(COLORIZE): %: %.tmp color/colorize.fish $(COLORSCHEME) makefile
+$(COLORIZE): %: %.tmp color/colorize.fish $(COLORSCHEME)
 	fish color/colorize.fish $(COLORSCHEME) < $< > $@
 
 $(HOME)/.config/%: %
