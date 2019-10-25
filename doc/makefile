@@ -7,7 +7,7 @@ LIBDIR=$(PREFIX)/share
 # Where to install man files
 MANDIR=$(LIBDIR)/man
 
-ALL=github gitinit gitfork pacman smart power_save
+ALL=github gitinit gitfork pacman smart power_save ezmlm
 
 all: $(ALL:%=%.man)
 
