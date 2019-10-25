@@ -4,6 +4,7 @@ set USB sdb1
 set BUP_DIR /media/$USB/$USER/bup
 
 function backup
+	echo 
 	echo -- backup $argv[1]
 	set -l before (du -sh $BUP_DIR | cut -d '	' -f 1)
 	bup index $argv[1]
@@ -29,6 +30,7 @@ else
 	for dir in $BACKUP
 		backup $dir
 	end
+	df -h /media/$USB
 end
 
 udevil umount /media/$USB
