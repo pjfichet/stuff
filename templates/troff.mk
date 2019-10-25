@@ -32,6 +32,7 @@ PREXML=$(BINDIR)/prexml
 POSTXML=$(BINDIR)/postxml
 TCHARS=$(BINDIR)/tchars
 TSQL=$(BINDIR)/tsql
+TPLAN=$(BINDIR)/tplan
 
 # Groff tools
 NROFF=groff -k -Tutf8 -M$(MACDIR)
@@ -55,7 +56,7 @@ ALL=$(shell ls -t *.tr | sed -e "s/\.tr//")
 last: $(LAST).pdf
 
 vi:
-	@vi $(LAST).tr
+	@vim $(LAST).tr
 
 spell:
 	aspell -n check $(LAST).tr
@@ -73,7 +74,7 @@ help:
 
 %.tmp: %.tr
 	@echo "Generating $@"
-	@$(SOELIM) $< | $(UGRIND) | $(TSQL) | $(REFER) -a -b -dAE $(REFARG) > $@
+	@$(SOELIM) $< | $(UGRIND) | $(TPLAN) | $(REFER) -a -b -dAE $(REFARG) > $@
 
 %.to: %.tmp
 	@echo "Generating $@ with $(TMAC)"
