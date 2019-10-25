@@ -8,6 +8,7 @@ set temp
 set vol
 set light
 set mpd
+set idle
 
 function getdate
 	set date (date +'%A %d %B %Y, %H:%M')
@@ -81,11 +82,19 @@ function getmpd
 	END { if (length(v)>50) {v=substr(v,1,47)"..."}; print v}')
 end
 
+function getidle
+	if test (pidof swayidle)
+		set idle
+	else
+		set idle "No idle manager  "
+	end
+end
+
 
 function show
-	set -l infolength (echo "$wifi$cpu$memory$temp$vol$light$mpd" | wc -m)
+	set -l infolength (echo "$wifi$cpu$memory$temp$vol$light$idle$mpd" | wc -m)
 	set -l spacelength "%"(math 108 - $infolength)"s"
-	echo "$wifi$cpu$memory$temp$vol$light$mpd"(printf "$spacelength" "")"$date "
+	echo "$wifi$cpu$memory$temp$vol$light$idle$mpd"(printf "$spacelength" "")"$date "
 	#echo "$wifi  $cpu  $memory  $temp  $vol  $light      $mpd                                    $date "
 end
 
@@ -104,6 +113,7 @@ while true
 	getwifi
 	getvol
 	getlight
+	getidle
 	show
 	sleep 1
 
@@ -122,6 +132,7 @@ while true
 	gettemp
 	getvol
 	getlight
+	getidle
 	show
 	sleep 1
 
