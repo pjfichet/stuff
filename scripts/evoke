@@ -9,6 +9,7 @@ rituals = {
 	"Ballad of the Last Knight": [-1, 0, 0, 0, 3],
 	"An'ell Nectrac": [0, '1', 0, 0, 0],
 	"Bellatuus Mortana": [0, 1, -1, 0, 0],
+	"Axaxis Ionem": [0, 3, 0, 0, -1],
 	"The Six Circles": [0, 0, 1, 0, 0],
 	"Dance of the Harvest": [0, 0, -2, 0, 0],
 	"The Nine Drops": [1, 0, 0, 0, 0],
@@ -30,6 +31,7 @@ spells = {
 	"Lenoir's Abrogation": [3, 2, 2, 5, 2],
 	"Peripheral Visions": [1, -1, 0, 2, -1],
 	"Riddle of Babel": [-2, 3, 0, 3, 0],
+	"Shadowmeld": [5, 5, 0, 6, -4],
 	"Slithershade": [2, -3, -1, -5, 3],
 	"Sphere of Lenoir": [2, 2, 3, 5, -2],
 	"Tanios' Quiescence": [0, 0, -4, 3, 4],
@@ -58,33 +60,49 @@ def search(path, ritual, shift):
 		path.append(ritual)
 		if len(path) > limit:
 			return
-		if limit >= 5 and len(pathlist) > 0:
-			return
+		#if limit >= 5 and len(pathlist) > 0:
+			#return
+		useless = True
 		for i in range(5):
 			value=rituals[ritual][i]
 			if isinstance(value, str):
+				value = int(value)
 				if shift[i] < 0:
-					value = - int(value)
+					if value < 0:
+						value = -value
 				if shift[i] >= 0:
-					value = int(value)
+					if value >= 0:
+						value = -value
 				if ritual.startswith('invert'):
 						value = -value
-			if shift[i] != 0:
+			if shift[i] != 0 and value != 0:
 				shift[i] = shift[i] + value	
+				useless = False
+			if abs(shift[i]) > 10:
+				return
+		if useless:
+			return
+		if abs(shift[0]) + abs(shift[1]) + abs(shift[2]) \
+			+ abs(shift[3]) + abs(shift[4]) > 15:
+			return
 	if shift[0] == 0 and shift[1] == 0 and shift[2] == 0 \
 		and shift[3] == 0 and shift[4] == 0:
 		pathlist.append(path)
+		if len(pathlist) == 1:
+			print("Found 1 path...")
 		return
 	for ritual in rituals:
 		search(path.copy(), ritual, shift.copy())
 
 def shortest(pathlist):	
 	if pathlist != []:
+		print("Found " + str(len(pathlist)) + " paths.")
 		shortest=pathlist[0]
 		for path in pathlist:
 			if len(shortest) > len(path):
 				shortest=path
-		print(shortest)
+		for ritual in shortest:
+			print("    " + ritual)
 
 def shift(focus, spell):	
 	moons = [0, 0, 0, 0, 0]
@@ -135,11 +153,18 @@ if spell is None:
 		search([], None, moons)
 		shortest(pathlist)
 else:
-	limit=7
 	pathlist=[]
 	moons = shift(focus, spell)
 	print(spell, moons)
-	search([], None, moons)
-	shortest(pathlist)
+	for limit in (4, 5, 6, 7):
+		try:
+			search([], None, moons)
+		except KeyboardInterrupt:
+			shortest(pathlist)
+			sys.exit()
+		if pathlist != []:
+			shortest(pathlist)
+			break
+	sys.exit()
 
 	
