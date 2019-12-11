@@ -4,6 +4,7 @@ CONFDIR=fish/config.fish \
 	khal/config \
 	khard/khard.conf \
 	mpd/mpd.conf \
+	mpv/mpv.conf \
 	sway/color sway/config \
 	termite/config termite/termite.terminfo \
 	vdirsyncer/config \
