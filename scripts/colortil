@@ -1,6 +1,13 @@
 #! /bin/sh
+# colorae: Parses After Earth color tags.
 
-# sed 's/\x1b\[[^m]*m//g'
+usage() {
+	name=$(basename $0)
+	echo "$name: parses After Earth color tags."
+	echo "$name <file>: replaces color tags by shell color sequences."
+	echo "$name -i <file>: replaces shell color sequences by color tags."
+}
+
 
 
 
@@ -187,78 +194,6 @@ shelltotag() {
 	s/\[38;5;157m/<dfd>/g
 	s/\[38;5;158m/<dfe>/g
 	s/\[38;5;159m/<dff>/g
-	s/\[38;5;160m/<eaa>/g
-	s/\[38;5;161m/<eab>/g
-	s/\[38;5;162m/<eac>/g
-	s/\[38;5;163m/<ead>/g
-	s/\[38;5;164m/<eae>/g
-	s/\[38;5;165m/<eaf>/g
-	s/\[38;5;166m/<eba>/g
-	s/\[38;5;167m/<ebb>/g
-	s/\[38;5;168m/<ebc>/g
-	s/\[38;5;169m/<ebd>/g
-	s/\[38;5;170m/<ebe>/g
-	s/\[38;5;171m/<ebf>/g
-	s/\[38;5;172m/<eca>/g
-	s/\[38;5;173m/<ecb>/g
-	s/\[38;5;174m/<ecc>/g
-	s/\[38;5;175m/<ecd>/g
-	s/\[38;5;176m/<ece>/g
-	s/\[38;5;177m/<ecf>/g
-	s/\[38;5;178m/<eda>/g
-	s/\[38;5;179m/<edb>/g
-	s/\[38;5;180m/<edc>/g
-	s/\[38;5;181m/<edd>/g
-	s/\[38;5;182m/<ede>/g
-	s/\[38;5;183m/<edf>/g
-	s/\[38;5;184m/<eea>/g
-	s/\[38;5;185m/<eeb>/g
-	s/\[38;5;186m/<eec>/g
-	s/\[38;5;187m/<eed>/g
-	s/\[38;5;188m/<eee>/g
-	s/\[38;5;189m/<eef>/g
-	s/\[38;5;190m/<efa>/g
-	s/\[38;5;191m/<efb>/g
-	s/\[38;5;192m/<efc>/g
-	s/\[38;5;193m/<efd>/g
-	s/\[38;5;194m/<efe>/g
-	s/\[38;5;195m/<eff>/g
-	s/\[38;5;196m/<faa>/g
-	s/\[38;5;197m/<fab>/g
-	s/\[38;5;198m/<fac>/g
-	s/\[38;5;199m/<fad>/g
-	s/\[38;5;200m/<fae>/g
-	s/\[38;5;201m/<faf>/g
-	s/\[38;5;202m/<fba>/g
-	s/\[38;5;203m/<fbb>/g
-	s/\[38;5;204m/<fbc>/g
-	s/\[38;5;205m/<fbd>/g
-	s/\[38;5;206m/<fbe>/g
-	s/\[38;5;207m/<fbf>/g
-	s/\[38;5;208m/<fca>/g
-	s/\[38;5;209m/<fcb>/g
-	s/\[38;5;210m/<fcc>/g
-	s/\[38;5;211m/<fcd>/g
-	s/\[38;5;212m/<fce>/g
-	s/\[38;5;213m/<fcf>/g
-	s/\[38;5;214m/<fda>/g
-	s/\[38;5;215m/<fdb>/g
-	s/\[38;5;216m/<fdc>/g
-	s/\[38;5;217m/<fdd>/g
-	s/\[38;5;218m/<fde>/g
-	s/\[38;5;219m/<fdf>/g
-	s/\[38;5;220m/<fea>/g
-	s/\[38;5;221m/<feb>/g
-	s/\[38;5;222m/<fec>/g
-	s/\[38;5;223m/<fed>/g
-	s/\[38;5;224m/<fee>/g
-	s/\[38;5;225m/<fef>/g
-	s/\[38;5;226m/<ffa>/g
-	s/\[38;5;227m/<ffb>/g
-	s/\[38;5;228m/<ffc>/g
-	s/\[38;5;229m/<ffd>/g
-	s/\[38;5;230m/<ffe>/g
-	s/\[38;5;231m/<fff>/g
 	s/\[38;5;160m/<eaa>/g
 	s/\[38;5;161m/<eab>/g
 	s/\[38;5;162m/<eac>/g
@@ -595,83 +530,13 @@ tagtoshell() {
 	s/<ffd>/\[38;5;229m/g
 	s/<ffe>/\[38;5;230m/g
 	s/<fff>/\[38;5;231m/g
-	s/<eaa>/\[38;5;160m/g
-	s/<eab>/\[38;5;161m/g
-	s/<eac>/\[38;5;162m/g
-	s/<ead>/\[38;5;163m/g
-	s/<eae>/\[38;5;164m/g
-	s/<eaf>/\[38;5;165m/g
-	s/<eba>/\[38;5;166m/g
-	s/<ebb>/\[38;5;167m/g
-	s/<ebc>/\[38;5;168m/g
-	s/<ebd>/\[38;5;169m/g
-	s/<ebe>/\[38;5;170m/g
-	s/<ebf>/\[38;5;171m/g
-	s/<eca>/\[38;5;172m/g
-	s/<ecb>/\[38;5;173m/g
-	s/<ecc>/\[38;5;174m/g
-	s/<ecd>/\[38;5;175m/g
-	s/<ece>/\[38;5;176m/g
-	s/<ecf>/\[38;5;177m/g
-	s/<eda>/\[38;5;178m/g
-	s/<edb>/\[38;5;179m/g
-	s/<edc>/\[38;5;180m/g
-	s/<edd>/\[38;5;181m/g
-	s/<ede>/\[38;5;182m/g
-	s/<edf>/\[38;5;183m/g
-	s/<eea>/\[38;5;184m/g
-	s/<eeb>/\[38;5;185m/g
-	s/<eec>/\[38;5;186m/g
-	s/<eed>/\[38;5;187m/g
-	s/<eee>/\[38;5;188m/g
-	s/<eef>/\[38;5;189m/g
-	s/<efa>/\[38;5;190m/g
-	s/<efb>/\[38;5;191m/g
-	s/<efc>/\[38;5;192m/g
-	s/<efd>/\[38;5;193m/g
-	s/<efe>/\[38;5;194m/g
-	s/<eff>/\[38;5;195m/g
-	s/<faa>/\[38;5;196m/g
-	s/<fab>/\[38;5;197m/g
-	s/<fac>/\[38;5;198m/g
-	s/<fad>/\[38;5;199m/g
-	s/<fae>/\[38;5;200m/g
-	s/<faf>/\[38;5;201m/g
-	s/<fba>/\[38;5;202m/g
-	s/<fbb>/\[38;5;203m/g
-	s/<fbc>/\[38;5;204m/g
-	s/<fbd>/\[38;5;205m/g
-	s/<fbe>/\[38;5;206m/g
-	s/<fbf>/\[38;5;207m/g
-	s/<fca>/\[38;5;208m/g
-	s/<fcb>/\[38;5;209m/g
-	s/<fcc>/\[38;5;210m/g
-	s/<fcd>/\[38;5;211m/g
-	s/<fce>/\[38;5;212m/g
-	s/<fcf>/\[38;5;213m/g
-	s/<fda>/\[38;5;214m/g
-	s/<fdb>/\[38;5;215m/g
-	s/<fdc>/\[38;5;216m/g
-	s/<fdd>/\[38;5;217m/g
-	s/<fde>/\[38;5;218m/g
-	s/<fdf>/\[38;5;219m/g
-	s/<fea>/\[38;5;220m/g
-	s/<feb>/\[38;5;221m/g
-	s/<fec>/\[38;5;222m/g
-	s/<fed>/\[38;5;223m/g
-	s/<fee>/\[38;5;224m/g
-	s/<fef>/\[38;5;225m/g
-	s/<ffa>/\[38;5;226m/g
-	s/<ffb>/\[38;5;227m/g
-	s/<ffc>/\[38;5;228m/g
-	s/<ffd>/\[38;5;229m/g
-	s/<ffe>/\[38;5;230m/g
-	s/<fff>/\[38;5;231m/g
 	" $1
 }
 
 if [ "$1" = "-i" ]; then
 	shelltotag $2
+elif [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+	usage
 else
 	tagtoshell $1
 fi
