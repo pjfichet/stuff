@@ -16,6 +16,7 @@ set INBOX $MAILDIR/box/inbox		# incoming boxes
 set SENT $MAILDIR/box/sent			# record for sent mails
 set BOX $MAILDIR/box/inbox
 set MFMT "-0 18from:48~subject:"	# listing format
+set VFMT "-0 18from:20date:48~subject:"	# verbose listing format
 set HDRS "from:subject:to:cc:date:user-agent:x-mailer:organization:status:"
 set HDRSFWD $HDRS"mime-version:content-type:content-transfer-encoding:"
 set FROM "Pierre-Jean Fichet <pierrejean.fichet@posteo.net>"	# from address
@@ -62,7 +63,7 @@ end
 # Make a verbose listing of the current mbox
 if test "$CMD" = "ver"
 	#$NEATMAIL mk -st -0 from:subject: -1 ~date:to:cc: $BOX >$LIST
-	eval $NEATMAIL mk -st $MFMT $BOX >$LIST
+	eval $NEATMAIL mk $VFMT $BOX >$LIST
 	sed "$COLORSET" $LIST
 	exit
 end
@@ -159,6 +160,17 @@ for letter in A D I M N O R
 		sed -n "/^$CMD$NUMBER/p" $LIST
 		exit
 	end
+end
+
+# mv a message
+if test "$CMD" = "mv"
+	if test -n "$argv[2]"
+		echo "mv $CUR box/$argv[2]"
+		begin echo :"$CUR"mv box/"$argv[2]" ; and echo ":w"; end | eval $NEATMAIL ex $BOX || exit 1
+	else
+		echo "mv $CUR where?"
+	end
+	exit
 end
 
 # edit a new mail
