@@ -32,7 +32,11 @@ set id (youtube-dl -q --no-playlist --get-id "$url")
 cd /tmp/
 
 if test -n "$_flag_list"
-	youtube-dl --format $_flag_format  -o '%(playlist_index)s.mp4' "$url"
+	if test -n "$_flag_music"
+		youtube-dl -x --format $_flag_format -o '%(playlist_index)s.m4a' "$url"
+	else
+		youtube-dl --format $_flag_format  -o '%(playlist_index)s.mp4' "$url"
+	end
 else if test -n "$_flag_info"
 	youtube-dl --list-formats "$id"
 else if test -n "$_flag_music"
