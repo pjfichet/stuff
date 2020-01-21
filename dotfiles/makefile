@@ -1,6 +1,6 @@
 COLORSCHEME=color/darkone.fish
 COLORIZE=termite/config sway/color vis/themes/mine.lua
-CONFDIR=fish/config.fish \
+CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	khal/config \
 	khard/khard.conf \
 	mpd/mpd.conf \
