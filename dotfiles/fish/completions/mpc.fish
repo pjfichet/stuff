@@ -18,6 +18,28 @@ function __fish_mpc_using_command
 	return 1
 end
 
+function __fish_mpc_ls
+	mpc ls (commandline -ct)
+end
+
+function __fish_mpc_complete
+	set -l curdir (pwd)
+	cd $XDG_MUSIC_DIR
+	__fish_complete_path (commandline -ct)
+	cd $curdir
+end
+
+function __fish_mpc_print
+	set -l text (commandline -ct)
+	printf '%s\n' "$XDG_MUSIC_DIR"/"$text"* | sed "s#$XDG_MUSIC_DIR/##"
+end
+
+
+
+
+
+
+
 complete -f -c mpc -n '__fish_mpc_needs_command' -a 'consume' -d 'Toggle consume mode'
 complete -f -c mpc -n '__fish_mpc_needs_command' -a 'current' -d 'Show the currently playing song'
 complete -f -c mpc -n '__fish_mpc_needs_command' -a 'queued' -d 'Show the currently queued song'
@@ -42,5 +64,4 @@ complete -f -c mpc -n '__fish_mpc_needs_command' -a 'ls' -d 'List files in the d
 complete -f -c mpc -n '__fish_mpc_needs_command' -a 'search' -d 'Search for substring in song tags'
 complete -f -c mpc -n '__fish_mpc_needs_command' -a 'update' -d 'Scans for updated files in the music directory'
 complete -f -c mpc -n '__fish_mpc_needs_command' -a 'rescans' -d 'Rescans the music directory'
-complete -f -c mpc -n '__fish_mpc_using_command add' -a '(cd $XDG_MUSIC_DIR; and __fish_complete_path (commandline -ct))'
-complete -f -c mpc -n '__fish_mpc_using_command insert' -a '(cd $XDG_MUSIC_DIR; and __fish_complete_path (commandline -ct))'
+complete -f -c mpc -n '__fish_mpc_using_command add' -a '(__fish_mpc_print)'
