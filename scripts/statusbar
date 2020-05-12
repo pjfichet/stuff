@@ -86,7 +86,7 @@ function getidle
 	if test (pidof swayidle)
 		set idle
 	else
-		set idle "No idle manager  "
+		set idle "  "
 	end
 end
 
