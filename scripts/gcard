@@ -1,0 +1,288 @@
+#! /usr/bin/env python
+
+"""Vcard thing.
+https://tools.ietf.org/html/rfc2426
+http://eventable.github.io/vobject/
+"""
+
+import fnmatch
+import os
+import vobject
+import sys
+import re
+
+class Vflat():
+	"""Vcard flattener"""
+	list_properties = ['categories', 'organization']
+	n_value = ['family', 'given', 'additional', 'prefix', 'suffix']
+	adr_value = ['street', 'city', 'region', 'code', 'country', 'box', 'extended', ]
+	adr_type = ['dom', 'intl', 'postal', 'parcel', 'home', 'work', 'pref' ]
+	tel_type = ['home', 'msg', 'work', 'pref', 'voice', 'fac', 'cell', 'video', 'pager', 'bbs',
+	'modem', 'car', 'isdn', 'pcs']
+	email_type = ['internet', 'x400', 'pref']
+	parameters = ['adr', 'agent', 'bday', 'categories', 'email', 'fn',
+	'geo', 'key', 'label', 'logo', 'mailer', 'n', 'nickname', 'note',
+	'org', 'photo', 'rev', 'role', 'sort_string', 'sound', 'tel', 'title',
+	'tz', 'uid', 'url', 'version', 'prodid']
+
+	parameters_flat = [
+'n_family', 'n_given', 'n_additional', 'n_prefix', 'n_suffix',
+
+'adr_dom_street', 'adr_dom_city', 'adr_dom_region', 'adr_dom_code',
+'adr_dom_code', 'adr_dom_country', 'adr_dom_box', 'adr_dom_extented',
+
+'adr_intl_street', 'adr_intl_city', 'adr_intl_region', 'adr_intl_code',
+'adr_intl_code', 'adr_intl_country', 'adr_intl_box', 'adr_intl_extented',
+
+'adr_postal_street', 'adr_postal_city', 'adr_postal_region', 'adr_postal_code',
+'adr_postal_code', 'adr_postal_country', 'adr_postal_box', 'adr_postal_extented',
+
+'adr_parcel_street', 'adr_parcel_city', 'adr_parcel_region', 'adr_parcel_code',
+'adr_parcel_code', 'adr_parcel_country', 'adr_parcel_box', 'adr_parcel_extented',
+
+'adr_home_street', 'adr_home_city', 'adr_home_region', 'adr_home_code',
+'adr_home_code', 'adr_home_country', 'adr_home_box', 'adr_home_extented',
+
+'adr_work_street', 'adr_work_city', 'adr_work_region', 'adr_work_code',
+'adr_work_code', 'adr_work_country', 'adr_work_box', 'adr_work_extented',
+
+'adr_pref_street', 'adr_pref_city', 'adr_pref_region', 'adr_pref_code',
+'adr_pref_code', 'adr_pref_country', 'adr_pref_box', 'adr_pref_extented',
+
+'tel_home', 'tel_msg', 'tel_work', 'tel_pref', 'tel_voice', 'tel_fac',
+'tel_cell', 'tel_video', 'tel_pager', 'tel_bbs', 'tel_modem',
+'tel_car', 'tel_isdn', 'tel_pcs',
+
+'email_home', 'email_work', 'email_pref', 'email_internet',
+'email_x400'
+]
+
+	parameters_all = parameters + parameters_flat
+
+
+	def __init__(self, vcard):
+		self.vflat = {}
+		self.debug = False
+		self.flatten(vcard)
+
+	def _debug(self, string):
+		if self.debug:
+			print(string)
+
+	def flatten(self, vcard):
+		# simple parameters
+		for param in vcard.contents:
+			if param not in Vflat.parameters:
+				self._debug(param + " is not an usual parameter.")
+			if not hasattr(self, param):
+				self.vflat[param] = getattr(vcard, param).value
+				#setattr(self, param, getattr(vcard, param).value)
+
+		# attributes (email, tel) 
+		if 'email' in vcard.contents:
+			for email in vcard.contents['email']:
+				self.vflat['email_' + email.type_param] = email.value
+				#setattr(self, 'email_' + email.type_param, email.value)
+		if 'tel' in vcard.contents:
+			for tel in vcard.contents['tel']:
+				self.vflat['tel_' + tel.type_param] = tel.value
+				#setattr(self, 'tel_' + tel.type_param, tel.value)
+
+		# subparameters (n)
+		if 'n' in vcard.contents:
+			for value in Vflat.n_value:
+				self.vflat['n_' + value] = getattr(vcard.n.value, value)
+				#setattr(self, value, getattr(vcard.n.value, value))
+
+		# attributes and subparameters (adr)
+		if 'adr' in vcard.contents:
+			for adr in vcard.contents['adr']:
+				for value in Vflat.adr_value:
+					key = 'adr_' + value
+					if key not in self.vflat:
+						self.vflat[key] = getattr(adr.value, value)
+					self.vflat['adr_' + adr.type_param + '_' + value] = getattr(adr.value, value)
+					#setattr(self, 'adr_' + adr.type_param + '_' + value, getattr(adr.value, value))
+
+			
+
+class Vfetch():
+	"""Vcard fetch"""
+
+	def __init__(self, vcfdir):
+		self.vcfdir = vcfdir
+		self.vcards = []
+		self.debug = False
+		self.default_format = "{fn} <{email}>"
+		self.collect()
+ 
+	def _debug(self, string):
+		if self.debug:
+			print(string)
+
+	def collect(self):
+		for root, dirs, files in os.walk(self.vcfdir):
+			for filename in  fnmatch.filter(files, '*.vcf'):
+				f = open(os.path.join(root, filename), 'r')
+				vcard = vobject.readOne(f.read())
+				f.close()
+				vflat = Vflat(vcard).vflat
+				self.vcards.append(vflat)
+		self._debug(len(self.vcards))
+	
+	def find(self, script):
+		self.render_function = self.build_code(script)['render_function']
+		for vcard in self.vcards:	
+			if self.render_function(vcard):
+				self.vcard = vcard
+				self.format(self.default_format)
+
+	def build_code(self, script):
+		self.tokens = script.strip().split()
+		self.start=""
+		self.code="	for parameter in vcard:"
+		self.end="	return"
+		self.step = 0
+		while self.tokens:
+			self.parse()
+		self.code="def render_function(vcard):\n" + self.start + "\n" + self.code + "\n" + self.end
+		self._debug(self.code)
+		global_namespace = {}
+		exec(self.code, global_namespace)
+		return global_namespace
+
+	def build_find_all(self):
+		self.step += 1
+		self.start += "	result{0} = False\n".format(self.step)
+		self.code += """
+		if str(vcard[parameter]).lower() == '{1}':
+			result{0} = True
+""".format(self.step, self.tokens[0].lower())
+		self.end += " result" + str(self.step)
+		self.tokens = self.tokens[1:]
+
+	def build_find_one(self):
+		self.step += 1
+		self.start += "	result{0} = False\n".format(self.step)
+		self.code += """
+		if parameter == '{1}':
+			if str(vcard[parameter]).lower() {2} '{3}':
+				result{0} = True
+""".format(self.step, self.tokens[0], self.tokens[1], self.tokens[2].lower())
+		self.end += " result" + str(self.step)
+		self.tokens = self.tokens[3:]
+
+	def build_find_in(self):
+		self.step += 1
+		if self.tokens[1] == '~':
+			self.tokens[1] = 'in'
+		else:
+			self.tokens[1] = 'not in'
+		self.start += "	result{0} = False\n".format(self.step)
+		self.code +="""
+		if parameter == '{1}':
+			if '{2}' {3} str(vcard[parameter]).lower():
+				result{0} = True
+""".format(self.step, self.tokens[0], self.tokens[2].lower(), self.tokens[1])
+		self.end += " result" + str(self.step)
+		self.tokens = self.tokens[3:]
+
+
+	def build_condition(self):
+		self.end += " " + self.tokens[0]
+		self.tokens = self.tokens[1:]
+
+	def parse(self):
+		if len(self.tokens) >= 3:
+			if self.tokens[1] == '==' or self.tokens[1] == '!=':
+				if self.tokens[0] in Vflat.parameters_all:
+					self.build_find_one()
+					return
+				else:
+					sys.exit("'{}' is not a valid parameter.".format(self.tokens[0]))
+			elif self.tokens[1] == '~' or self.tokens[1] == '!~':
+				if self.tokens[0] in Vflat.parameters_all:
+					self.build_find_in()
+					return
+				else:
+					sys.exit("'{}' is not a valid parameter.".format(self.tokens[0]))
+			elif self.tokens[1] == 'and' or self.tokens[1] == 'or':
+				if self.tokens[0] not in Vflat.parameters_all:
+					self.build_find_one()
+					self.build_condition()
+					return
+				else:
+					sys.exit("Missing string to search after parameter '{}'.".format(self.tokens[0]))
+		if self.tokens[0] == 'and' or self.tokens[0] == 'or':
+			self.build_condition()
+		elif self.tokens[0] not in Vflat.parameters_all:
+			self.build_find_all()
+		else:
+			sys.exit("Missing string to search after parameter '{}'.".format(self.tokens[0]))
+
+	def format(self, string):
+		self._debug(self.vcard)
+		output = re.sub('{\w*}', self.matchformat, string)
+		print(output)
+
+	def matchformat(self, matchobj):
+		param = matchobj.group(0)
+		param = re.sub('[{}]', '', param)
+		if param in self.vcard:
+			return str(self.vcard[param])
+		else:
+			return ''
+
+
+import os, sys, getopt
+
+def usage():
+	print(sys.argv[0] + " -d <directory> -f <format> -s <script>")
+
+def main(argv):
+	directory = None
+	if 'VCARD_DIR' in os.environ:
+		directory = os.environ['VCARD_DIR']
+	printformat = "{fn} <{email}>"
+	script = None
+	verbose = False
+
+	try:
+		opts, args = getopt.getopt(argv, "hvd:f:s:",
+			["help", "verbose", "directory=", "format=", "script="])
+	except getopt.GetoptError:
+		usage()
+		sys.exit(2)
+
+	for opt, arg in opts:
+		if opt in ('-h', '--help'):
+			usage()
+			sys.exit()
+		elif opt in ('-v', '--verbose'):
+			verbose = True
+		elif opt in ('-d', '--directory'):
+			directory = arg
+		elif opt in ('-f', '--format'):
+			printformat = arg
+		elif opt in ('-s', '--script'):
+			script = arg
+
+	if directory is None:
+		print("No directory specified.")
+		usage()
+		sys.exit(2)
+	if script is None:
+		print("No script specified.")
+		usage()
+		sys.exit(2)
+
+	vfetch = Vfetch(directory)
+	vfetch.default_format = printformat
+	vfetch.debug = verbose
+	vfetch.find(script)
+
+
+if __name__ == "__main__":
+	main(sys.argv[1:])
+
+
