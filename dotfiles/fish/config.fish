@@ -30,6 +30,7 @@ set -x XKB_DEFAULT_MODEL pc101
 set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
 set -x PASSWORD_STORE_DIR $HOME/var/pass
 set -x PASSWORD_STORE_CHARACTER_SET [:alnum:],?*%~./
+set -x VCARD_DIR $HOME/var/dav/card/
 set -x XAPPS firefox libreoffice gimp inkscape mupdf termite openmw klavaro
 set -x PHONE storage/7FDD-280D
 #set -x EXINIT "/etc/vi.my"
@@ -71,7 +72,7 @@ alias dater "date +%Y%m%d"
 alias sway "/usr/bin/sway 2> sway.log"
 alias wclip "swaymsg clipboard"
 alias khsync "vdirsyncer sync"
-alias vi "vis"
+alias vi "vim"
 alias fox "firefox"
 alias pmount "udevil mount"
 alias pumount "udevil umount"
@@ -119,6 +120,11 @@ function mvif
 	if test -e $argv[2]/$argv[1]
 		mv $argv[1] $argv[2]
 	end
+end
+
+function webcam --description "Use the webcam"
+	echo modprobe uvcvideo
+	mpv av://v4l2:/dev/video0
 end
 
 
