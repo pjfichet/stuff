@@ -3,6 +3,7 @@
 """Unpack a MIME message into a directory of files."""
 
 import os
+import sys
 import email
 import mimetypes
 
@@ -22,7 +23,7 @@ Unpack a MIME message into a directory of files.
 	parser.add_argument('msgfile')
 	args = parser.parse_args()
 
-	if args == '-':
+	if args.msgfile == '-':
 		msg = email.message_from_file(sys.stdin, policy=default)
 	else:
 		with open(args.msgfile, 'rb') as fp:
