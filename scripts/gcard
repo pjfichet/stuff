@@ -71,6 +71,7 @@ class Vflat():
 
 	def flatten(self, vcard):
 		# simple parameters
+		#print(vcard.serialize)
 		for param in vcard.contents:
 			if param not in Vflat.parameters:
 				self._debug(param + " is not an usual parameter.")
@@ -155,7 +156,7 @@ class Vfetch():
 		self.step += 1
 		self.start += "	result{0} = False\n".format(self.step)
 		self.code += """
-		if str(vcard[parameter]).lower() == '{1}':
+		if '{1}' in str(vcard[parameter]).lower():
 			result{0} = True
 """.format(self.step, self.tokens[0].lower())
 		self.end += " result" + str(self.step)
@@ -234,53 +235,34 @@ class Vfetch():
 			return ''
 
 
-import os, sys, getopt
-
-def usage():
-	print(sys.argv[0] + " -d <directory> -f <format> -s <script>")
+import os, sys
+import argparse
 
 def main(argv):
-	directory = None
-	if 'VCARD_DIR' in os.environ:
-		directory = os.environ['VCARD_DIR']
-	printformat = "{fn} <{email}>"
-	script = None
-	verbose = False
 
-	try:
-		opts, args = getopt.getopt(argv, "hvd:f:s:",
-			["help", "verbose", "directory=", "format=", "script="])
-	except getopt.GetoptError:
-		usage()
-		sys.exit(2)
+	parser = argparse.ArgumentParser(description="Get fields from Vcards.")
+	parser.add_argument('-v', '--verbose', help="verbosity level",
+		default=False, action="store_true")
+	parser.add_argument('-d', '--directory', help="directory",
+		default=os.environ.get('VCARD_DIR'))
+	parser.add_argument('-f', '--format', help="output format",
+		default="{fn} <{email}>")
+	parser.add_argument('script')
 
-	for opt, arg in opts:
-		if opt in ('-h', '--help'):
-			usage()
-			sys.exit()
-		elif opt in ('-v', '--verbose'):
-			verbose = True
-		elif opt in ('-d', '--directory'):
-			directory = arg
-		elif opt in ('-f', '--format'):
-			printformat = arg
-		elif opt in ('-s', '--script'):
-			script = arg
+	args = parser.parse_args()
+	if args.directory is None:
+		parser.print_usage()
+		print("The following arguments are required: directory")
+		exit(1)
+	if not os.path.isdir(args.directory):
+		parser.print_usage()
+		print(f"Directory {args.directory} does not exist.")
+		exit(1)
 
-	if directory is None:
-		print("No directory specified.")
-		usage()
-		sys.exit(2)
-	if script is None:
-		print("No script specified.")
-		usage()
-		sys.exit(2)
-
-	vfetch = Vfetch(directory)
-	vfetch.default_format = printformat
-	vfetch.debug = verbose
-	vfetch.find(script)
-
+	vfetch = Vfetch(args.directory)
+	vfetch.default_format = args.format
+	vfetch.debug = args.verbose
+	vfetch.find(args.script)
 
 if __name__ == "__main__":
 	main(sys.argv[1:])
