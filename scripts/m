@@ -145,7 +145,7 @@ if test "$CMD" = "mime"
 	end
 	set -l MIMEDIR $MAILDIR/tmp/$CUR
 	echo Exploding in $MIMEDIR.
-	eval $NEATMAIL pg $BOX $CUR | $UNMIME -d $MIMEDIR
+	eval $NEATMAIL pg $BOX $CUR | $UNMIME -d $MIMEDIR -
 	exit
 end
 
