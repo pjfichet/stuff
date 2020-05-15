@@ -3,7 +3,7 @@ PREFIX=$(HOME)/.local
 BINDIR=$(PREFIX)/bin
 LANG=enfr fren
 
-FILES=statusbar backupusb m mimer.py smartmail \
+FILES=statusbar backupusb m mkmime.py unmime.py smartmail \
 	lum menubar temp ripdvd translate.fish \
 	ydl typo evoke colortil gcard
 
