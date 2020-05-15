@@ -47,7 +47,7 @@ syn match   ListCommand '^:.*'
 "Funtion Number Operator Repeat PreProc String TODO  SpecialChar
 "Folded Type Normal WarningMsg
 hi link ListOld   Special
-hi link ListNew  Normal
+hi link ListNew  Type
 hi link ListImportant     Statement
 hi link ListCommand   PreProc
 hi link PacmanTag4 Normal
