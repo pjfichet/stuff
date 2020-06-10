@@ -2,7 +2,7 @@
 
 set -x PATH $PATH $HOME/.local/bin $HOME/dev/bin
 set -x TERM xterm-256color
-set -x EDITOR vi
+set -x EDITOR vim
 set -x LESSCHARSET utf-8
 set -x G_FILENAME_ENCODING @locale,UTF-8
 set -x LC_ALL fr_FR.UTF-8
@@ -31,7 +31,7 @@ set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
 set -x PASSWORD_STORE_DIR $HOME/var/pass
 set -x PASSWORD_STORE_CHARACTER_SET [:alnum:],?*%~./
 set -x VCARD_DIR $HOME/var/dav/card/
-set -x XAPPS firefox libreoffice gimp inkscape mupdf termite openmw klavaro
+set -x XAPPS firefox libreoffice gimp gcompris-qt inkscape mupdf termite openmw klavaro chromium
 set -x PHONE storage/7FDD-280D
 #set -x EXINIT "/etc/vi.my"
 set -x BUP_DIR $XDG_CONFIG_HOME/bup
@@ -65,6 +65,7 @@ set -x LESS_TERMCAP_us (set_color brblue)
 
 
 #alias ls "ls --color=auto --group-directories-first"
+alias gcompris "gcompris-qt"
 alias diff "diff -u"
 alias perms "stat -c '%A %a %n'"
 alias datetime "date +'%A %d %B %Y, %H:%M'"
