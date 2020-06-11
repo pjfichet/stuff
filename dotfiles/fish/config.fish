@@ -84,6 +84,7 @@ alias volup "amixer set Master 5%+"
 alias voldown "amixer set Master 5%-"
 alias imv "/usr/bin/imv -s shrink"
 alias mplayer "mplayer -dvd-device /dev/sr0"
+alias lp2 "lp -o sides=two-sided-long-edge"
 
 function backup
 	set -l before (du -sh $BUP_DIR | cut -d '	' -f 1)
