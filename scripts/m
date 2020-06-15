@@ -250,7 +250,7 @@ if test "$CMD" = "send"
 		exit 1
 	end
 	cp $DRAFT $OLD
-	eval $MIMER $DRAFT; or begin
+	eval $MKMIME $DRAFT; or begin
 		echo "Can't format <$DRAFT>. Not sent."
 		exit 1
 	end
