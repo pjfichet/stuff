@@ -39,7 +39,7 @@ if len(sys.argv) == 3:
     filename = path.basename(sys.argv[2])
     try:
         mimetype, subtype = guess_type(pathname)[0].split('/')
-	except AttributeError:
+    except AttributeError:
         mimetype, subtype = application, unknown
     with open(pathname, 'rb') as attachment:
         data = attachment.read()
