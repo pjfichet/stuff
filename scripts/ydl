@@ -33,9 +33,9 @@ cd /tmp/
 
 if test -n "$_flag_list"
 	if test -n "$_flag_music"
-		youtube-dl -x --format $_flag_format -o '%(playlist_index)s.m4a' "$url"
+		youtube-dl -i -x --format $_flag_format -o '%(playlist_index)s.m4a' "$url"
 	else
-		youtube-dl --format $_flag_format  -o '%(playlist_index)s.mp4' "$url"
+		youtube-dl -i --format $_flag_format  -o '%(playlist_index)s.mp4' "$url"
 	end
 else if test -n "$_flag_info"
 	youtube-dl --list-formats "$id"
