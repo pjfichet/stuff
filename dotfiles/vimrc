@@ -54,6 +54,12 @@ autocmd BufEnter *.tin set ft=tintin
 autocmd BufEnter *.fish set ft=fish
 autocmd BufEnter list.nm set ft=list
 autocmd BufEnter do set tw=0 wm=1
+
+autocmd filetype python setlocal expandtab
+autocmd filetype python setlocal softtabstop=4
+autocmd filetype python setlocal tw=79
+"autocmd filetype python setlocal backspace=indent,eol,start
+
 autocmd filetype troff colorscheme troff
 autocmd filetype sql colorscheme troff
 autocmd filetype tintin colorscheme troff
