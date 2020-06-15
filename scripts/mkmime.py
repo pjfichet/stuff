@@ -37,7 +37,10 @@ for field in fields:
 if len(sys.argv) == 3:
     pathname = sys.argv[2]
     filename = path.basename(sys.argv[2])
-    mimetype, subtype = guess_type(pathname)[0].split('/')
+    try:
+        mimetype, subtype = guess_type(pathname)[0].split('/')
+	except AttributeError:
+        mimetype, subtype = application, unknown
     with open(pathname, 'rb') as attachment:
         data = attachment.read()
         mail.add_attachment(data, mimetype, subtype, filename=filename)
