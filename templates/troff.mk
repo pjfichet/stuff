@@ -56,13 +56,13 @@ ALL=$(shell ls -t *.tr | sed -e "s/\.tr//")
 last: $(LAST).pdf
 
 vi:
-	@vim $(LAST).tr
+	vim $(LAST).tr
 
 spell:
 	aspell -n check $(LAST).tr
 
 mu: $(LAST).pdf
-	@mupdf $<
+	mupdf $<
 
 
 help:
