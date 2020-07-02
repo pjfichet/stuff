@@ -2,22 +2,20 @@
 local lexers = vis.lexers
 
 local colors = {
-	bg_dark  = '#bg_dark', -- background
-	bg_light  = '#bg_light', -- line cursor bg
-	fg_dark  = '#fg_dark', -- comment whitespace eof fg
-	fg_normal   = '#fg_normal', -- foreground
-	fg_light   = '#fg_light', -- status focused bg
-	col_class  = '#light_magenta', -- class, type
-	col_preproc  = '#yellow', -- preprocessor
-	col_error     = '#red', -- error, tag
-	col_embedded = '#green', -- embedded
-	col_regex  = '#light_blue', -- regex
-	col_function    = '#magenta', -- function, variable, embedded
-	col_string    = '#cyan', -- constant, number, string
-	col_keyword   = '#blue', -- keyword, label, operator
-	brown   = '#brown',
-	light_blue = '#light_blue',
-	beige = '#beige'
+	bg_dark  = '#@bg_dark', -- background
+	bg_light  = '#@bg_light', -- line cursor bg
+	fg_dark  = '#@fg_dark', -- comment whitespace eof fg
+	fg_normal   = '#@fg_normal', -- foreground
+	fg_light   = '#@fg_light', -- status focused bg
+	col_class  = '#@light_magenta', -- class, type
+	col_preproc  = '#@yellow', -- preprocessor
+	col_error     = '#@red', -- error, tag
+	col_embedded = '#@green', -- embedded
+	col_regex  = '#@light_blue', -- regex
+	col_function    = '#@magenta', -- function, variable, embedded
+	col_string    = '#@cyan', -- constant, number, string
+	col_keyword   = '#@blue', -- keyword, label, operator
+	light_blue = '#@light_blue',
 }
 
 lexers.colors = colors

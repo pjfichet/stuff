@@ -1,0 +1,26 @@
+set -U fish_color_normal normal
+set -U fish_color_command @blue
+set -U fish_color_quote @green
+set -U fish_color_redirection @magenta
+set -U fish_color_end @yellow
+set -U fish_color_error @red
+set -U fish_color_param @fg_normal
+set -U fish_color_selection @fg_light
+set -U fish_color_search_match @yellow
+set -U fish_color_history_current --bold
+set -U fish_color_operator @cyan
+set -U fish_color_cwd green
+set -U fish_color_cwd_root @red
+set -U fish_color_valid_path @green
+set -U fish_color_escape @cyan
+set -U fish_color_autosuggestion @fg_dark
+set -U fish_color_user @green
+set -U fish_color_host @green
+set -U fish_color_cancel normal
+set -U fish_color_comment @fg_dark
+set -U fish_color_match --background=brblue @fg_dark
+set -U fish_color_selection normal --background=@bg_light
+set -U fish_pager_color_completion @fg_dark
+set -U fish_pager_color_prefix @fg_light
+set -U fish_pager_color_progress normal --background=@bg_light
+set -U fish_pager_color_description @green
