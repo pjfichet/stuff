@@ -1,5 +1,5 @@
-COLORSCHEME=color/darkone.fish
-COLORIZE=termite/config sway/color vis/themes/mine.lua
+COLORSCHEME=color/selenized.fish
+COLORIZE=termite/config sway/color vis/themes/mine.lua fish/color.fish
 CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	khal/config \
 	khard/khard.conf \
@@ -11,6 +11,7 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	vis/visrc.lua vis/themes/mine.lua
 
 HOMEDIR=vimrc \
+	vim/colors/dracula.vim vim/colors/selenized.vim \
 	vim/colors/blue.vim vim/colors/troff.vim \
 	vim/syntax/bnk.vim vim/syntax/csv.vim vim/syntax/fish.vim \
 	vim/syntax/map.vim vim/syntax/pacman.vim vim/syntax/tag.vim \
@@ -23,13 +24,17 @@ install: $(COLORIZE) $(CONFDIR:%=$(HOME)/.config/%) $(HOMEDIR:%=$(HOME)/.%)
 clean:
 	rm -f $(COLORIZE)
 
-$(COLORIZE): %: %.tmp color/colorize.fish $(COLORSCHEME)
-	fish color/colorize.fish $(COLORSCHEME) < $< > $@
+$(COLORIZE): %: %.tmp color/colorize.fish $(COLORSCHEME) makefile
+	@echo "Creating $@"
+	@fish color/colorize.fish $(COLORSCHEME) < $< > $@
+	@#if test "$@" = "fish/color.fish"; then echo "Coloring fish session."; fish fish/color.fish; fi
 
 $(HOME)/.config/%: %
-	test -d $$(dirname $@) || mkdir -p $$(dirname $@)
-	sed -e "s/@email@/$(email)/g; s,@bnbcal@,$(bnbcal),g" $< > $@
+	@echo "Installing $@"
+	@test -d $$(dirname $@) || mkdir -p $$(dirname $@)
+	@sed -e "s/@email@/$(email)/g; s,@bnbcal@,$(bnbcal),g" $< > $@
 
 $(HOME)/.%: %
-	test -d $$(dirname $@) || mkdir -p $$(dirname $@)
-	cp $< $@
+	@echo "Installing $@"
+	@test -d $$(dirname $@) || mkdir -p $$(dirname $@)
+	@cp $< $@

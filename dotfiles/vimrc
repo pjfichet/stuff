@@ -43,6 +43,14 @@ nnoremap - <C-W><
 "map k gk
 "map j gj
 
+"git clone https://github.com/itchyny/lightline.vim ~/.vim/pack/plugins/start/lightline
+set laststatus=2
+let g:lightline = {'colorscheme': 'selenized_dark'}
+
+colorscheme selenized
+set termguicolors
+set background=dark
+
 " mime types
 autocmd filetype security set nobackup noswapfile nowritebackup
 "au BufNewFile,BufRead
@@ -60,9 +68,9 @@ autocmd filetype python setlocal softtabstop=4
 autocmd filetype python setlocal tw=79
 "autocmd filetype python setlocal backspace=indent,eol,start
 
-autocmd filetype troff colorscheme troff
-autocmd filetype sql colorscheme troff
-autocmd filetype tintin colorscheme troff
+"autocmd filetype troff colorscheme troff
+"autocmd filetype sql colorscheme troff
+"autocmd filetype tintin colorscheme troff
 
 " Spell check
 function! Cfr()
