@@ -54,13 +54,13 @@ set -x SDL_VIDEODRIVER wayland
   #se      rmso      stop standout
   #us      smul      start underline
   #ue      rmul      stop underline
-set -x LESS_TERMCAP_mb (set_color brgreen)
-set -x LESS_TERMCAP_md (set_color brwhite)
+set -x LESS_TERMCAP_mb (set_color brblue)
+set -x LESS_TERMCAP_md (set_color brblue)
 set -x LESS_TERMCAP_me (set_color normal)
 set -x LESS_TERMCAP_se (set_color normal)
 set -x LESS_TERMCAP_so (set_color -b black)
 set -x LESS_TERMCAP_ue (set_color normal)
-set -x LESS_TERMCAP_us (set_color brblue)
+set -x LESS_TERMCAP_us (set_color green)
 #set LS_COLORS 'rs=0:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:';
 
 
@@ -85,6 +85,7 @@ alias voldown "amixer set Master 5%-"
 alias imv "/usr/bin/imv -s shrink"
 alias mplayer "mplayer -dvd-device /dev/sr0"
 alias lp2 "lp -o sides=two-sided-long-edge"
+alias octal "stat -c '%a %n'"
 
 function backup
 	set -l before (du -sh $BUP_DIR | cut -d '	' -f 1)
@@ -159,7 +160,7 @@ end
 function fish_prompt --description 'Write out the prompt'
 	echo -n -s \
 	(set_color brblack) "$USER" @ (prompt_hostname) \
-	(set_color brgreen) ' ' (prompt_pwd) ' ' \
+	(set_color green) ' ' (prompt_pwd) ' ' \
 	(set_color brblack) "$status> " \
 	(set_color normal)
 end
@@ -171,16 +172,16 @@ function fish_default_mode_prompt --description 'Display the default mode for th
         switch $fish_bind_mode
             case default
                 set_color red
-                echo '[N]'
+                echo 'N'
             case insert
                 set_color green
-                echo '[I]'
+                echo 'I'
             case replace_one
-                set_color green
-                echo '[R]'
+                set_color yellow
+                echo 'R'
             case visual
-                set_color magenta magenta
-                echo '[V]'
+                set_color magenta
+                echo 'V'
         end
         set_color normal
         echo -n ' '
