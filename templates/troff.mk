@@ -53,7 +53,10 @@ LAST=$(shell ls -t *.tr | head -1 | sed -e "s/\.tr//")
 
 ALL=$(shell ls -t *.tr | sed -e "s/\.tr//")
 
-last: $(LAST).pdf
+lastpdf: $(LAST).pdf
+
+last:
+	@echo $(LAST).tr
 
 vi:
 	vim $(LAST).tr
@@ -89,6 +92,7 @@ help:
 %.ps.pdf: %.ps
 	@echo "Generating $@"
 	@ps2pdf $(PDFFLAGS1) $< $@
+
 
 %.n.pdf: %.tmp
 	@echo "Generating $@"
@@ -141,8 +145,16 @@ help:
 	@echo "Generating $@"
 	@unoconv -f doc $<
 
+%-book.pdf: %.pdf
+	@#psbook -s8 a.ps b.ps
+	@echo "Generating $@"
+	@pdf2ps $< /tmp/a.ps
+	@psnup -2 /tmp/a.ps /tmp/b.ps
+	@ps2pdf -sPAPERSIZE=a4 /tmp/b.ps $@
+	@rm -f /tmp/a.ps /tmp/b.ps
+
 clean:
 	@rm -f *.ig $(ALL:%=%.tmp) $(ALL:%=%.to) $(ALL:%=%.ps) $(ALL:%=%.ps.pdf) \
 	$(ALL:%=%.pdf) $(ALL:%=%.n.pdf) $(ALL:%=%.c.pdf) $(ALL:%=%.crypt.pdf) \
 	$(ALL:%=%.txt) $(ALL:%=%.mkd) $(ALL:%=%.man) $(ALL:%=%.xml) $(ALL:%=%.html) \
-	$(ALL:%=%.fodt)
+	$(ALL:%=%.fodt) $(ALL:%=%.doc) $(ALL:%=%-book.pdf)
