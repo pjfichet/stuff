@@ -137,6 +137,10 @@ help:
 	@echo "Generating $@"
 	@xsltproc $(XSLDIR)/utofodt.xsl $< > $@
 
+%.doc: %.fodt
+	@echo "Generating $@"
+	@unoconv -f doc $<
+
 clean:
 	@rm -f *.ig $(ALL:%=%.tmp) $(ALL:%=%.to) $(ALL:%=%.ps) $(ALL:%=%.ps.pdf) \
 	$(ALL:%=%.pdf) $(ALL:%=%.n.pdf) $(ALL:%=%.c.pdf) $(ALL:%=%.crypt.pdf) \
