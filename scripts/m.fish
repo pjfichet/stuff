@@ -19,11 +19,11 @@ set MFMT "-0 18from:48~subject:"	# listing format
 set VFMT "-0 18from:20date:48~subject:"	# verbose listing format
 set HDRS "from:subject:to:cc:date:user-agent:x-mailer:organization:status:"
 set HDRSFWD $HDRS"mime-version:content-type:content-transfer-encoding:"
-set FROM "Pierre-Jean Fichet <pierrejean.fichet@posteo.net>"	# from address
-set FROMSET "s/^From: \$/From: $FROM/; /^Message-ID:/s/neatmail.host/localhost.localdomain/"
 set FROMESC "2,\$s/^From />From /"
 set COLORSET "s/^\(N[^\t]*\)/[1;32m\1[0;0m/g; s/^\(I[^\t]*\)/[1;33m\1[0;0m/g"
 
+set FROM (cat $MAILDIR/.from)
+set FROMSET "s/^From: \$/From: $FROM/; /^Message-ID:/s/neatmail.host/localhost.localdomain/"
 set BOX (cat $MAILDIR/.box)
 set CUR (cat $MAILDIR/.cur | sed -e "s/\(....\).*/\1/g")
 set BOXES (ls $MAILDIR/box)
@@ -46,6 +46,19 @@ if test "$CMD" = "com"
 	cp $BOX /tmp/.neatmail.(echo $BOX | tr / .)
 	begin cat $LIST; and echo ":w"; end | eval $NEATMAIL ex $BOX || exit 1
 	set CMD box
+end
+
+# shortcuts for main boxes
+if test "$CMD" = "scic"
+	echo "@scic@" > $MAILDIR/.from
+	set CMD box
+	set argv[2] scic
+end
+
+if test "$CMD" = "inbox"
+	echo "@inbox@" > $MAILDIR/.from
+	set CMD box
+	set argv[2] inbox
 end
 
 # create the listing for an mbox
@@ -302,6 +315,8 @@ m inc         check mboxes for new mails
 m com         execute commands in $LIST
 m help        show the list of commands
 m box mbox    list messages in the mbox
+m scic        list the scic mbox
+m inbox       list the inbox mbox
 m ver         verbose list of messages
 m from msg    list messages starting from msg
 m list        open the listing in an editor

@@ -1,3 +1,4 @@
+include secret.mk
 
 PREFIX=$(HOME)/.local
 BINDIR=$(PREFIX)/bin
@@ -26,3 +27,6 @@ $(LANG:%=$(BINDIR)/%): $(BINDIR)/translate.fish
 $(BINDIR)/%: % | $(BINDIR)
 	install -m 755 $< $@
 
+m: m.fish
+	@echo "Creating m."
+	@sed -e "s/@inbox@/$(inbox)/g; s/@scic@/$(scic)/g" $< > $@
