@@ -87,6 +87,12 @@ alias mplayer "mplayer -dvd-device /dev/sr0"
 alias lp2 "lp -o sides=two-sided-long-edge"
 alias octal "stat -c '%a %n'"
 
+function m4a2ogg
+	set name (basename $argv[1] .m4a)
+	# -acodec libopus may be better
+	ffmpeg -i $name.m4a -vn -acodec libvorbis $name.ogg
+end
+
 function backup
 	set -l before (du -sh $BUP_DIR | cut -d '	' -f 1)
 	bup index $argv[1]
