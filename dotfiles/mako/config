@@ -1,0 +1,12 @@
+icons=0
+background-color=#184956
+border-color=#103c48
+
+[urgency=low]
+text-color=#58a3ff
+
+[urgency=normal]
+text-color=#84c747
+
+[urgency=high]
+text-color=#ebc13d

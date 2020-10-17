@@ -1,5 +1,5 @@
 COLORSCHEME=color/selenized.fish
-COLORIZE=termite/config sway/color vis/themes/mine.lua fish/color.fish
+COLORIZE=termite/config sway/color vis/themes/mine.lua fish/color.fish mako/config
 CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	khal/config \
 	khard/khard.conf \
@@ -7,6 +7,7 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	mpv/mpv.conf \
 	sway/color sway/config \
 	termite/config termite/termite.terminfo \
+	mako/config \
 	vdirsyncer/config \
 	vis/visrc.lua vis/themes/mine.lua
 
