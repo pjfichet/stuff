@@ -1,0 +1,7 @@
+#! /usr/bin/fish
+
+if pidof swayidle
+	killall swayidle
+else
+	swayidle timeout 60 'swaylock -c 000000' timeout 90 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -c 000000'
+end

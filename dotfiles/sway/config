@@ -63,8 +63,9 @@ exec $swayidle
     # menu launcher
     bindsym $mod+m exec menubar
 	# swayidle
-	bindsym $mod+s exec $swayidle
-	bindsym $mod+Shift+s exec killall swayidle
+	bindsym $mod+z exec sway_screensaver
+	# screenshot
+	bindsym $mod+s exec grim shot-`date +%Y%m%d%H%M%S`.png
 	# sound
 	bindsym $mod+Page_Up exec amixer set Master 5%+
 	bindsym $mod+Page_Down exec amixer set Master 5%-
