@@ -68,8 +68,20 @@ if test "$CMD" = "box"
 		echo $MAILDIR/box/$argv[2] > $MAILDIR/.box
 		set BOX $MAILDIR/box/$argv[2]
 	end
-	# -st sort thread, sd sort date
-	eval $NEATMAIL mk -r -sd $MFMT $BOX | sed -e "/^O/d" >$LIST
+	# -st sort by thread, -sd sort by date
+	eval $NEATMAIL mk -r $MFMT $BOX | sed -e "/^O/d" >$LIST
+	sed "$COLORSET" $LIST
+	exit
+end
+
+# create the listing for an mbox, sorted by thread
+if test "$CMD" = "thread"
+	if test -n "$argv[2]"
+		echo $MAILDIR/box/$argv[2] > $MAILDIR/.box
+		set BOX $MAILDIR/box/$argv[2]
+	end
+	# -st sort by thread, -sd sort by date
+	eval $NEATMAIL mk -r -st $MFMT $BOX | sed -e "/^O/d" >$LIST
 	sed "$COLORSET" $LIST
 	exit
 end
