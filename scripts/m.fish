@@ -64,6 +64,13 @@ if test "$CMD" = "inbox"
 	set argv[2] inbox
 end
 
+if test "$CMD" = "csmjc"
+	echo "@csmjc" > $MAILDIR/.from
+	set CMD box
+	set argv[2] inbox
+end
+
+
 # create the listing for an mbox
 if test "$CMD" = "box"
 	if test -n "$argv[2]"
