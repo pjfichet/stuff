@@ -67,7 +67,7 @@ end
 if test "$CMD" = "csmjc"
 	echo "@csmjc" > $MAILDIR/.from
 	set CMD box
-	set argv[2] inbox
+	set argv[2] csmjc
 end
 
 
