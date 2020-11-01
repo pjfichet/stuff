@@ -2,6 +2,7 @@
 # neatmail wrapper
 
 set BINDIR $HOME/.local/bin
+set POP3 $BINDIR/pop3
 set NEATMAIL $BINDIR/neatmail				# neatmail address
 set SEND $BINDIR/smtp				# neatmail smtp
 set UNMIME $BINDIR/unmime.py			# ripmime, unmime.py
@@ -31,10 +32,7 @@ set CMD $argv[1]
 
 # Fetch messages
 if test "$CMD" = "pop"
-	eval $BINDIR/pop3-posteo
-	eval $BINDIR/pop3-laposte
-	eval $BINDIR/pop3-csmjc
-	eval $BINDIR/pop3-scic
+	eval $POP3
 	exit
 end
 
@@ -65,7 +63,7 @@ if test "$CMD" = "inbox"
 end
 
 if test "$CMD" = "csmjc"
-	echo "@csmjc" > $MAILDIR/.from
+	echo "@csmjc@" > $MAILDIR/.from
 	set CMD box
 	set argv[2] csmjc
 end
