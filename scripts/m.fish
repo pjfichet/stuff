@@ -25,7 +25,8 @@ set COLORSET "s/^\(N[^\t]*\)/[1;32m\1[0;0m/g; s/^\(I[^\t]*\)/[1;33m\1[0;0m/g
 set FROM (cat $MAILDIR/.from)
 set FROMSET "s/^From: \$/From: $FROM/; /^Message-ID:/s/neatmail.host/localhost.localdomain/"
 set BOX (cat $MAILDIR/.box)
-set CUR (cat $MAILDIR/.cur | sed -e "s/\(....\).*/\1/g")
+#set CUR (cat $MAILDIR/.cur | sed -e "s/\(....\).*/\1/g")
+set CUR (cat $MAILDIR/.cur)
 set BOXES (ls $MAILDIR/box)
 set CMD $argv[1]
 
@@ -101,9 +102,12 @@ end
 
 # show the next message
 if test "$CMD" = "next"
-	set NUMBER (printf "%04d" $CUR)
+	set NUM (sed -n "/.0*$CUR/{n; s/.0*\([^\t]*\).*/\1/;p}" $LIST)
+	echo "$CUR -> $NUM"
+	# prefix number with 0
+	# set NUMBER (printf "%04d" $CUR)
 	# get next line
-	set NUM (awk "/^.$NUMBER/ {getline; print substr(\$1, 3)}" $LIST)
+	# set NUM (awk "/^.$NUMBER/ {getline; print substr(\$1, 3)}" $LIST)
 	if test "$NUM" = "$CUR"
 		echo "No more messages."
 		exit
