@@ -49,31 +49,23 @@ if test "$CMD" = "com"
 	set CMD box
 end
 
-# shortcuts for main boxes
-if test "$CMD" = "scic"
-	echo "@scic@" > $MAILDIR/.from
-	set CMD box
-	set argv[2] scic
-end
-
-if test "$CMD" = "inbox"
-	echo "@inbox@" > $MAILDIR/.from
-	set CMD box
-	set argv[2] inbox
-end
-
-if test "$CMD" = "csmjc"
-	echo "@csmjc@" > $MAILDIR/.from
-	set CMD box
-	set argv[2] csmjc
-end
-
 
 # create the listing for an mbox
 if test "$CMD" = "box"
 	if test -n "$argv[2]"
 		echo $MAILDIR/box/$argv[2] > $MAILDIR/.box
 		set BOX $MAILDIR/box/$argv[2]
+		if test "$argv[2]" = "inbox" -o "$argv[2]" = "groff"
+			echo "@inbox@" > $MAILDIR/.from
+		else if test "$argv[2]" = "fanuilas"
+			echo "@fanuilas@" > $MAILDIR/.from
+		else if test "$argv[2]" = "laposte"
+			echo "@laposte@" > $MAILDIR/.from
+		else if test "$argv[2]" = "scic"
+			echo "@scic@" > $MAILDIR/.from
+		else if test "$argv[2]" = "csmjc" -o "$argv[2]" = "fede"
+			echo "@csmjc@" > $MAILDIR/.from
+		end
 	end
 	# -st sort by thread, -sd sort by date
 	eval $NEATMAIL mk -r $MFMT $BOX | sed -e "/^O/d" >$LIST

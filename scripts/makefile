@@ -30,4 +30,8 @@ $(BINDIR)/%: % | $(BINDIR)
 
 m: m.fish
 	@echo "Creating m."
-	@sed -e "s/@inbox@/$(inbox)/g; s/@scic@/$(scic)/g; s/@csmjc@/$(csmjc)/g" $< > $@
+	@sed -e "s/@inbox@/$(inbox)/g; \
+		s/@fanuilas@/$(fanuilas)/g; \
+		s/@laposte@/$(laposte)/g; \
+		s/@scic@/$(scic)/g; \
+		s/@csmjc@/$(csmjc)/g" $< > $@
