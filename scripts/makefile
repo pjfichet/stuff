@@ -6,7 +6,7 @@ LANG=enfr fren fres esfr
 
 FILES=statusbar backupusb m mkmime.py unmime.py smartmail \
 	lum menubar temp ripdvd translate.fish \
-	sway_screensaver \
+	sway_screensaver sway_menubar \
 	ydl typo evoke colortil gcard
 
 ALL=$(FILES:%=$(BINDIR)/%) $(LANG:%=$(BINDIR)/%)

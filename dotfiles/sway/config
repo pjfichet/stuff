@@ -61,7 +61,7 @@ exec $swayidle
     bindsym $mod+w exec firefox -P default
 	bindsym $mod+x exec firefox -P safe
     # menu launcher
-    bindsym $mod+m exec menubar
+    bindsym $mod+m exec sway_menubar
 	# swayidle
 	bindsym $mod+z exec sway_screensaver
 	# screenshot
