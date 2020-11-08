@@ -12,7 +12,7 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	vis/visrc.lua vis/themes/mine.lua
 
 HOMEDIR=vimrc \
-	vim/colors/dracula.vim vim/colors/selenized.vim \
+	vim/colors/selenized.vim \
 	vim/colors/blue.vim vim/colors/troff.vim \
 	vim/syntax/bnk.vim vim/syntax/csv.vim vim/syntax/fish.vim \
 	vim/syntax/map.vim vim/syntax/pacman.vim vim/syntax/tag.vim \
