@@ -1,0 +1,87 @@
+diff --git a/conf.h b/conf.h
+index 711a3a8..77d238d 100644
+--- a/conf.h
++++ b/conf.h
+@@ -1,6 +1,6 @@
+-#define MAXMAILS		(1 << 12)
+-#define MAXSIZE			(1 << 21)
+-#define FOLDER			"/home/me/.mailx/"
++#define MAXMAILS		(1 << 21)
++#define MAXSIZE			(1 << 25)
++#define FOLDER			"/home/pj/var/mail/box/"
+ #define SPOOL			(FOLDER "inbox")
+ #define LOG(msg)
+ 
+@@ -9,13 +9,65 @@ struct account {
+ 	char *port;		/* server port */
+ 	char *user;		/* username */
+ 	char *pass;		/* password */
++	char *dest;		/* destination folder */
+ 	char *uidl;		/* path of uidl file; disables uidl if NULL */
+ 	char *cert;		/* path of server certificate pem file */
+ 	int del;		/* delete messages after retrieving */
+ 	int nopipe;		/* no outstanding commands */
+ 	int stls;		/* enable starttls */
+ } accounts [] = {
+-	{"server", "port", "username", "password"},
++	//{"server", "port", "username", "password", "folder"},
+ };
+ 
+ struct filter {
+@@ -23,5 +75,14 @@ struct filter {
+ 	char *val;		/* pattern to match */
+ 	char *dst;		/* destination mbox file */
+ } filters[] = {
+-	{"HDR:", "KEY", FOLDER "dst"},
++	//{"HDR:", "KEY", FOLDER "dst"},
++
+ };
+diff --git a/pop3.c b/pop3.c
+index 062bc3e..57bd04f 100644
+--- a/pop3.c
++++ b/pop3.c
+@@ -206,7 +206,7 @@ static int pop3_lonefrom_(char *s)
+ 	return !strncmp("From ", s, 5);
+ }
+ 
+-static int fetch_one(int i)
++static int fetch_one(int i, char *account_dest)
+ {
+ 	char line[BUFFSIZE];
+ 	char *s = mailbuf;
+@@ -236,6 +236,8 @@ static int fetch_one(int i)
+ 		s += len;
+ 	}
+ 	*s++ = '\n';
++	if (!dst)
++		dst = account_dest;
+ 	if (!dst)
+ 		dst = SPOOL;
+ 	ret = mail_write(dst, mailbuf, s - mailbuf);
+@@ -258,7 +260,7 @@ static int uidl_new(int i)
+ 	return !uidl || !uidl_find(uidl, mails[i].id);
+ }
+ 
+-static int fetch_mails(int beg, int end, int del)
++static int fetch_mails(int beg, int end, int del, char *account_dest)
+ {
+ 	char line[BUFFSIZE];
+ 	int i;
+@@ -267,7 +269,7 @@ static int fetch_mails(int beg, int end, int del)
+ 			pop3_retr(i);
+ 	for (i = beg; i < end; i++) {
+ 		if (size_ok(i) && uidl_new(i)) {
+-			if (fetch_one(i))
++			if (fetch_one(i, account_dest))
+ 				return 1;
+ 			if (uidl)
+ 				uidl_add(uidl, mails[i].id);
+@@ -322,7 +324,7 @@ static int fetch(struct account *account)
+ 			return 1;
+ 	batch = account->nopipe ? 1 : nmails;
+ 	for (i = 0; i < nmails; i += batch)
+-		if ((failed = fetch_mails(i, MIN(nmails, i + batch), account->del)))
++		if ((failed = fetch_mails(i, MIN(nmails, i + batch), account->del, account->dest)))
+ 			break;
+ 	if (!failed) {
+ 		pop3_cmd("QUIT\r\n");
