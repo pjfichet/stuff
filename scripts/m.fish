@@ -4,6 +4,7 @@
 set BINDIR $HOME/.local/bin
 set POP3 $BINDIR/pop3
 set NEATMAIL $BINDIR/neatmail				# neatmail address
+set BROWSER firefox
 set SEND $BINDIR/smtp				# neatmail smtp
 set UNMIME $BINDIR/unmime.py			# ripmime, unmime.py
 set MKMIME $BINDIR/mkmime.py			# mimer.py
@@ -174,6 +175,12 @@ if test "$CMD" = "mime"
 	set -l MIMEDIR $MAILDIR/tmp/$CUR
 	echo Exploding in $MIMEDIR.
 	eval $NEATMAIL pg $BOX $CUR | $UNMIME -d $MIMEDIR -
+	exit
+end
+
+# open an html file in firefox
+if test "$CMD" = "fox"
+	eval $BROWSER $MAILDIR/tmp/$CUR/*.html
 	exit
 end
 
