@@ -61,7 +61,7 @@ exec $swayidle
     bindsym $mod+w exec firefox -P default
 	bindsym $mod+x exec firefox -P safe
     # menu launcher
-    bindsym $mod+m exec sway_menubar
+    bindsym $mod+m exec sway_menu
 	# swayidle
 	bindsym $mod+z exec sway_screensaver
 	# screenshot
@@ -132,7 +132,7 @@ bindsym $mod+r mode "resize"
 bar {
 	# status_command exec datetime
 	# status_command exec mybar while mybar ; do sleep 1; done
-	status_command statusbar
+	status_command sway_bar
     position top
 	height 30px
 	font Liberation Mono 11
