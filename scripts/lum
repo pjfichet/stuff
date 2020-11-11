@@ -1,4 +1,4 @@
-#! /bin/fish
+#! /usr/bin/fish
 
 set FILE "/sys/class/backlight/intel_backlight/brightness"
 set LUM (cat $FILE)

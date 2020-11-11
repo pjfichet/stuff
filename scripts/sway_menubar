@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /usr/bin/fish
 # normal, selected title filter hightlighted 
 echo $XAPPS | sed 's/ /\n/g' | sort \
 	| bemenu --fn liberation-mono 13 \
