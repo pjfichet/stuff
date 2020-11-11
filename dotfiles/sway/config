@@ -40,7 +40,7 @@ output $output bg /home/pj/var/pic/background.jpg fill
 #
 
 # swayidle
-set $swayidle swayidle timeout 60 'swaylock -c 000000' timeout 90 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -c 000000'
+set $swayidle swayidle timeout 90 'swaylock -c 000000' timeout 120 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -c 000000'
 exec $swayidle
 
 
@@ -153,6 +153,7 @@ bar {
 default_border pixel 5
 #for_window [class=".*"] border pixel 5
 #for_window [floating=true] move down 30px
+for_window [app_id="zoom"] floating enable
 
 # border, background, text, indicator, childborder
 client.focused $bg_dark $bg_dark $fg_normal $bg_light $bg_light
