@@ -57,6 +57,7 @@ autocmd filetype security set nobackup noswapfile nowritebackup
 autocmd BufEnter * if getline(1) =~ '^To:' | set ft=mail | endif
 autocmd BufEnter * if getline(1) =~ '^From:' | set ft=mail | endif
 autocmd BufEnter * if getline(1) =~ '^\.' | set ft=troff | endif
+autocmd BufEnter * if getline(1) =~ 'fish' | set ft=fish | endif
 autocmd BufEnter *.mh,*.ms,*.tr set ft=troff
 autocmd BufEnter *.tin set ft=tintin
 autocmd BufEnter *.fish set ft=fish
