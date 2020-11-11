@@ -1,6 +1,7 @@
 # fish configuration
 
-set -x PATH $PATH $HOME/.local/bin $HOME/dev/bin
+set -x PATH $PATH $HOME/.local/bin
+set -x HOSTNAME (cat /proc/sys/kernel/hostname)
 set -x TERM xterm-256color
 set -x EDITOR vim
 set -x LESSCHARSET utf-8
@@ -31,14 +32,18 @@ set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
 set -x PASSWORD_STORE_DIR $HOME/var/pass
 set -x PASSWORD_STORE_CHARACTER_SET [:alnum:],?*%~./
 set -x VCARD_DIR $HOME/var/dav/card/
-set -x XAPPS firefox libreoffice gimp gcompris-qt inkscape mupdf termite openmw klavaro chromium
+set -x XAPPS firefox libreoffice gimp gcompris-qt inkscape openmw klavaro
+if test "$HOSTNAME" = "cspj"
+	set -x XAPPS firefox gimp libreoffice zoom
+end
 set -x PHONE storage/7FDD-280D
 #set -x EXINIT "/etc/vi.my"
 set -x BUP_DIR $XDG_CONFIG_HOME/bup
 set -l V $HOME/var
 set -x BACKUP $V/coop $V/mail $V/pass $V/dav $V/doc $V/web
 set -x SAL_USE_VCLPLUGIN gtk3
-set -x QT_QPA_PLATFORM wayland-egl
+#set -x QT_QPA_PLATFORM wayland-egl
+set -x QT_QPA_PLATFORM wayland
 set -x CLUTTER_BACKEND wayland
 set -x SDL_VIDEODRIVER wayland
 #set -x GDK_BACKEND "wayland"
@@ -133,7 +138,7 @@ end
 
 function webcam --description "Use the webcam"
 	echo modprobe uvcvideo
-	mpv av://v4l2:/dev/video0
+	echo mpv av://v4l2:/dev/video0
 end
 
 
