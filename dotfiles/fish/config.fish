@@ -233,4 +233,5 @@ end
 fish_vi_key_bindings
 
 #commands
-if test ! -s ~/.config/mpd/pid; mpd; end
+# use systemctl enable --user mpd.socket or
+# if test ! -s ~/.config/mpd/pid; mpd; end
