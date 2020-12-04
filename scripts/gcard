@@ -223,6 +223,8 @@ class Vfetch():
 
 	def format(self, string):
 		self._debug(self.vcard)
+        # should take care to match formatting options too
+        # and use them to format the string.
 		output = re.sub('{\w*}', self.matchformat, string)
 		print(output)
 
@@ -240,14 +242,18 @@ import argparse
 
 def main(argv):
 
-	parser = argparse.ArgumentParser(description="Get fields from Vcards.")
+	parameters = ", ".join(Vflat.parameters + Vflat.parameters_flat)
+	epilog="Parameters:\n{}".format(parameters)
+
+	parser = argparse.ArgumentParser(description="Get fields from Vcards.",
+		epilog=epilog)
 	parser.add_argument('-v', '--verbose', help="verbosity level",
 		default=False, action="store_true")
-	parser.add_argument('-d', '--directory', help="directory",
+	parser.add_argument('-d', '--directory', help="directory storing vcards, default is $VCARD_DIR",
 		default=os.environ.get('VCARD_DIR'))
-	parser.add_argument('-f', '--format', help="output format",
+	parser.add_argument('-f', '--format', help="String with {parameter}",
 		default="{fn} <{email}>")
-	parser.add_argument('script')
+	parser.add_argument('script', help="<parameter> =|~|!=|!~ <value> [and|or <script> ...]")
 
 	args = parser.parse_args()
 	if args.directory is None:
