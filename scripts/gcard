@@ -221,13 +221,6 @@ class Vfetch():
 					return
 				else:
 					sys.exit("'{}' is not a valid parameter.".format(self.tokens[0]))
-			elif self.tokens[1] == 'and' or self.tokens[1] == 'or':
-				if self.tokens[0] not in Vflat.parameters_all:
-					self.build_find_one()
-					self.build_condition()
-					return
-				else:
-					sys.exit("Missing string to search after parameter '{}'.".format(self.tokens[0]))
 		if self.tokens[0] == 'and' or self.tokens[0] == 'or':
 			self.build_condition()
 		elif self.tokens[0] not in Vflat.parameters_all:
