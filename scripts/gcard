@@ -57,7 +57,9 @@ class Vflat():
 'email_x400'
 ]
 
-	parameters_all = parameters + parameters_flat
+	parameters_path = ['directory', 'filename', 'path']
+
+	parameters_all = parameters + parameters_flat + parameters_path
 
 
 	def __init__(self, vcard):
@@ -128,8 +130,20 @@ class Vfetch():
 				vcard = vobject.readOne(f.read())
 				f.close()
 				vflat = Vflat(vcard).vflat
+				vflat['directory'] = root
+				vflat['filename'] = filename
+				vflat['path'] = os.path.join(root, filename)
 				self.vcards.append(vflat)
 		self._debug(len(self.vcards))
+
+	def list(self, script):
+		self.render_function = self.build_code(script)['render_function']
+		card_list = []
+		for vcard in self.vcards:
+			if self.render_function(vcard):
+				card_list.append(vcard['path'])
+		self._debug(card_list)
+		return(card_list)
 	
 	def find(self, script):
 		self.render_function = self.build_code(script)['render_function']
@@ -223,8 +237,8 @@ class Vfetch():
 
 	def format(self, string):
 		self._debug(self.vcard)
-        # should take care to match formatting options too
-        # and use them to format the string.
+		# should take care to match formatting options too
+		# and use them to format the string.
 		output = re.sub('{\w*}', self.matchformat, string)
 		print(output)
 
@@ -242,8 +256,8 @@ import argparse
 
 def main(argv):
 
-	parameters = ", ".join(Vflat.parameters + Vflat.parameters_flat)
-	epilog="Parameters:\n{}".format(parameters)
+	parameters = ", ".join(Vflat.parameters_all)
+	epilog="Parameters: {}.".format(parameters)
 
 	parser = argparse.ArgumentParser(description="Get fields from Vcards.",
 		epilog=epilog)
@@ -251,6 +265,8 @@ def main(argv):
 		default=False, action="store_true")
 	parser.add_argument('-d', '--directory', help="directory storing vcards, default is $VCARD_DIR",
 		default=os.environ.get('VCARD_DIR'))
+	parser.add_argument('-e', '--edit', help="Edit found vcards",
+        default=False, action="store_true")
 	parser.add_argument('-f', '--format', help="String with {parameter}",
 		default="{fn} <{email}>")
 	parser.add_argument('script', help="<parameter> =|~|!=|!~ <value> [and|or <script> ...]")
@@ -268,7 +284,12 @@ def main(argv):
 	vfetch = Vfetch(args.directory)
 	vfetch.default_format = args.format
 	vfetch.debug = args.verbose
-	vfetch.find(args.script)
+	if args.edit:
+		filelist = " ".join(vfetch.list(args.script))
+		os.system(os.environ.get('EDITOR') + ' ' + filelist)
+		#print(filelist)
+	else:
+		vfetch.find(args.script)
 
 if __name__ == "__main__":
 	main(sys.argv[1:])
