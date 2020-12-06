@@ -153,7 +153,7 @@ class Vfetch():
 				self.format(self.default_format)
 
 	def build_code(self, script):
-		self.tokens = script.strip().split()
+		self.tokens = script
 		self.start=""
 		self.code="	for parameter in vcard:"
 		self.end="	return"
@@ -262,7 +262,8 @@ def main(argv):
         default=False, action="store_true")
 	parser.add_argument('-f', '--format', help="String with {parameter}",
 		default="{fn} <{email}>")
-	parser.add_argument('script', help="<parameter> =|~|!=|!~ <value> [and|or <script> ...]")
+	parser.add_argument('script', help="<parameter> =|~|!=|!~ <value> [and|or <script> ...]",
+		nargs='*')
 
 	args = parser.parse_args()
 	if args.directory is None:
