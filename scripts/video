@@ -15,8 +15,9 @@ end
 argparse "r/reduce" "c/container" "o/codec" "a/audio" "v/video" "s/subtitles" -- $argv
 or usage
 
-test (count $argv) -eq 0
-or usage
+if test (count $argv) -eq 0
+	usage
+end
 
 set input $argv[1]
 set output $argv[2]
