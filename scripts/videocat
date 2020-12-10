@@ -1,0 +1,28 @@
+#! /usr/bin/fish
+
+# concatenate files
+set file /tmp/(basename (status -f)).(echo %self)
+if test -e $file;
+	rm $file
+end
+
+if test -e $argv[-1]
+	echo "File $argv[-1] exists yet. Aborting."
+end
+
+for video in $argv[1..-2]
+	set video_path (pwd)/$video
+	if test ! -e $video_path
+		echo "File $video not found."
+		if test -e $file
+			rm $file
+		end
+		exit 1
+	end
+	echo file \'$video_path\' >> $file
+end
+
+echo ffmpeg -f concat -safe 0 -i $file -c copy $argv[-1]
+if test -e $file
+	rm $file
+end
