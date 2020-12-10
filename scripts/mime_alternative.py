@@ -1,4 +1,4 @@
-#! /usr/bin/env/python
+#! /usr/bin/env python
 
 # This file creates an alternative mime message, ie a mime message containing
 # an html file and a plain text alternative. Related files or attachment can be
