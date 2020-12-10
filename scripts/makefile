@@ -4,7 +4,7 @@ PREFIX=$(HOME)/.local
 BINDIR=$(PREFIX)/bin
 LANG=enfr fren fres esfr
 
-FILES=backupusb m mkmime.py unmime.py smartmail \
+FILES=backupusb m mkmime.py unmime.py smartmail mime_alternative.py \
 	lum temp ripdvd translate.fish \
 	sway_bar sway_menu sway_screensaver \
 	ydl typo evoke colortil gcard
