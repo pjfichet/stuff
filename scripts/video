@@ -1,0 +1,72 @@
+#! /usr/bin/fish
+
+function usage
+	echo "Usage:"
+	echo (basename (status -f)) " [-r] [-c] [-a] [-v] [-s] input output"
+	echo "    -r/--reduce        reduce size"
+	echo "    -c/--container     change container"
+	echo "    -o/--codec         change audio codec"
+	echo "    -a/--audio         extract audio"
+	echo "    -v/--video         extract video"
+	echo "    -s/--subtitltes    remove subtitles"
+	exit 1
+end
+
+argparse "r/reduce" "c/container" "o/codec" "a/audio" "v/video" "s/subtitles" -- $argv
+or usage
+
+test (count $argv) -eq 0
+or usage
+
+set input $argv[1]
+set output $argv[2]
+
+
+if test ! -e $input
+	echo "File $input not found."
+	exit 1
+end
+
+if test -e $output
+	echo "File $output exist yet. Aborting."
+	exit 1
+end
+
+
+# -hwaccel use hardware acceleration, but may give inferiors results
+# -hwaccel vaapi -hwaccel_device /dev/dri/renderD128
+
+# quickly reduce a video with a constant bitrate
+# crf values: 17 is visually lossless, 23 default, 28 still sane, 51 worst
+# preset values: ultrafast, superfast, veryfast, faster, fast
+# medium, slow, slower, veryslow
+# tune values: film, animation, grain, stillimage, fastdecode,
+# zerolatency
+if test -n "$_flag_reduce"
+	ffmpeg -i $input -vcodec libx264 -crf 28 -preset faster $output
+end
+
+# change audio codec to mp4a
+if test -n "$_flag_codec"
+	ffmpeg -i $input -c:v copy -c:a aac $output
+end
+
+# change container
+if test -n "$_flag_container"
+	ffmpeg -i $input -c:av copy $output
+end
+
+# extract audio
+if test -n "$_flag_audio"
+	ffmpeg -i $input -vn $output
+end
+
+# extract video
+if test -n "$_flag_video"
+	ffmpeg -i $input -an $output
+end
+
+# remove subtitles
+if test -n "$_flag_subtitles"
+	ffmpeg -i $input -sn $output
+end
