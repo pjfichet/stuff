@@ -36,7 +36,8 @@ set -x XAPPS firefox libreoffice gimp gcompris-qt inkscape openmw klavaro
 if test "$HOSTNAME" = "cspj"
 	set -x XAPPS firefox gimp libreoffice zoom
 end
-set -x PHONE storage/7FDD-280D
+set -x PHONE_CARD storage/7FDD-280D
+set -x PHONE_CAM sdcard/DCIM/Camera
 #set -x EXINIT "/etc/vi.my"
 set -x BUP_DIR $XDG_CONFIG_HOME/bup
 set -l V $HOME/var
