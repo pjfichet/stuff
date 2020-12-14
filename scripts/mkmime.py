@@ -40,7 +40,7 @@ if len(sys.argv) == 3:
     try:
         mimetype, subtype = guess_type(pathname)[0].split('/')
     except AttributeError:
-        mimetype, subtype = application, unknown
+        mimetype, subtype = "application", "octet-stream"
     with open(pathname, 'rb') as attachment:
         data = attachment.read()
         mail.add_attachment(data, mimetype, subtype, filename=filename)
