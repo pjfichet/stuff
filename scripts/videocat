@@ -22,7 +22,7 @@ for video in $argv[1..-2]
 	echo file \'$video_path\' >> $file
 end
 
-echo ffmpeg -f concat -safe 0 -i $file -c copy $argv[-1]
+ffmpeg -f concat -safe 0 -i $file -c copy $argv[-1]
 if test -e $file
 	rm $file
 end
