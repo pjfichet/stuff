@@ -28,7 +28,8 @@ set -x CDPATH .:~:~/var:~/var/doc:~dld
 set -x XKB_DEFAULT_LAYOUT fr,fr
 set -x XKB_DEFAULT_VARIANT oss,bepo
 set -x XKB_DEFAULT_MODEL pc101
-set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
+#set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
+set -x XKB_DEFAULT_OPTIONS grp:shifts_toggle
 set -x PASSWORD_STORE_DIR $HOME/var/pass
 set -x PASSWORD_STORE_CHARACTER_SET [:alnum:],?*%~./
 set -x VCARD_DIR $HOME/var/dav/card/
@@ -92,6 +93,7 @@ alias imv "/usr/bin/imv -s shrink"
 alias mplayer "mplayer -dvd-device /dev/sr0"
 alias lp2 "lp -o sides=two-sided-long-edge"
 alias octal "stat -c '%a %n'"
+alias cpr "rsync --archive --human-readable --partial --progress"
 
 function m4a2ogg
 	set name (basename $argv[1] .m4a)
