@@ -93,12 +93,28 @@ alias imv "/usr/bin/imv -s shrink"
 alias mplayer "mplayer -dvd-device /dev/sr0"
 alias lp2 "lp -o sides=two-sided-long-edge"
 alias octal "stat -c '%a %n'"
-alias cpr "rsync --archive --human-readable --partial --progress"
+alias rsync "rclone sync -P"
+alias rls "rclone lsf"
+alias rmount "rclone mount"
 
-function m4a2ogg
-	set name (basename $argv[1] .m4a)
+function rcopy
+	set --local dirname (basename $argv[1])
+	find $argv[1] -type -d -exec rclone mkdir $argv[2]/'{}'\;
+	rclone copy -P $argv[1] $argv[2]/$dirname
+end
+
+function adbpush
+	set --local dirname (basename $argv[1])
+	find $argv[1] -type -d -exec adb shell mkdir $argv[2]/'{}'\;
+	adb push $argv[1]/. $argv[2]/$dirname
+end
+
+function vid2ogg
+	set file $argv[1]
+	set --local extension (echo $file | awk -F. '{print $NF}')
+    set --local filename (basename $file .$extension)
 	# -acodec libopus may be better
-	ffmpeg -i $name.m4a -vn -acodec libvorbis $name.ogg
+	ffmpeg -i $file -vn -acodec libvorbis $filename.ogg
 end
 
 function backup
