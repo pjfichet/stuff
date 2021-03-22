@@ -93,14 +93,16 @@ alias imv "/usr/bin/imv -s shrink"
 alias mplayer "mplayer -dvd-device /dev/sr0"
 alias lp2 "lp -o sides=two-sided-long-edge"
 alias octal "stat -c '%a %n'"
+alias rcopy "rclone copy -P"
 alias rsync "rclone sync -P"
 alias rls "rclone lsf"
 alias rmount "rclone mount"
 
-function rcopy
-	set --local dirname (basename $argv[1])
-	find $argv[1] -type -d -exec rclone mkdir $argv[2]/'{}'\;
-	rclone copy -P $argv[1] $argv[2]/$dirname
+function rtree
+	set --local dirname (dirname $argv[1])
+	set --local basename (basename $argv[1])
+	cd $dirname
+		and find $basename -type d -exec rclone mkdir $argv[2]/'{}' \;
 end
 
 function adbpush
