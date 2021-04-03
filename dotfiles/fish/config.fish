@@ -13,25 +13,27 @@ set -x XDG_CONFIG_HOME $HOME/.config
 set -x XDG_CACHE_HOME $HOME/.cache
 set -x XDG_DATA_HOME $HOME/.local/share
 set -x XDG_DESKTOP_DIR $HOME
-set -x XDG_DOCUMENTS_DIR $HOME/var/doc
+set -x XDG_DOCUMENTS_DIR $HOME/doc
+set -x XDG_TEMPLATES_DIR $XDG_DOCUMENTS_DIR/tpl
+set -x XDG_MEDIAS_DIR $HOME/var
+set -x XDG_MUSIC_DIR $XDG_MEDIAS_DIR/mus
+set -x XDG_PICTURES_DIR $XDG_MEDIAS_DIR/pic
+set -x XDG_PUBLICSHARE_DIR $XDG_MEDIAS_DIR/pub
+set -x XDG_VIDEOS_DIR $XDG_MEDIAS_DIR/vid
+set -x XDG_DEV_DIR $XDG_MEDIAS_DIR/dev
 set -x XDG_DOWNLOAD_DIR $HOME/dld
-set -x XDG_MUSIC_DIR $HOME/var/mus
-set -x XDG_PICTURES_DIR $HOME/var/pic
-set -x XDG_PUBLICSHARE_DIR $HOME/pub
-set -x XDG_TEMPLATES_DIR $HOME/var/tpl
-set -x XDG_VIDEOS_DIR $HOME/var/vid
 #set -x XDG_DATA_DIRS "/usr/local/share:/usr/share"
 #set -x XDG_CONFIG_DIRS "/etc/xdg"
 #set -x XDG_CONFIG_DIRS "/etc/xdg:$XDG_CONFIG_DIRS"
 #set -x XDG_RUNTIME_DIR
-set -x CDPATH .:~:~/var:~/var/doc:~dld
+set -x CDPATH .:~:$XDG_DOCUMENTS_DIR:$XDG_MEDIAS_DIR:$XDG_DEV_DIR
 set -x XKB_DEFAULT_LAYOUT fr,fr
 set -x XKB_DEFAULT_VARIANT oss,bepo
 set -x XKB_DEFAULT_MODEL pc101
 #set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
 set -x XKB_DEFAULT_OPTIONS grp:shifts_toggle
-set -x PASSWORD_STORE_DIR $HOME/var/pass
-set -x PASSWORD_STORE_CHARACTER_SET [:alnum:],?*%~./
+set -x PASSWORD_STORE_DIR $XDG_DOCUMENTS_DIR/pass
+set -x PASSWORD_STORE_CHARACTER_SET '[:alnum:],?*%~./'
 set -x VCARD_DIR $HOME/var/dav/card/
 set -x XAPPS firefox libreoffice gimp gcompris-qt inkscape openmw klavaro
 if test "$HOSTNAME" = "cspj"
@@ -41,14 +43,13 @@ set -x PHONE_CARD storage/7FDD-280D
 set -x PHONE_CAM sdcard/DCIM/Camera
 #set -x EXINIT "/etc/vi.my"
 set -x BUP_DIR $XDG_CONFIG_HOME/bup
-set -l V $HOME/var
-set -x BACKUP $V/coop $V/mail $V/pass $V/dav $V/doc $V/web
+set -x BACKUP $XDG_DOCUMENTS_DIR
 set -x SAL_USE_VCLPLUGIN gtk3
-#set -x QT_QPA_PLATFORM wayland-egl
 set -x QT_QPA_PLATFORM wayland
 set -x CLUTTER_BACKEND wayland
 set -x SDL_VIDEODRIVER wayland
-#set -x GDK_BACKEND "wayland"
+set -x GDK_BACKEND "wayland"
+set -x MOZ_ENABLE_WAYLAND 1 firefox
 
   #termcap terminfo
   #ks      smkx      make the keypad send commands
@@ -77,7 +78,7 @@ alias diff "diff -u"
 alias perms "stat -c '%A %a %n'"
 alias datetime "date +'%A %d %B %Y, %H:%M'"
 alias dater "date +%Y%m%d"
-alias sway "/usr/bin/sway 2> sway.log"
+alias sway "wlsunset -l 45.6 -L 0.15 & /usr/bin/sway 2> sway.log"
 alias wclip "swaymsg clipboard"
 alias khsync "vdirsyncer sync"
 alias vi "vim"
@@ -99,16 +100,15 @@ alias rls "rclone lsf"
 alias rmount "rclone mount"
 
 function rtree
-	set --local dirname (dirname $argv[1])
-	set --local basename (basename $argv[1])
-	cd $dirname
-		and find $basename -type d -exec rclone mkdir $argv[2]/'{}' \;
+	rclone mkdir $argv[2]
+	cd $argv[1]
+		and find ./ -type d -exec rclone mkdir $argv[2]/'{}' \;
 end
 
-function adbpush
-	set --local dirname (basename $argv[1])
-	find $argv[1] -type -d -exec adb shell mkdir $argv[2]/'{}'\;
-	adb push $argv[1]/. $argv[2]/$dirname
+function adbtree
+	adb shell mkdir $argv[2]
+	cd $argv[1]
+		and find ./ -type d -exec adb shell mkdir $argv[2]/'{}' \;
 end
 
 function vid2ogg
