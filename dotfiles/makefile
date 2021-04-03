@@ -18,9 +18,13 @@ HOMEDIR=vimrc \
 	vim/syntax/map.vim vim/syntax/pacman.vim vim/syntax/tag.vim \
 	vim/syntax/tintin.vim vim/syntax/troff.vim vim/syntax/txt2tags.vim
 
+VIMPLUGINS=lightline zig
+
 include secret.mk
 
 install: $(COLORIZE) $(CONFDIR:%=$(HOME)/.config/%) $(HOMEDIR:%=$(HOME)/.%)
+
+update: $(VIMPLUGINS:%=$(HOME)/.vim/pack/plugins/start/%)
 
 clean:
 	rm -f $(COLORIZE)
@@ -39,3 +43,11 @@ $(HOME)/.%: %
 	@echo "Installing $@"
 	@test -d $$(dirname $@) || mkdir -p $$(dirname $@)
 	@cp $< $@
+
+$(VIMPLUGINS:%=$(HOME)/.vim/pack/plugins/start/%):
+	@echo $@
+	@test -e $@ && cd $@ && git pull || true
+	@test ! -e $@ && git clone https://github.com/itchyny/$$(basename $@).vim $@ || true
+
+.PHONY: $(VIMPLUGINS:%=$(HOME)/.vim/pack/plugins/start/%)
+
