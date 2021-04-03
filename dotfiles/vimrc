@@ -51,6 +51,8 @@ colorscheme selenized
 set termguicolors
 set background=dark
 
+"git clone https://github.com/ziglang/zig.vim ~/.vim/pack/plugins/start/zig
+
 " mime types
 autocmd filetype security set nobackup noswapfile nowritebackup
 "au BufNewFile,BufRead
