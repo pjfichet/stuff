@@ -42,7 +42,7 @@ end
 set -x PHONE_CARD storage/7FDD-280D
 set -x PHONE_CAM sdcard/DCIM/Camera
 #set -x EXINIT "/etc/vi.my"
-set -x BUP_DIR $XDG_CONFIG_HOME/bup
+set -x BUP_DIR $XDG_CACHE_HOME/bup
 set -x BACKUP $XDG_DOCUMENTS_DIR
 set -x SAL_USE_VCLPLUGIN gtk3
 set -x QT_QPA_PLATFORM wayland
@@ -78,7 +78,7 @@ alias diff "diff -u"
 alias perms "stat -c '%A %a %n'"
 alias datetime "date +'%A %d %B %Y, %H:%M'"
 alias dater "date +%Y%m%d"
-alias sway "wlsunset -l 45.6 -L 0.15 & /usr/bin/sway 2> sway.log"
+alias sway "/usr/bin/sway 2> sway.log"
 alias wclip "swaymsg clipboard"
 alias khsync "vdirsyncer sync"
 alias vi "vim"
