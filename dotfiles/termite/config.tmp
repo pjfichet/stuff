@@ -12,8 +12,8 @@ mouse_autohide = true
 background = #@bg_dark
 foreground = #@fg_normal
 foreground_bold = #@fg_light
-highlight = #$bg_lighter
-cursor = #$fg_normal
+highlight = #@bg_lighter
+cursor = #@fg_normal
 
 # Black, Gray
 # base02 base01
