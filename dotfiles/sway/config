@@ -56,7 +56,7 @@ exec wlsunset -l 45.6 -L 0.15
     # reload the configuration file
     bindsym $mod+Shift+r reload
     # start a terminal
-    bindsym $mod+Return exec termite
+    bindsym $mod+Return exec alacritty
     # firefox
     bindsym $mod+w exec firefox -P default
 	bindsym $mod+x exec firefox -P safe

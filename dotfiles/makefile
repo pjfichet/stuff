@@ -1,5 +1,11 @@
 COLORSCHEME=color/selenized.fish
-COLORIZE=termite/config sway/color vis/themes/mine.lua fish/color.fish mako/config
+COLORIZE=termite/config \
+	sway/color \
+	vis/themes/mine.lua \
+	fish/color.fish \
+	mako/config \
+	alacritty/alacritty.yml
+
 CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	khal/config \
 	khard/khard.conf \
@@ -9,7 +15,8 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	termite/config termite/termite.terminfo \
 	mako/config \
 	vdirsyncer/config \
-	vis/visrc.lua vis/themes/mine.lua
+	vis/visrc.lua vis/themes/mine.lua \
+	alacritty/alacritty.yml
 
 HOMEDIR=vimrc \
 	vim/colors/selenized.vim \
