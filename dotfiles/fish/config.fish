@@ -49,7 +49,7 @@ set -x QT_QPA_PLATFORM wayland
 set -x CLUTTER_BACKEND wayland
 set -x SDL_VIDEODRIVER wayland
 set -x GDK_BACKEND "wayland"
-set -x MOZ_ENABLE_WAYLAND 1 firefox
+#set -x MOZ_ENABLE_WAYLAND 1 firefox
 
   #termcap terminfo
   #ks      smkx      make the keypad send commands
@@ -72,7 +72,7 @@ set -x LESS_TERMCAP_us (set_color green)
 #set LS_COLORS 'rs=0:di=01;34:ln=01;36:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:tw=30;42:ow=34;42:st=37;44:ex=01;32:';
 
 
-#alias ls "ls --color=auto --group-directories-first"
+alias ls "ls --color=auto --group-directories-first"
 alias gcompris "gcompris-qt"
 alias diff "diff -u"
 alias perms "stat -c '%A %a %n'"
@@ -80,7 +80,7 @@ alias datetime "date +'%A %d %B %Y, %H:%M'"
 alias dater "date +%Y%m%d"
 alias sway "/usr/bin/sway 2> sway.log"
 alias wclip "swaymsg clipboard"
-alias khsync "vdirsyncer sync"
+alias davsync "vdirsyncer sync"
 alias vi "vim"
 alias fox "firefox"
 alias pmount "udevil mount"
@@ -98,11 +98,17 @@ alias rcopy "rclone copy -P"
 alias rsync "rclone sync -P"
 alias rls "rclone lsf"
 alias rmount "rclone mount"
+alias rcheck "rclone check -P"
+alias openmw-fr "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-fr $XDG_CONFIG_HOME/openmw"
+alias openmw-en "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-en $XDG_CONFIG_HOME/openmw"
+
 
 function rtree
-	rclone mkdir $argv[2]
+	set -l current_dir (pwd)
+	rclone mkdir -P $argv[2]
 	cd $argv[1]
-		and find ./ -type d -exec rclone mkdir $argv[2]/'{}' \;
+		and find ./ -type d -exec rclone mkdir -P $argv[2]/'{}' \;
+	cd $current_dir
 end
 
 function adbtree
@@ -146,9 +152,31 @@ function bk --description "make a backup of a file"
 	cp -a "$argv[1]" "$argv[1]"_(dater)
 end
 
+function oldlsl
+	set -l file (/usr/bin/ls -t $argv[1] | head -1)
+	if test $argv[1]
+		echo $argv[1]"/"$file
+	else
+		echo $file
+	end
+end
+
 function lsl
-	set -l file (ls -t $argv[1] | head -1)
-	echo $argv[1]"/"$file
+	set -l filelist
+	set -l timestamp 0
+	set -l newest
+	if test $argv[1]
+		set filelist $argv[1]/*
+	else
+		set filelist *
+	end
+	for f in $filelist
+		if test -f $f -a (stat -c '%Y' $f) -gt $timestamp
+			set timestamp (stat -c '%Y' $f)
+			set newest $f
+		end
+	end
+	echo $newest
 end
 
 function mvif
