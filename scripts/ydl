@@ -5,16 +5,17 @@ set _flag_format 18
 
 function usage
 	echo "Usage:"
-	echo (basename (status -f)) "[-f format] [-h] [-i] [-l] [-m] [url]" 
+	echo (basename (status -f)) "[-f format] [-h] [-i] [-l] [-m] [-n] [url]" 
 	echo "    f/format: set the format."
 	echo "    h/help: show this help."
 	echo "    i/info: list available formats."
 	echo "    l/list: download the whole list."
 	echo "    m/music: download music only."
+	echo "    n/noplay: don't play."
 	exit 1
 end
 
-argparse "l/list" "f/format=" "i/info" "m/music" "h/help" -- $argv
+argparse "l/list" "f/format=" "i/info" "m/music" "h/help" "n/noplay" -- $argv
 or usage
 
 if test -n "$_flag_help"
@@ -41,9 +42,13 @@ else if test -n "$_flag_info"
 	youtube-dl --list-formats "$id"
 else if test -n "$_flag_music"
    youtube-dl -x --id --format $_flag_format --no-playlist "$url"
-   mpv "/tmp/$id.m4a"
+	if test ! -n "$_flag_noplay"
+   		mpv "/tmp/$id.m4a"
+	end
 else
 	youtube-dl --id --format $_flag_format --no-playlist "$url"
-	mpv "/tmp/$id.mp4"
+	if test ! -n "$_flag_noplay"
+		mpv "/tmp/$id.mp4"
+	end
 end
 
