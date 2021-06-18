@@ -50,7 +50,7 @@ let g:lightline = {'colorscheme': 'selenized_dark'}
 colorscheme selenized
 set termguicolors
 set background=dark
-hi Normal guifg='#@fg_0' guibg='#@bg_0' guisp=NONE gui=NONE cterm=NONE
+hi Normal guifg='#@fg_normal' guibg='#@bg_dark' guisp=NONE gui=NONE cterm=NONE
 
 
 "git clone https://github.com/ziglang/zig.vim ~/.vim/pack/plugins/start/zig
