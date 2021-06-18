@@ -44,7 +44,7 @@ end
 # tune values: film, animation, grain, stillimage, fastdecode,
 # zerolatency
 if test -n "$_flag_reduce"
-	ffmpeg -i $input -vcodec libx264 -crf 28 -preset faster $output
+	ffmpeg -i $input -vcodec libx264 -crf 28 -preset faster -vsync 0 $output
 end
 
 # change audio codec to mp4a
