@@ -6,48 +6,53 @@ status_path = "~/.local/share/vdirsyncer/"
 [pair cards]
 a = "cards_local"
 b = "cards_remote"
-collections = ["from a", "from b"]
+collections = ["from b"]
+conflict_resolution = "b wins"
+metadata = ["displayname"]
 
 [storage cards_local]
 type = "filesystem"
-path = "~/var/dav/card"
+path = "~/doc/dav/card"
 fileext = ".vcf"
 
 [storage cards_remote]
 type = "carddav"
-url = "https://posteo.de:8843"
-username = "@email@"
-password.fetch = ["command", "pass", "mail/posteo.net"]
+url = "https://carddav.mailo.com/adbook/@user@"
+username = "@user@"
+password.fetch = ["command", "pass", "mail/mailo.com"]
 
 ### Calendars
 [pair cals]
 a = "cals_local"
 b = "cals_remote"
-collections = [["bnb", "bnb", "lgqzjn"], "default"]
+collections = ["from b"]
+conflict_resolution = "b wins"
+metadata = ["displayname"]
+#collections = [["bnb", "bnb", "lgqzjn"], "default"]
 
 [storage cals_local]
 type = "filesystem"
-path = "~/var/dav/cal"
+path = "~/doc/dav/cal"
 fileext = ".ics"
 
 [storage cals_remote]
 type = "caldav"
-url = "https://posteo.de:8843"
-username = "@email@"
-password.fetch = ["command", "pass", "mail/posteo.net"]
+url = "https://caldav.mailo.com/calendar/@user@"
+username = "@user@"
+password.fetch = ["command", "pass", "mail/mailo.com"]
 
-[pair airbnb]
-a = "airbnb_remote"
-b = "airbnb_local"
-collections = null
-partial_sync = "revert"
-
-[storage airbnb_local]
-type = "filesystem"
-path = "~/var/dav/cal/airbnb"
-fileext = ".ics"
-
-[storage airbnb_remote]
-type = "http"
-url = "@bnbcal@"
+#[pair airbnb]
+#a = "airbnb_remote"
+#b = "airbnb_local"
+#collections = null
+#partial_sync = "revert"
+#
+#[storage airbnb_local]
+#type = "filesystem"
+#path = "~/var/dav/cal/airbnb"
+#fileext = ".ics"
+#
+#[storage airbnb_remote]
+#type = "http"
+#url = "@bnbcal@"
 
