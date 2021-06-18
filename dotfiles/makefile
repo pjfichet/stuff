@@ -1,10 +1,11 @@
-COLORSCHEME=color/selenized.fish
+COLORSCHEME=color/violet.fish
 COLORIZE=termite/config \
 	sway/color \
 	vis/themes/mine.lua \
 	fish/color.fish \
 	mako/config \
-	alacritty/alacritty.yml
+	alacritty/alacritty.yml \
+	vimrc
 
 CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	khal/config \

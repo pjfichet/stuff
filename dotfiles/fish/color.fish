@@ -19,8 +19,8 @@ set -U fish_color_host 75b938
 set -U fish_color_cancel normal
 set -U fish_color_comment 72898f
 set -U fish_color_match --background=brblue 72898f
-set -U fish_color_selection normal --background=184956
+set -U fish_color_selection normal --background=183456
 set -U fish_pager_color_completion 72898f
 set -U fish_pager_color_prefix cad8d9
-set -U fish_pager_color_progress normal --background=184956
+set -U fish_pager_color_progress normal --background=183456
 set -U fish_pager_color_description 75b938
