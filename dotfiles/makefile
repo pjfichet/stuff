@@ -45,7 +45,7 @@ $(COLORIZE): %: %.tmp color/colorize.fish $(COLORSCHEME) makefile
 $(HOME)/.config/%: %
 	@echo "Installing $@"
 	@test -d $$(dirname $@) || mkdir -p $$(dirname $@)
-	@sed -e "s/@email@/$(email)/g; s,@bnbcal@,$(bnbcal),g" $< > $@
+	@sed -e "s/@email@/$(email)/g; s/@user@/$(user)/g; s,@bnbcal@,$(bnbcal),g" $< > $@
 
 $(HOME)/.%: %
 	@echo "Installing $@"
