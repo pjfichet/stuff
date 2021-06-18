@@ -1,0 +1,76 @@
+#! /usr/bin/fish
+
+function usage
+	echo "Usage:"
+	echo (basename (status -f)) "[-s speed] [-c channel] file"
+	echo "	-s/--speed			select speed from 0 to 8"
+	echo "	-a/--audio			select audio flux" 
+	echo "	-v/--video			select video flux" 
+	echo "  -q/--quality        select quality from 23 to 28"
+	echo "Extract the dvd with:"
+	echo "dvdbackup -i /dev/dvd -o ./ -F -n moviename"
+	exit 1
+end
+
+argparse "s/speed=" "a/audio=" "v/video=" "q/quality=" -- $argv
+or usage
+
+if test (count $argv) = 0
+	usage
+end
+set input $argv[1]
+set output (echo $argv[1] | sed -e "s/\.[^.]*//").mp4
+
+if test ! -e $input
+	echo "File $input not found."
+	exit 1
+end
+
+if test -e $output
+	echo "File $output exists yet. Aborting."
+	exit 1
+end
+
+set speed slow
+if test -n "$_flag_speed"
+	if test $_flag_speed = 0; set speed veryslow; end
+	if test $_flag_speed = 1; set speed slower; end
+	if test $_flag_speed = 2; set speed slow; end
+	if test $_flag_speed = 3; set speed medium; end
+	if test $_flag_speed = 4; set speed fast; end
+	if test $_flag_speed = 5; set speed faster; end
+	if test $_flag_speed = 6; set speed veryfast; end
+	if test $_flag_speed = 7; set speed superfast; end
+	if test $_flag_speed = 8; set speed ultrafast; end
+end
+
+set map
+set audio 0
+set video 0
+if test -n "$_flag_audio"
+	set audio $_flag_audio
+	set map -map 0:v:$video -map 0:a:$audio
+end
+if test -n "$_flag_video"
+	set video $_flag_video
+	set map -map 0:v:$video -map 0:a:$audio
+end
+
+set quality 24
+if test -n "$_flag_quality"
+	set quality $_flag_quality
+end
+
+# use the following for x265:
+# set vcodec -vcodec libx265 -crf 28
+
+set starttime  (date '+%H:%M:%S')
+ffmpeg -hide_banner -loglevel error -stats \
+	-i $input $map -sn \
+	-vcodec libx264 -crf $quality \
+	-preset $speed \
+	-acodec libmp3lame -q:a 4 -ac 2 \
+	-vsync 0 -max_muxing_queue_size 1024 \
+	$output
+echo $input converted to $output. Started at $starttime, ended at (date '+%H:%M:%S').
+
