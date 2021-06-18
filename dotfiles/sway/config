@@ -21,7 +21,7 @@ include /home/pj/.config/sway/color
 # output (swaymsg -t get_outputs)
 #output $output resolution 1366x768 position 0,0
 # wallpaper 
-output $output bg /home/pj/var/pic/background.jpg fill
+output $output bg /home/pj/var/pic/background.png fill
 
 
 ### Input configuration
@@ -153,7 +153,7 @@ bar {
 default_border pixel 5
 #for_window [class=".*"] border pixel 5
 #for_window [floating=true] move down 30px
-for_window [app_id="zoom"] floating enable
+#for_window [app_id="zoom"] floating enable
 
 # border, background, text, indicator, childborder
 client.focused $bg_dark $bg_dark $fg_normal $bg_light $bg_light
