@@ -33,6 +33,7 @@
 # https://docs.python.org/3/library/email.html
 
 import sys
+import os
   
 import argparse
 parser = argparse.ArgumentParser()
@@ -41,16 +42,20 @@ parser.add_argument("-t", "--to", help="email To field", required=True)
 parser.add_argument("-s", "--subject", help="email Subject field", required=True)
 parser.add_argument("-p", "--plain", help="plain text file", required=True)
 parser.add_argument("-m", "--html", help="html file", required=True)
-parser.add_argument("-r", "--related", help="related file", nargs='*')
-parser.add_argument("-a", "--attachment", help="attachment", nargs='*')
+parser.add_argument("-r", "--related", help="related file", action='append')
+parser.add_argument("-a", "--attachment", help="attachment", action='append')
 args = parser.parse_args()
 
 from email.mime.multipart import MIMEMultipart
+from email.utils import formatdate, make_msgid
 multipart_message = MIMEMultipart()
-multipart_message["subject"] = args.subject
-multipart_message["from"] = args.fromfield
+multipart_message["Subject"] = args.subject
+multipart_message["From"] = args.fromfield
 multipart_message["Bcc"] =  args.fromfield
 multipart_message["To"] = args.to
+multipart_message['Date'] = formatdate(localtime=True)
+multipart_message['Message-ID'] = make_msgid()
+
 # multipart_message["To"] = "Georges Bray <georges.bray@centres-sociaux.fr>"
 
 from email.mime.text import MIMEText
@@ -69,14 +74,15 @@ if args.related:
     # attach the alternative message to the related one
     related_message.attach(alternative_message)
     # attach the document to the related message
-    for filename in args.related:
+    for pathname in args.related:
         try:
-            with open(filename, "rb") as f:
+            with open(pathname, "rb") as f:
                 image = MIMEImage(f.read())
                 # link the image with <img src="cid:logo"/>
+                filename = os.path.basename(pathname)
                 image.add_header('Content-ID', f"<{filename}>")
         except IOError:
-            print(f"{filename} not found.", file=sys.stderr)
+            print(f"{pathname} not found.", file=sys.stderr)
             sys.exit(1)
         related_message.attach(image)
     # attach the related message to the multipart message
@@ -89,13 +95,14 @@ else:
 if args.attachment:
     # there are attachments
     from email.mime.application import MIMEApplication
-    for filename in args.attachment:
+    for pathname in args.attachment:
         try:
-            with open(filename, "rb") as f:
+            with open(pathname, "rb") as f:
                 pdf_file = MIMEApplication(f.read(), "pdf")
+                filename = os.path.basename(pathname)
                 pdf_file.add_header("Content-Disposition", "attachment", filename=filename)
         except IOError:
-            print(f"{filename} not found.", file=sys.stderr)
+            print(f"{pathname} not found.", file=sys.stderr)
             sys.exit(1)
         multipart_message.attach(pdf_file) 
 
