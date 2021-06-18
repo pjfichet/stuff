@@ -3,8 +3,8 @@
 source $argv[1]
 
 sed -e "s/@bg_dark/$bg_dark/g; \
-	s/@bg_light/$bg_light/g; \
 	s/@bg_lighter/$bg_lighter/g; \
+	s/@bg_light/$bg_light/g; \
 	s/@fg_dark/$fg_dark/g; \
 	s/@fg_normal/$fg_normal/g; \
 	s/@fg_light/$fg_light/g; \
