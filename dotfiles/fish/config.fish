@@ -101,6 +101,8 @@ alias rmount "rclone mount"
 alias rcheck "rclone check -P"
 alias openmw-fr "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-fr $XDG_CONFIG_HOME/openmw"
 alias openmw-en "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-en $XDG_CONFIG_HOME/openmw"
+alias gpg-public "gpg --export --armor"
+alias gpg-private "gpg --export-secret-keys --armor"
 
 
 function rtree
