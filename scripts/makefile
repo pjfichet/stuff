@@ -7,7 +7,8 @@ LANG=enfr fren fres esfr
 FILES=backupusb m mkmime.py unmime.py smartmail mime_alternative.py \
 	lum temp ripdvd translate.fish \
 	sway_bar sway_menu sway_screensaver \
-	ydl video videocat videotomp4 typo evoke colortil gcard
+	ydl video videocat videotomp4 ripdvd2 typo evoke colortil gcard \
+	installfont
 
 ALL=$(FILES:%=$(BINDIR)/%) $(LANG:%=$(BINDIR)/%)
 
