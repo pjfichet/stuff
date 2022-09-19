@@ -128,17 +128,29 @@ function vid2ogg
 end
 
 function backup
-	set -l before (du -sh $BUP_DIR | cut -d '	' -f 1)
-	bup index $argv[1]
-	bup save -n (basename $argv[1]) $argv[1]
-	set -l after (du -sh $BUP_DIR | cut -d '	' -f 1)
-	echo $BUP_DIR: $before '->' $after
+	if test -d $HOME/$argv[1]
+		set -l before (du -sh $BUP_DIR | cut -f 1)
+		bup index $HOME/$argv[1]
+		bup save -n (basename $argv[1]) $HOME/$argv[1]
+		set -l after (du -sh $BUP_DIR | cut -f 1)
+		echo $BUP_DIR: $before '->' $after
+	else
+		echo "$argv[1] not in $HOME/."
+	end
 end
 
 function restore
 	bup restore -C $HOME/bup $argv[1]/latest
 end
-	
+
+function mailo
+	if test -d $HOME/doc/$argv[1]
+		backup doc
+		rclone copy -P $HOME/doc/$argv[1] mailo:doc/$argv[1]
+	else
+		echo "$argv[1] not in $HOME/doc/"
+	end
+end
 
 
 function ppause
