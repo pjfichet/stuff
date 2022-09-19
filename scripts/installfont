@@ -19,6 +19,7 @@ set libdir $XDG_DATA_HOME
 if test ! -n "$libdir"
 	set libdir $HOME/.local/share
 end
+
 set otfdir $libdir/font/otf
 set ttfdir $libdir/font/ttf
 set devdir $libdir/font/devutf
@@ -56,6 +57,7 @@ end
 if test ! -e $devdir/$filename
 	echo Creating $devdir/$filename
 	cat $ttfdir/$filename.ttf \
-	| $bindir/mkfn -b -l -o -r720 -Slatn -t $filename -f "$ttfdir/$filename.ttf" \
+	| mkfn -b -l -o -r720 -Slatn -t $filename -f "$ttfdir/$filename.ttf" \
 	> $devdir/$filename
+
 end
