@@ -109,14 +109,16 @@ function rtree
 	set -l current_dir (pwd)
 	rclone mkdir -P $argv[2]
 	cd $argv[1]
-		and find ./ -type d -exec rclone mkdir -P $argv[2]/'{}' \;
+		and find ./ -type d -exec rclone mkdir -P $argv[2]/{} \;
 	cd $current_dir
 end
 
 function adbtree
+	set -l current_dir (pwd)
 	adb shell mkdir $argv[2]
 	cd $argv[1]
-		and find ./ -type d -exec adb shell mkdir $argv[2]/'{}' \;
+		and find ./ -type d -exec adb shell mkdir $argv[2]/{} \;
+	cd $current_dir
 end
 
 function vid2ogg
