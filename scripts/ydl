@@ -2,6 +2,8 @@
 
 # video format (18)
 set _flag_format 18
+#set ydl youtube-dl
+set ydl yt-dlp
 
 function usage
 	echo "Usage:"
@@ -27,26 +29,26 @@ if test -n "$argv[1]"
 else
 	set url (wl-paste)
 end
-set id (youtube-dl -q --no-playlist --get-id "$url")
+set id ($ydl -q --no-playlist --get-id "$url")
 
 
 cd /tmp/
 
 if test -n "$_flag_list"
 	if test -n "$_flag_music"
-		youtube-dl -i -x --format $_flag_format -o '%(playlist_index)s.m4a' "$url"
+		$ydl -i -x --format $_flag_format -o '%(playlist_index)s.m4a' "$url"
 	else
-		youtube-dl -i --format $_flag_format  -o '%(playlist_index)s.mp4' "$url"
+		$ydl -i --format $_flag_format  -o '%(playlist_index)s.mp4' "$url"
 	end
 else if test -n "$_flag_info"
-	youtube-dl --list-formats "$id"
+	$ydl --list-formats "$id"
 else if test -n "$_flag_music"
-   youtube-dl -x --id --format $_flag_format --no-playlist "$url"
+   $ydl -x --id --format $_flag_format --no-playlist "$url"
 	if test ! -n "$_flag_noplay"
    		mpv "/tmp/$id.m4a"
 	end
 else
-	youtube-dl --id --format $_flag_format --no-playlist "$url"
+	$ydl --id --format $_flag_format --no-playlist "$url"
 	if test ! -n "$_flag_noplay"
 		mpv "/tmp/$id.mp4"
 	end
