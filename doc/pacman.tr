@@ -8,8 +8,12 @@ met à jour le système
 install paquet
 .PI "\*B-Rcsn\*B \*Ipaquet\*I"
 supprime paquet et ses dépendances inusités
+.PI "\*B-Rcsn\*B \*I$(pacman \*B-Qqdt\*B)\*I
+supprime les dépendences inusitées
 .PI "\*B-Ss\*B \*Imotif\*I"
 recherche motif dans le dépot
+.PI \*B-Qqe\*B
+Liste les paquets installés explicitement.
 .PI "\*B-Qs\*B \*Imotif\*I"
 recherche motif dans les paquets installés
 .PI "\*B-Sc\*B"
