@@ -1,0 +1,42 @@
+#! /usr/bin/fish
+
+
+function usage
+	echo "Usage:"
+	echo (basename (status -f)) "moviename"
+	postusage
+end
+
+function postusage
+	echo ""
+	echo "check language with:"
+	echo "    mpv --aid=1 VIDEO_TS/VTS_01_1.VOB"
+	echo "edit mkmovie.fish to set audio channel"
+	echo "and run:"
+	echo "    fish mkmovie.fish"
+end
+
+if test (count $argv) != 1
+	usage
+	exit 1
+end
+
+set moviename $argv[1]
+set directory (pwd)
+
+cd ~/var/vid
+dvdbackup -i /dev/sr0 -o ./ -F -n $moviename
+
+cd $moviename
+
+echo "#! /usr/bin/fish" > mkmovie.fish
+echo "" >> mkmovie.fish
+echo "# mpv --aid=1 VIDEO_TS/VTS_01_1.VOB"  >> mkmovie.fish
+for f in VIDEO_TS/*.VOB
+	echo "videotomp4 -v 0 -a 0 $f" >> mkmovie.fish
+end
+echo "videocat *.mp4 $moviename.mp4" >> mkmovie.fish
+
+postusage
+
+cd $directory
