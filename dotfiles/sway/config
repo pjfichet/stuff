@@ -40,10 +40,12 @@ output $output bg /home/pj/var/pic/background.png fill
 #
 
 # swayidle
+exec wlsunset -l 45.6 -L 0.15
+
 set $swayidle swayidle timeout 90 'swaylock -c 000000' timeout 120 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -c 000000'
 exec $swayidle
 
-exec wlsunset -l 45.6 -L 0.15
+exec dunst
 
 ### Key bindings
 #

@@ -5,7 +5,8 @@ COLORIZE=termite/config \
 	fish/color.fish \
 	mako/config \
 	alacritty/alacritty.yml \
-	vimrc
+	vimrc \
+	dunst/dunstrc
 
 CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	khal/config \
@@ -17,7 +18,8 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	mako/config \
 	vdirsyncer/config \
 	vis/visrc.lua vis/themes/mine.lua \
-	alacritty/alacritty.yml
+	alacritty/alacritty.yml \
+	dunst/dunstrc
 
 HOMEDIR=vimrc \
 	vim/colors/selenized.vim \
