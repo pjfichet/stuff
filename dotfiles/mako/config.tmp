@@ -5,9 +5,12 @@ border-color=#@bg_dark
 
 [urgency=low]
 text-color=#@light_blue
+border-color=#@light_blue
 
 [urgency=normal]
 text-color=#@light_green
+border-color=#@light_green
 
 [urgency=high]
 text-color=#@light_yellow
+border-color=#@light_yellow
