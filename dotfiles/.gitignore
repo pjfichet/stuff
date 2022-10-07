@@ -1,3 +1,5 @@
 sway/color
 termite/config
+mako/config
+dunst/dunstrc
 vis/themes/mine.lua
