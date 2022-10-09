@@ -19,7 +19,8 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	vdirsyncer/config \
 	vis/visrc.lua vis/themes/mine.lua \
 	alacritty/alacritty.yml \
-	dunst/dunstrc
+	dunst/dunstrc \
+	imv/config
 
 HOMEDIR=vimrc \
 	vim/colors/selenized.vim \

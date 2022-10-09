@@ -1,0 +1,19 @@
+[options]
+suppress_default_binds = true
+
+[binds]
+q = quit
+g = goto 0
+G = goto -1
+h = zoom -1
+j = next
+k = prev
+l = zoom 1
+<Shift+H> = pan -10 0
+<Shift+J> = pan 0 -10
+<Shift+K> = pan 0 10
+<Shift+L> = pan 10 0
+p = exec echo $imv_current_file
+f = fullscreen
+x = toggle_playing
+c = center
