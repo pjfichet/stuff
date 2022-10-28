@@ -67,6 +67,7 @@ autocmd BufEnter *.tin set ft=tintin
 autocmd BufEnter *.fish set ft=fish
 autocmd BufEnter list.nm set ft=list
 autocmd BufEnter do set tw=0 wm=1
+autocmd BufEnter pacman.log set ft=pacman
 
 autocmd filetype python setlocal expandtab
 autocmd filetype python setlocal softtabstop=4
