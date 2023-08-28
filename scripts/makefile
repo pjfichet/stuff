@@ -1,16 +1,24 @@
 include secret.mk
 
+COLORSCHEME=violet.fish
 PREFIX=$(HOME)/.local
 BINDIR=$(PREFIX)/bin
 LANG=enfr fren fres esfr
+
+COLORIZE=sway_menu
 
 FILES=backupusb m mkmime.py unmime.py smartmail mime_alternative.py \
 	lum temp ripdvd translate.fish \
 	sway_bar sway_menu sway_screensaver \
 	ydl video videocat videotomp4 ripdvd2 typo evoke colortil gcard \
-	installfont
+	installfont omw
 
 ALL=$(FILES:%=$(BINDIR)/%) $(LANG:%=$(BINDIR)/%)
+
+$(COLORIZE): %: %.tmp ../dotfiles/color/colorize.fish ../dotfiles/color/$(COLORSCHEME) makefile
+	@echo "Creating $@"
+	@fish ../dotfiles/color/colorize.fish ../dotfiles/color/$(COLORSCHEME) < $< > $@
+
 
 help:
 	make install uninstall
