@@ -1,0 +1,201 @@
+#! /usr/bin/fish
+
+# https://modding-openmw.com/lists/expanded-vanilla/
+
+set modpath $HOME/var/mor/mods
+set modlist (cat $modpath/.modlist)
+
+if test -z "$argv"
+	exec /home/pj/var/mor/bin/openmw-0.48.0-Linux-64BitRC6/openmw
+end
+
+function usage
+	echo "Usage:"
+	echo (basename (status -f)) "--[clean|delta|examine|install|list[|extract|resize]"
+	echo "-c/--clean                clean mods needing cleaning"
+	echo "-d/--delta                creates delta and omwllf plugins"
+	echo "-e/--examine directory    examine the content of directory"
+	echo "-i/--install         		install openmw.cfg based on modlist"
+	echo "-l/--list					set modlist"
+	echo "-x/--extract directory    extract archive in directory"
+    echo "-r/--resize               resize meshes"
+	echo "-h/--help					show this usage"
+	exit
+end
+
+
+
+
+argparse "c/clean"  "d/delta" "e/examine" "i/install" "l/list" \
+	"x/extract" "r/resize" "h/help" -- $argv
+or usage
+
+
+if test -n "$_flag_help"
+	usage
+end
+
+
+
+function list_mod
+	set dir (echo $argv[1] | sed -e "s/.*\///")
+	begin
+		set date (date +%Y%m%d)
+		echo "### $argv[1] ($date)"
+		find $argv[1] -iname '*.bsa' \
+			| sed -e "s/^/fallback-archive=/g"
+		find $argv[1] -iname '*.esp' \
+			-o -iname '*.esm' \
+			-o -iname 'meshes' \
+			-o -iname 'textures' \
+			-o -iname 'music' \
+			-o -iname 'animations' \
+			-o -iname '*.omwaddon' \
+			-o -iname '*.omwscripts' \
+			| sed -e 's,^,#data=",g; s,/[^/]*$,",g'
+		find $argv[1] -iname '*.esp' \
+			-o -iname '*.esm' \
+			-o -iname '*.omwaddon' \
+			-o -iname '*.omwscripts' \
+			| sed -e "s,^,#content=,"
+	end | uniq | sort -t "=" -k 2 | sed -e "s,$argv[1],$dir,g"
+end	
+
+
+
+if test -n "$_flag_extract"	
+	if test -e $modpath/$argv[1]/$modlist.cfg
+		echo "$argv/$modlist.cfg exists. Aborting."
+		exit
+	end
+	echo extracting in $modpath/$argv[1]
+	if test ! -d $modpath/$argv[1]
+		mkdir -p $modpath/$argv[1]
+	end
+	set here (pwd)
+	cd $modpath/$argv[1]
+	mv (lsl ~/dld) ./
+	find ./ -maxdepth 1 -name '*.7z' -exec 7z x '{}' \;
+	find ./ -maxdepth 1 -name '*.zip' -exec unzip '{}' \;
+	find ./ -maxdepth 1 -name '*.rar' -exec unrar x '{}' \;
+	find ./ -maxdepth 1 -name '*.tar.gz' -exec tar -xzf '{}' \;
+	cd "$here"
+	list_mod $modpath/$argv[1] > $modpath/$argv[1]/$modlist.cfg
+	vim $modpath/$argv[1]/$modlist.cfg
+	echo $argv[1] >> $modpath/$modlist.cfg
+end
+
+if test -n "$_flag_examine"
+	if test -e $modpath/$argv[1]/$modlist.cfg
+		echo "$argv[1]/$modlist.cfg exists. Aborting."
+		exit
+	else
+		echo $argv[1] >> $modpath/$modlist.cfg
+		list_mod $argv[1] > $modpath/$argv[1]/$modlist.cfg
+		vim $argv/$modlist.cfg
+	end
+end
+
+if test -n "$_flag_install"
+	if test ! -d $HOME/.config/openmw-$modlist
+		echo "$HOME/.config/openmw-$modlist does not exist. Aborting."
+		exit
+	end
+	echo "Replacing $HOME/.config/openmw-$modlist/openmw.cfg"
+	begin
+		echo "fallback-archive=Morrowind.bsa
+fallback-archive=Tribunal.bsa
+fallback-archive=Bloodmoon.bsa"
+
+		sed -e "/^#/d" $modpath/$modlist.cfg | while read -l dir
+			if test -e $modpath/$dir/$modlist.cfg
+				grep fallback-archive $modpath/$dir/$modlist.cfg
+			end
+		end
+
+		if test "$modlist" = "fr"
+			echo 'data="/home/pj/var/mor/fr/app/Data Files"'
+		else
+			echo 'data="/home/pj/var/mor/en/app/Data Files"'
+		end
+
+		echo "content=Morrowind.esm
+content=Tribunal.esm
+content=Bloodmoon.esm"
+
+		sed -e '/^#/d; /^$/d' $modpath/$modlist.cfg | while read -l dir
+			if test -e $modpath/$dir/$modlist.cfg
+				echo -e "\n### $dir"
+				sed -e "/^#/d; /fallback-archive=/d;
+					s,^data=\",data=\"$modpath/,;
+					s,content=.*/\([^/]*\),content=\1," \
+					$modpath/$dir/$modlist.cfg
+			end
+		end
+		sed -e "/^#/d" $modpath/$modlist.cfg | while read -l dir
+			if test -e $modpath/$dir/openmw.cfg
+				cat $modpath/$dir/openmw.cfg
+			end
+		end
+	end > $HOME/.config/openmw-$modlist/openmw.cfg
+end
+
+
+if test -n "$_flag_clean"
+	set here (pwd)
+	cd ~/var/mor/en/app/
+	~/var/mor/bin/tes3cmd clean $modpath/$argv[1]
+	cd $here
+end	
+
+if test -n "$_flag_delta"
+	if test ! -d $modpath/delta
+		mkdir $modpath/delta
+	end
+	set -x RAYON_NUM_THREADS 1
+	nice ../scripts/delta_plugin -v -v merge --skip-cells $modpath/delta/$modlist-delta.omwaddon
+	set -u RAYON_NUM_THREADS
+	if test ! -e $modpath/delta/$modlist.cfg
+		list_mod $argv[1] > $modpath/delta/$modlist.cfg
+		echo delta >> $modpath/$modlist.cfg
+	end	
+	#echo "Creating delta/omwllf.omwaddon"
+	#rm -f delta/omwllf.omwaddon
+	#nice ../scripts/omwllf/omwllf.py -d $modpath/delta -m $modlist-omwllf.omwaddon
+end
+
+if test -n "$_flag_list"
+	if test ! -n "$argv[1]"
+		echo modlist: $modlist
+		exit
+	end
+	echo modlist: $argv[1]
+	echo $argv[1] > $modpath/.modlist
+	if test -d $HOME/.config/openmw-$argv[1]
+		cd $HOME/.config
+		rm $HOME/.config/openmw
+		ln -s $HOME/.config/openmw-$argv[1] $HOME/.config/openmw
+		ls -l $HOME/.config/openmw
+		rm $HOME/.local/share/openmw
+		ln -s $HOME/.local/share/openmw-$argv[1] $HOME/.local/share/openmw
+		ls -l $HOME/.local/share/openmw
+	else
+		echo "Possibles choices  are:"
+		ls -d $HOME/.config/openmw-* | cut -d '-' -f 2
+	end
+end
+
+
+if test -n "$_flag_resize"
+	# find $argv[1] -type d -exec mkdir lowdef/'{}' \;
+	set -l percent 50%
+	if test -e .resized
+		cat .resized
+		exit
+	else
+		magick mogrify -verbose -filter Mitchell -resize $percent *.dds
+		#magick mogrify -verbose -filter Mitchell -resize $percent -path lowdef *.dds
+		set date (date +%Y%m%d)
+		echo "Resized by $percent on $date." > .resized
+	end
+end

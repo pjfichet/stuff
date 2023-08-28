@@ -35,10 +35,11 @@ set -x XKB_DEFAULT_OPTIONS grp:shifts_toggle
 set -x PASSWORD_STORE_DIR $XDG_DOCUMENTS_DIR/pass
 set -x PASSWORD_STORE_CHARACTER_SET '[:alnum:],?*%~./'
 set -x VCARD_DIR $HOME/var/dav/card/
-set -x XAPPS firefox libreoffice gimp gcompris-qt inkscape openmw klavaro
+set -x XAPPS firefox libreoffice gimp gcompris-qt inkscape omw klavaro
 if test "$HOSTNAME" = "cspj"
 	set -x XAPPS firefox gimp libreoffice zoom
 end
+set -x OPENMW_PHYSICS_FPS 30
 set -x PHONE_CARD storage/7FDD-280D
 set -x PHONE_CAM sdcard/DCIM/Camera
 #set -x EXINIT "/etc/vi.my"
@@ -101,6 +102,7 @@ alias rmount "rclone mount"
 alias rcheck "rclone check -P"
 alias openmw-fr "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-fr $XDG_CONFIG_HOME/openmw"
 alias openmw-en "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-en $XDG_CONFIG_HOME/openmw"
+alias openmw-mod "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-mod $XDG_CONFIG_HOME/openmw"
 alias gpg-public "gpg --export --armor"
 alias gpg-private "gpg --export-secret-keys --armor"
 
