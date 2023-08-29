@@ -11,23 +11,23 @@ set $left h
 set $down j
 set $up k
 set $right l
-set $output eDP-1
-set $input "eglax 3823:1/eGalax_Inc._USB_TouchControll"
 
 # solarized colors
 include /home/pj/.config/sway/color
 
 
 # output (swaymsg -t get_outputs)
-#output $output resolution 1366x768 position 0,0
+# set $output eDP-1
+# output $output resolution 1366x768 position 0,0
 # wallpaper 
-output $output bg /home/pj/var/pic/background.png fill
+output * bg /home/pj/doc/pic/background.png fill
 
 
 ### Input configuration
 #
 # Example configuration:
 #
+#  set $input "eglax 3823:1/eGalax_Inc._USB_TouchControll"
 #   input "2:14:SynPS/2_Synaptics_TouchPad" {
 #       dwt enabled
 #       tap enabled
