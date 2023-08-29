@@ -2,7 +2,8 @@
 
 # Default macro
 TMAC=-mul -mu-fr
-#TMAC=-muh -mu-apolline -mu-fr
+#TMAC=-muh -mu-apolline
+LMAC=-mu-fr
 
 # Prefix directory
 PREFIX=$(HOME)/.local
@@ -25,6 +26,7 @@ PDF=$(BINDIR)/pdf
 POST=$(BINDIR)/post
 TBL=$(BINDIR)/tbl
 EQN=$(BINDIR)/eqn
+PIC=$(BINDIR)/pic
 # Utroff tools
 REFER=$(BINDIR)/refer
 UGRIND=$(BINDIR)/ugrind
@@ -67,23 +69,26 @@ spell:
 mu: $(LAST).pdf
 	mupdf $<
 
-
 help:
-	@echo "set REFARG=\"-p file.ref\""
-	@echo "set TMAC=-mul -mu-fr -mu-tbl -mu-ref"
-	@echo "make last vi mu .ps .pdf .n.pdf .c.pdf .crypt.pdf"
-	@echo "make .txt .mkd .man .xml .html .fodt"
-
+	@echo "edit local makefile:"
+	@echo "    include $(XDG_TEMPLATES_DIR)/troff.mk"
+	@echo "    TMAC=-mul -mu-tbl -mu-ref"
+	@echo "    LMAC=-mufr"
+	@echo "    REFARG=\"-p file.ref\""
+	@echo "make last vi mu .ps .ps.pdf .n.pdf .pdf .crypt.pdf"
+	@echo "make .txt .mkd .man .xml .html .fodt .doc"
+	@echo "make .book.pdf"
 
 %.tmp: %.tr
 	@echo "Generating $@"
-	@$(SOELIM) $< | $(UGRIND) | $(TPLAN) | $(REFER) -a -b -dAE $(REFARG) > $@
+	@$(SOELIM) $< | $(UGRIND) | $(PIC) | $(REFER) -a -b -dAE $(REFARG) > $@
+	#@$(SOELIM) $< > $@
 
 %.to: %.tmp
-	@echo "Generating $@ with $(TMAC)"
-	@$(ROFF) $(TMAC) $< > /dev/null 2>&1 
-	@$(ROFF) $(TMAC) $< > /dev/null 2>&1
-	@$(ROFF) $(TMAC) $< > $@
+	@echo "Generating $@ with $(TMAC) $(LMAC)"
+	@$(ROFF) $(TMAC) $(LMAC) $< > /dev/null 2>&1 
+	@$(ROFF) $(TMAC) $(LMAC) $< > /dev/null 2>&1
+	@$(ROFF) $(TMAC) $(LMAC) $< > $@
 
 %.ps: %.to
 	@echo "Generating $@"
@@ -93,20 +98,22 @@ help:
 	@echo "Generating $@"
 	@ps2pdf $(PDFFLAGS1) $< $@
 
+#%.pdf: %.ps.pdf
+#	@mv $< $@
 
-%.n.pdf: %.tmp
+%.n.pdf: %.tr
 	@echo "Generating $@"
-	@$(PDF) -pa4 <$< > $@
+	@$(ROFF) $(TMAC) $(LMAC) $< | $(PDF) -pa4 > $@
 
-%.pdf: %.ps.pdf
-	@mv $< $@
+%.pdf: %.n.pdf
+	@echo "Generating compressed $@"
+	@mutool convert -o $@ -O compress,compress-fonts,compress-images $<
 
-%.c.pdf: %.pdf
-	@echo "Compressing $<"
-	@#mutool convert -o $@ -O compress,compress-fonts $<
-	@gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 \
-	-dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH \
-	-sOutputFile=$@ $<
+#%.pdf: %.n.pdf
+#@echo "Compressing $<"
+#@gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 \
+#-dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH \
+#-sOutputFile=$@ $<
 
 
 %.crypt.pdf: %.ps
@@ -119,19 +126,19 @@ help:
 
 %.txt: %.tmp
 	@echo "Generating $@"
-	@$(NROFF) -mut $< > $@
+	@$(NROFF) -mut $(LMAC) $< > $@
 
 %.mkd: %.tmp
 	@echo "Generating $@"
-	@$(NROFF) -muw $< > $@
+	@$(NROFF) -muw $(LMAC) $< > $@
 
 %.man: %.tr
 	@echo "Generating $@"
-	@$(SOELIM) $< | $(UGRIND) | $(NROFF) -mum > $@
+	@$(SOELIM) $< | $(UGRIND) | $(NROFF) -mum $(LMAC) > $@
 
 %.xml: %.tmp
 	@echo "Generating $@"
-	@$(PREXML) < $< | $(UGRIND) | $(NROFF) -mux | $(POSTXML) > $@
+	@$(PREXML) < $< | $(UGRIND) | $(NROFF) -mux $(LMAC) | $(POSTXML) > $@
 
 %.html: %.xml
 	@echo "Generating $@"
@@ -154,7 +161,7 @@ help:
 	@rm -f /tmp/a.ps /tmp/b.ps
 
 clean:
-	@rm -f *.ig $(ALL:%=%.tmp) $(ALL:%=%.to) $(ALL:%=%.ps) $(ALL:%=%.ps.pdf) \
-	$(ALL:%=%.pdf) $(ALL:%=%.n.pdf) $(ALL:%=%.c.pdf) $(ALL:%=%.crypt.pdf) \
-	$(ALL:%=%.txt) $(ALL:%=%.mkd) $(ALL:%=%.man) $(ALL:%=%.xml) $(ALL:%=%.html) \
+	@rm -f *.ig $(ALL:%=%.tmp) $(ALL:%=%.to) $(ALL:%=%.ps) $(ALL:%=%.ps.pdf)
+	@rm -f $(ALL:%=%.pdf) $(ALL:%=%.n.pdf) $(ALL:%=%.c.pdf) $(ALL:%=%.crypt.pdf)
+	@rm -f $(ALL:%=%.txt) $(ALL:%=%.mkd) $(ALL:%=%.man) $(ALL:%=%.xml) $(ALL:%=%.html) \
 	$(ALL:%=%.fodt) $(ALL:%=%.doc) $(ALL:%=%-book.pdf)
