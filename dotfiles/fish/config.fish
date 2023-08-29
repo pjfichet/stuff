@@ -20,25 +20,22 @@ set -x XDG_MUSIC_DIR $XDG_MEDIAS_DIR/mus
 set -x XDG_PICTURES_DIR $XDG_MEDIAS_DIR/pic
 set -x XDG_PUBLICSHARE_DIR $XDG_MEDIAS_DIR/pub
 set -x XDG_VIDEOS_DIR $XDG_MEDIAS_DIR/vid
-set -x XDG_DEV_DIR $XDG_MEDIAS_DIR/dev
+set -x XDG_SRC_DIR $XDG_MEDIAS_DIR/src
 set -x XDG_DOWNLOAD_DIR $HOME/dld
 #set -x XDG_DATA_DIRS "/usr/local/share:/usr/share"
 #set -x XDG_CONFIG_DIRS "/etc/xdg"
 #set -x XDG_CONFIG_DIRS "/etc/xdg:$XDG_CONFIG_DIRS"
 #set -x XDG_RUNTIME_DIR
-set -x CDPATH .:~:$XDG_DOCUMENTS_DIR:$XDG_MEDIAS_DIR:$XDG_DEV_DIR
+set -x CDPATH .:~:$XDG_DOCUMENTS_DIR
 set -x XKB_DEFAULT_LAYOUT fr,fr
-set -x XKB_DEFAULT_VARIANT oss,bepo
+#set -x XKB_DEFAULT_VARIANT oss,bepo
 set -x XKB_DEFAULT_MODEL pc101
 #set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
-set -x XKB_DEFAULT_OPTIONS grp:shifts_toggle
+#set -x XKB_DEFAULT_OPTIONS grp:shifts_toggle
 set -x PASSWORD_STORE_DIR $XDG_DOCUMENTS_DIR/pass
 set -x PASSWORD_STORE_CHARACTER_SET '[:alnum:],?*%~./'
-set -x VCARD_DIR $HOME/var/dav/card/
+set -x VCARD_DIR $XDG_DOCUMENTS_DIR/dav/card/
 set -x XAPPS firefox libreoffice gimp gcompris-qt inkscape omw klavaro
-if test "$HOSTNAME" = "cspj"
-	set -x XAPPS firefox gimp libreoffice zoom
-end
 set -x OPENMW_PHYSICS_FPS 30
 set -x PHONE_CARD storage/7FDD-280D
 set -x PHONE_CAM sdcard/DCIM/Camera
@@ -100,9 +97,6 @@ alias rsync "rclone sync -P"
 alias rls "rclone lsf"
 alias rmount "rclone mount"
 alias rcheck "rclone check -P"
-alias openmw-fr "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-fr $XDG_CONFIG_HOME/openmw"
-alias openmw-en "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-en $XDG_CONFIG_HOME/openmw"
-alias openmw-mod "rm $XDG_CONFIG_HOME/openmw; ln -sr $XDG_CONFIG_HOME/openmw-mod $XDG_CONFIG_HOME/openmw"
 alias gpg-public "gpg --export --armor"
 alias gpg-private "gpg --export-secret-keys --armor"
 
