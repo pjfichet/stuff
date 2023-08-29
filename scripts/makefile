@@ -7,13 +7,13 @@ LANG=enfr fren fres esfr
 
 COLORIZE=sway_menu
 
-FILES=backupusb mkmime.py unmime.py smartmail mime_alternative.py \
-	lum temp ripdvd translate.fish \
-	sway_bar sway_menu sway_screensaver \
-	ydl video videocat videotomp4 ripdvd2 typo evoke colortil gcard \
-	installfont omw
-	# m
+FILES=backupusb translate.fish installfont typo gcard \
+	lum temp sway_bar sway_menu sway_screensaver \
+	ydl video videocat videotomp4 ripdvd ripdvd2  \
+	omw evoke colortil 
 
+OLDFILES=m mkmime.py unmime.py smartmail mime_alternative.py \
+	
 ALL=$(FILES:%=$(BINDIR)/%) $(LANG:%=$(BINDIR)/%)
 
 $(COLORIZE): %: %.tmp ../dotfiles/color/colorize.fish ../dotfiles/color/$(COLORSCHEME) makefile
@@ -27,7 +27,7 @@ help:
 install: $(ALL)
 
 uninstall:
-	-rm $(ALL)
+	-rm -f $(ALL) $(OLDFILES:%=$(BINDIR)/%)
 
 $(BINDIR):
 	mkdir -p $@
