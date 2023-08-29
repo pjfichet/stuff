@@ -1,3 +1,26 @@
 # Stuff: scripts, templates, and dotfiles
 
 All the needed stuff to get a working system...
+
+# dependencies:
+
+alacritty
+bemenu
+bup
+dunst
+ffmpeg
+firefox
+fish
+grim
+imv
+mako
+mencoder
+mpc
+mpd
+mpv
+sway
+swayidle
+vdirsyncer
+vim
+vis
+yt-dlp
