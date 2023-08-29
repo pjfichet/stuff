@@ -14,13 +14,14 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	mpd/mpd.conf \
 	mpv/mpv.conf \
 	sway/color sway/config \
-	termite/config termite/termite.terminfo \
 	mako/config \
 	vdirsyncer/config \
 	vis/visrc.lua vis/themes/mine.lua \
 	alacritty/alacritty.yml \
 	dunst/dunstrc \
 	imv/config
+
+OLDCONFDIR=termite/config termite/termite.terminfo
 
 HOMEDIR=vimrc \
 	vim/colors/selenized.vim \
@@ -39,6 +40,11 @@ update: $(VIMPLUGINS:%=$(HOME)/.vim/pack/plugins/start/%)
 
 clean:
 	rm -f $(COLORIZE)
+
+uninstall:
+	rm -f $(CONFDIR:%=$(HOME)/.config/%)
+	rm -f $(OLDCONFDIR:%=$(HOME)/.config/%)
+	rm -f $(HOMEDIR:%=$(HOME)/.%)
 
 $(COLORIZE): %: %.tmp color/colorize.fish $(COLORSCHEME) makefile
 	@echo "Creating $@"
