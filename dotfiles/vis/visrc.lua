@@ -21,7 +21,13 @@ vis.events.subscribe(vis.events.WIN_OPEN, function(win)
 	if win.file.name:find(".bashrc") then
 		win:set_syntax("bash")
 	end
-	if win.syntax == 'python' or win.syntax == 'rust' then
+	if win.file.name:find("pacman.log") then
+		win:set_syntax("pacman")
+	end
+	if win.file.name:find(".tr") then
+		win:set_syntax("troff")
+	end
+if win.syntax == 'python' or win.syntax == 'rust' then
 	 	local tabwidth = 4
 	 	vis:command('set tabwidth ' .. tabwidth)
 	 	vis:command('set expandtab')
