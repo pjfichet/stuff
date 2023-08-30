@@ -1,5 +1,6 @@
 #! /usr/bin/fish 
 
+set battery
 set date
 set wifi
 set cpu
@@ -14,9 +15,25 @@ function getdate
 	set date (date +'%A %d %B %Y, %H:%M')
 end
 
+function getbattery
+	set acpib (acpi -b | cut -d "," -f 2 | sed -e "s/%//")
+	set battery
+	for bat in $acpib
+		if test $bat -lt 25
+			set battery "$battery $bat% "
+		else if test $bat -lt 50
+			set battery "$battery  "
+		else if test $bat -lt 75
+			set battery "$battery  "
+		else
+			set battery "$battery  "
+		end
+	end
+end
+
 function getwifi
 	set wifi (awk 'NR==3 {print substr($3, 1, 2)}''' /proc/net/wireless)
-	if test $wifi -lt 40
+	if test $wifi -lt 70
 		set wifi " $wifi%  "
 	else
 		set wifi
@@ -36,7 +53,8 @@ function getmemory
 	set memtotal (sed -n 's/MemTotal: *\(.*\) kB/\1/p' /proc/meminfo)
 	set memavail (sed -n 's/MemAvailable: *\(.*\) kB/\1/p' /proc/meminfo)
 	set memory (math "$memavail/$memtotal*100" | sed "s/\..*//")
-	if test $memory -gt 25
+	set memory (math 100-$memory)
+	if test $memory -lt 75
 		set memory
 	else
 		set memory " $memory%  "
@@ -45,35 +63,35 @@ end
 
 function gettemp
 	set temp (cat /sys/class/thermal/thermal_zone2/temp | sed 's/...$//' )
-	if test $temp -gt 50
-		set temp " $temp°C  "
-	else if test $temp -gt 45
-		set temp " $temp°C  "
+	if test $temp -lt 40
+		set temp " "
+	else if test $temp -lt 55
+		set temp " "
+	else if test $temp -lt 70
+		set temp " "
 	else
-		set temp
+		set temp "  $temp°C "
 	end
 end
 
 function getvol
 	set vol (amixer sget Master | awk '/%/ {gsub(/[\[%\]]/,""); print $4}')
 	if test $vol = 0
-		set vol " $vol%  "
-	else if test $vol -lt 35
-		set vol " $vol%  "
+		set vol "  "
+	else if test $vol -lt 50
+		set vol "  "
 	else
-		set vol
+		set vol "  "
 		#  $vol%
 	end
 end
 
 function getlight
-	set light (awk '{light=$1/937*100} END {split(light, a, "."); print a[1]}' < /sys/class/backlight/intel_backlight/brightness)
-	if test $light -lt 50
-		set light " $light%  "
-	else if test $light -lt 80
-		set light " $light%  "
+	set light (math (brightnessctl g)/(brightnessctl m)\*100 | cut -d "." -f 1)
+	if test $light -lt 100
+		set light " $light% "
 	else
-		set light
+		set light " "
 	end
 end
 
@@ -86,20 +104,25 @@ function getidle
 	if test (pidof swayidle)
 		set idle
 	else
-		set idle "  "
+		set idle " "
 	end
 end
 
 
+
 function show
-	set -l infolength (echo "$wifi$cpu$memory$temp$vol$light$idle$mpd" | wc -m)
-	set -l spacelength "%"(math 108 - $infolength)"s"
-	echo "$wifi$cpu$memory$temp$vol$light$idle$mpd"(printf "$spacelength" "")"$date "
+	#set screenlength (swaymsg -t get_outputs | sed -n -e "s/.*\"width\": \([^,]*\),/\1/p")
+	#set -l infolength (echo "$wifi$cpu$memory$temp$vol$light$idle$mpd" | wc -m)
+	#set -l spacelength "%"(math 165 - $infolength)"s"
+	#echo "$battery$wifi$cpu$memory$temp$vol$light$idle$mpd"(printf "$spacelength" "")"$date "
+	echo "$mpd$battery$wifi$cpu$memory$temp$vol$light$idle | $date "
+
 	#echo "$wifi  $cpu  $memory  $temp  $vol  $light      $mpd                                    $date "
 end
 
 
 while true
+	getbattery
 	getdate
 	show
 	sleep 1
