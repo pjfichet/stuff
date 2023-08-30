@@ -24,6 +24,9 @@ $(COLORIZE): %: %.tmp ../dotfiles/color/colorize.fish ../dotfiles/color/$(COLORS
 help:
 	make install uninstall
 
+clean:
+	rm $(COLORIZE)
+
 install: $(ALL)
 
 uninstall:
