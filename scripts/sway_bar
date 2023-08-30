@@ -96,8 +96,8 @@ function getlight
 end
 
 function getmpd
-	set mpd (mpc | awk 'NR==1 && $1 != "volume:" {v=$0}
-	END { if (length(v)>50) {v=substr(v,1,47)"..."}; print v}')
+	set mpd (mpc current -f "%album% - %track%")
+	set mpd "$mpd   "
 end
 
 function getidle
