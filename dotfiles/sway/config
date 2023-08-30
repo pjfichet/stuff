@@ -75,8 +75,8 @@ exec dunst
 	bindsym $mod+End exec alsaplayer --next
 	bindsym $mod+Pause exec ppause
 	# screen light
-	bindsym $mod+Shift+Page_Up exec lum more
-	bindsym $mod+Shift+Page_Down exec lum less
+	bindsym $mod+Shift+Page_Up exec brightnessctl set 10%+
+	bindsym $mod+Shift+Page_Down exec brightnessctl set 10%-
 #
 # Moving around:
 #

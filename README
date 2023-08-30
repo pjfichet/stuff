@@ -6,6 +6,7 @@ All the needed stuff to get a working system...
 
 alacritty
 bemenu
+brightnessctl
 bup
 dunst
 ffmpeg

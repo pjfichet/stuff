@@ -8,7 +8,7 @@ LANG=enfr fren fres esfr
 COLORIZE=sway_menu
 
 FILES=backupusb translate.fish installfont typo gcard \
-	lum temp sway_bar sway_menu sway_screensaver \
+	temp sway_bar sway_menu sway_screensaver \
 	ydl video videocat videotomp4 ripdvd ripdvd2  \
 	omw evoke colortil 
 
