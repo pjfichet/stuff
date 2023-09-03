@@ -1,0 +1,137 @@
+.\" pj.tmac: colorize ul.tmac
+.so \n(.D/ul.tmac
+.de pj.random
+.sy shuf -r -i 0-9 -n 999 |  awk -v ln=0 '{print ".ds rand" ln++ " " $0}' > /tmp/pj.random.tr
+\\.so /tmp/pj.random.tr
+..
+.nr pj-rand 0 1
+.de pj.blue
+.	ds color-0 #daf0ff
+.	ds color-1 #b5e2ff
+.	ds color-2 #8fd3fe
+.	ds color-3 #8ac5fe
+.	ds color-4 #e8ffff
+.	ds color-5 #d9f1ff
+.	ds color-6 #bfe6ff
+.	ds color-7 #8cd3ff
+.	ds color-8 #59bfff
+.	ds color-9 #26abff
+.	ds color-head \\*[color-7]
+.	ds color-line \\*[color-6]
+.	ds color-link \\*[color-8]
+..
+.de pj.rainbow
+.	\" https://coolors.co/palette/fbf8cc-fde4cf-ffcfd2-f1c0e8-cfbaf0-a3c4f3-90dbf4-8eecf5-98f5e1-b9fbc0
+.	ds color-0 #fbf8cc
+.	ds color-1 #fde4cf
+.	ds color-2 #ffcfd2
+.	ds color-3 #f1c0e8
+.	ds color-4 #cfbaf0
+.	ds color-5 #a3c4f3
+.	ds color-6 #90dbf4
+.	ds color-7 #8eecf5
+.	ds color-8 #98f5e1
+.	ds color-9 #b9fbc0
+..
+.pj.blue
+.de pj.t1
+\m[\\*[color-\\$1]]\
+\D'P 0.5v -1v 0.5v 1v -1v 0'\h'1v'\c
+..
+.de pj.t2
+\m[\\*[color-\\$1]]\
+\D'P -0.5v -1v 1v 0v -0.5v 1v'\c
+..
+.de t1
+\m[\\*[color-\\$1]]\
+\D'P 0 -0.25v 0.5v -0.5v 0.5v 0.5v 0 0.25v 0 0.25v -0.5v 0.5v -0.5v -0.5v 0 -0.25v'\h'1v'\
+\m[\\*[color-text]]\c
+..
+.de pj.l1
+\m[\\*[color-\\*[rand\\n+[pj-rand]]]]\
+\D'P 0 -0.25v 0.5v -0.5v 0.5v 0.5v 0 0.25v 0 0.25v -0.5v 0.5v -0.5v -0.5v 0 -0.25v'\h'1v'\
+\m[\\*[color-text]]\c
+..
+.nr pj-odd 0 1
+.de pj.mkline
+.	if \\$2>0 \{\
+.		\\$1
+.		nr pj-mkline \\$2-1
+.		pj.mkline \\$1 \\n[pj-mkline]
+.	\}
+..
+.nr pj-odd 0 1 \" track odd lines.
+.de pj.mkblock
+.	\\" $1: command $2...$9: number of command per line
+.	ds pj-mkblock \\$1
+.	shift
+.	if \\n[pj-odd] \h'.5v'\c
+.	pj.mkline \\*[pj-mkblock] \\$1
+.	if \\n[pj-odd] \h'.5v'
+.	br
+.	nr pj-odd 1-\\n[pj-odd]
+.	shift
+.	if \\n(.$>0 .pj.mkblock \\*[pj-mkblock] \\$*
+..
+.de pj.triangle1
+.	mk pj-triangle
+.	pj.mkblock pj.l1 9 8 7 6 5 4 3 2 1
+.	rt \\n[pj-triangle]u
+..
+.de pj.triangle2
+.	mk pj-triangle
+.	pj.mkblock pj.l1 1 2 3 4 5 6 7 8 9
+.	rt \\n[pj-triangle]u
+..
+.de pj.header
+.	nr pj-header 1
+..
+.de pj.footer
+.	nr pj-footer 1
+..
+.de page:head
+.	\" put a vacuum header
+.	\" print diverted note
+.	ch page:head
+.	par:doc
+.	note:head
+.	sp |\\n[page-head]v-1v
+.	\" decoration
+.	if \\n[pj-header] \{\
+.		ad \\*[text-adj]r
+.		ll \\n[text-length]u+3v
+.		po \\n[text-offset]u
+.		pj.triangle1
+.		nr pj-header 0
+.	\}
+.	sp |\\n[page-head]v
+.	ns
+.	par:po
+.	if \\n(RV=1 .if e .par:po
+.	wh \\n[page-foot]v page:foot
+.	wh 0 page:head
+..
+.de page:foot
+.	\" print footer
+.	note:foot
+.	ch page:foot
+.	if \\n[pj-footer] \{\
+.		ad l
+.		sp -7v
+.		po \\n[note-offset]u-1v
+.		pj.triangle2
+.		ie \\n[pj-footer]=1 .nr pj-footer 0
+.	\}
+.	ev ev-foot
+.	br
+.	par:doc
+.	br
+.	page:box
+.	bp
+.	ns
+.	ev
+..
+.pj.random
+.pj.blue
+.pj.header
+.nr pj-footer 3

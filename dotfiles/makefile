@@ -32,11 +32,14 @@ HOMEDIR=vimrc \
 	vim/syntax/map.vim vim/syntax/pacman.vim vim/syntax/tag.vim \
 	vim/syntax/tintin.vim vim/syntax/troff.vim vim/syntax/txt2tags.vim
 
+SHAREDIR=tmac/pj.tmac
+
 VIMPLUGINS=lightline zig
 
 include secret.mk
 
-install: $(COLORIZE) $(CONFDIR:%=$(HOME)/.config/%) $(HOMEDIR:%=$(HOME)/.%)
+install: $(COLORIZE) $(CONFDIR:%=$(HOME)/.config/%) $(HOMEDIR:%=$(HOME)/.%) \
+	$(SHAREDIR:%=$(HOME)/.local/share/%)
 
 update: $(VIMPLUGINS:%=$(HOME)/.vim/pack/plugins/start/%)
 
@@ -57,6 +60,11 @@ $(HOME)/.config/%: %
 	@echo "Installing $@"
 	@test -d $$(dirname $@) || mkdir -p $$(dirname $@)
 	@sed -e "s/@email@/$(email)/g; s/@user@/$(user)/g" $< > $@
+
+$(HOME)/.local/share/%: %
+	@echo "Installing $@"
+	@test -d $$(dirname $@) || mkdir -p $$(dirname $@)
+	cp $< $@
 
 $(HOME)/.%: %
 	@echo "Installing $@"
