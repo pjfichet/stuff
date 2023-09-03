@@ -20,9 +20,9 @@ if test ! -n "$libdir"
 	set libdir $HOME/.local/share
 end
 
-set otfdir $libdir/font/otf
-set ttfdir $libdir/font/ttf
-set devdir $libdir/font/devutf
+set otfdir $libdir/fonts/otf
+set ttfdir $libdir/fonts/ttf
+set devdir $libdir/fonts/devutf
 
 if test ! -d $otfdir; mkdir -p $otfdir; end
 if test ! -d $ttfdir; mkdir -p $ttfdir; end
