@@ -24,8 +24,11 @@ vis.events.subscribe(vis.events.WIN_OPEN, function(win)
 	if win.file.name:find("pacman.log") then
 		win:set_syntax("pacman")
 	end
-	if win.file.name:find(".tr") then
+	if win.file.name:find(".tr") or win.file.name:find(".tmac") or win.file.name:find(".man") then
 		win:set_syntax("troff")
+	end
+	if win.file.name:find(".tin") then
+		win:set_syntax("tintin")
 	end
 if win.syntax == 'python' or win.syntax == 'rust' then
 	 	local tabwidth = 4
