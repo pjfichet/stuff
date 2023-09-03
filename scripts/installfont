@@ -2,17 +2,13 @@
 
 function usage
 	echo "Usage:"
-	echo (basename (status -f)) " /path/to/font"
-	exit 1
+	echo (basename (status -f)) " /path/to/font" [/path/to/anotherfont ...]
+	exit 0
 end
 
-if test ! (count $argv) -eq 1
+if test "$argv[1]" = "--help"
 	usage
-end
-
-if test ! -e $argv[1]
-	echo "File $argv[1] not found."
-	exit 1
+	exit 0
 end
 
 set libdir $XDG_DATA_HOME
@@ -28,36 +24,41 @@ if test ! -d $otfdir; mkdir -p $otfdir; end
 if test ! -d $ttfdir; mkdir -p $ttfdir; end
 if test ! -d $devdir; mkdir -p $devdir; end
 
-set file $argv[1]
-set basename (basename $file)
-set name (string split -r -m1 . $basename)
-set filename $name[1]
-set extension $name[2]
-
-if test "$extension" = "otf"
-	if test ! -e $otfdir/$filename.otf
-		echo Creating $otfdir/$filename.otf
-		cp $file $otfdir/
+for file in $argv
+	if test ! -e $file
+		echo "File $file not found."
+		exit 1
 	end
-	if test ! -e $ttfdir/$filename.ttf
-		echo Creating $ttfdir/$filename.ttf
-		fontforge -lang=ff \
-			-c "Open(\"$file\"); Generate(\"$ttfdir/$filename.ttf\");" \
-			> /dev/null 2>&1
+
+	set basename (basename $file)
+	set name (string split -r -m1 . $basename)
+	set filename $name[1]
+	set extension $name[2]
+
+	if test "$extension" = "otf"
+		if test ! -e $otfdir/$filename.otf
+			echo Creating $otfdir/$filename.otf
+			cp $file $otfdir/
+		end
+		if test ! -e $ttfdir/$filename.ttf
+			echo Creating $ttfdir/$filename.ttf
+			fontforge -lang=ff \
+				-c "Open(\"$file\"); Generate(\"$ttfdir/$filename.ttf\");" \
+				> /dev/null 2>&1
+		end
 	end
-end
 
-if test "$extension" = "ttf"
-	if test ! -e $ttfdir/$filename.ttf
-		echo Creating $ttfdir/$filename.ttf
-		cp $file $ttfdir/
+	if test "$extension" = "ttf"
+		if test ! -e $ttfdir/$filename.ttf
+			echo Creating $ttfdir/$filename.ttf
+			cp $file $ttfdir/
+		end
 	end
-end
 
-if test ! -e $devdir/$filename
-	echo Creating $devdir/$filename
-	cat $ttfdir/$filename.ttf \
-	| mkfn -b -l -o -r720 -Slatn -t $filename -f "$ttfdir/$filename.ttf" \
-	> $devdir/$filename
-
+	if test ! -e $devdir/$filename
+		echo Creating $devdir/$filename
+		cat $ttfdir/$filename.ttf \
+		| mkfn -b -l -o -r720 -Slatn -t $filename -f "$ttfdir/$filename.ttf" \
+		> $devdir/$filename
+	end
 end
