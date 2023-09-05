@@ -1,40 +1,39 @@
 PREFIX=$(HOME)/.local
 BINDIR=$(PREFIX)/bin
-LIBDIR=$(PREFIX)/share
-FNTDIR=$(LIBDIR)/font
-TTFDIR=$(FNTDIR)/ttf
-MACDIR=$(LIBDIR)/tmac
-HYPDIR=$(LIBDIR)/hyph
-ALLDIR=$(BINDIR) $(LIBDIR) $(DEVDIR) $(FNTDIR) $(MACDIR) $(HYPDIR)
+NEAT=pop3 smtp neatmail
 
-NEAT = pop3 smtp neatmail 
+all = pop3/pop3 smtp/smtp neatmail/neatmail
 
 $(NEAT):
 	git clone git://repo.or.cz/$@.git
 
-$(ALLDIR):
+$(BINDIR):
 	mkdir -p $@
 
-dirs: $(ALLDIR)
-
-mkfn:
-	cd neatmkfn && $(MAKE)
-	install -c neatmkfn/mkfn $(BINDIR)/mkfn
-
-font: mkfn
-	cd makefont && $(MAKE) FNTDIR=$(FNTDIR) HYPDIR=$(HYPDIR)
-
-mail: pop3 smtp
+pop3/pop3: pop3
 	@echo "Building pop3"
 	@cd pop3 && git apply ../diff/pop3.diff
 	@cd pop3 && $(MAKE)
 	@install -c pop3/pop3 $(BINDIR)/pop3
+
+smtp/smtp: smtp
 	@echo "Building smtp"
-	@cd pop3 && git apply ../diff/smtp.diff
-	@cd pop3 && $(MAKE)
+	@cd smtp && git apply ../diff/smtp.diff
+	@cd smtp && $(MAKE)
 	@install -c smtp/smtp $(BINDIR)/smtp
+
+$(BINDIR)/%: % %/%
+	@echo "Installing $(BINDIR)/$<"
+	@test -e $(BINDIR) || mkdir -p $(BINDIR)
+	@install -c $< $(BINDIR)/$<
+
+install: $(BINDIR)/pop3 $(BINDIR)/smtp $(BINDIR)/neatmail
+
+uninstall:
+	rm -f $(BINDIR)/pop3 $(BINDIR)/smtp $(BINDIR)/neatmail
+	
 
 clean:
 	rm -rf $(NEAT)
 
-.PHONY:
+.PHONY: all install uninstall clean
