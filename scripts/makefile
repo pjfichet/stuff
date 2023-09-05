@@ -20,6 +20,8 @@ $(COLORIZE): %: %.tmp ../dotfiles/color/colorize.fish ../dotfiles/color/$(COLORS
 	@echo "Creating $@"
 	@fish ../dotfiles/color/colorize.fish ../dotfiles/color/$(COLORSCHEME) < $< > $@
 
+colorfiles: $(COLORIZE)
+
 
 help:
 	make install uninstall

@@ -1,0 +1,49 @@
+# Font
+[options]
+font = Liberation Mono 13
+#font = JetBrains Mono 13
+#cell_height_scale = 1.2
+allow_bold = false
+bold_is_bright = true
+mouse_autohide = true
+
+[colors]
+#base03 base0
+background = #102948
+foreground = #adbcbc
+foreground_bold = #cad8d9
+highlight = #2d5b69
+cursor = #adbcbc
+
+# Black, Gray
+# base02 base01
+color0 = #183456
+color8 = #72898f
+
+# Red (31)
+color1 = #fa5750
+color9 = #ff665c
+
+# Green (32)
+color2 = #75b938
+color10 = #84c747
+
+# Yellow (33)
+color3 = #dbb32d
+color11 = #ebc13d
+
+# Blue (34)
+color4 = #4695f7
+color12 = #58a3ff
+
+# magenta (35)
+color5 = #f275be
+color13 = #ff84cd
+
+# cyan (36)
+color6 = #41c7b9
+color14 = #53d6c7
+
+# Silver white (37)
+color7 = #72898f
+color15 = #cad8d9

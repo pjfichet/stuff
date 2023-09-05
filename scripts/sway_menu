@@ -1,0 +1,26 @@
+#! /usr/bin/fish
+# normal, selected title filter hightlighted 
+echo $XAPPS | sed 's/ /\n/g' | sort \
+	| bemenu --fn liberation-mono 13 \
+	-H 30 \
+	--ab  '#102948' \
+	--cb  '#102948' \
+	--fb  '#102948' \
+	--fbb '#102948' \
+	--hb  '#102948' \
+	--nb  '#102948' \
+	--sb  '#102948' \
+	--tb  '#102948' \
+	--af  '#72898f' \
+	--cf  '#72898f' \
+	--ff  '#72898f' \
+	--fbf '#72898f' \
+	--nf  '#72898f' \
+	--sf  '#72898f' \
+	--tf  '#72898f' \
+	--hf  '#58a3ff' \
+	-p '>' wayland | xargs sh -c
+
+	#-scb '#103c48' \
+	#-scf '#adbcbc' \
+

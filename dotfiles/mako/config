@@ -1,0 +1,16 @@
+icons=0
+font=Liberation Mono 13
+background-color=#183456
+border-color=#102948
+
+[urgency=low]
+text-color=#58a3ff
+border-color=#58a3ff
+
+[urgency=normal]
+text-color=#84c747
+border-color=#84c747
+
+[urgency=high]
+text-color=#ebc13d
+border-color=#ebc13d

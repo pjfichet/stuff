@@ -56,6 +56,8 @@ $(COLORIZE): %: %.tmp color/colorize.fish $(COLORSCHEME) makefile
 	@fish color/colorize.fish $(COLORSCHEME) < $< > $@
 	@#if test "$@" = "fish/color.fish"; then echo "Coloring fish session."; fish fish/color.fish; fi
 
+colorfiles: $(COLORIZE)
+
 $(HOME)/.config/%: %
 	@echo "Installing $@"
 	@test -d $$(dirname $@) || mkdir -p $$(dirname $@)
