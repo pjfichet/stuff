@@ -17,7 +17,11 @@ end
 
 function getbattery
 	set acpib (acpi -b | cut -d "," -f 2 | sed -e "s/%//")
+	set charging (acpi -a | cut -d ":" -f 2)
 	set battery
+	if test "$charging" = " on-line"
+		set battery "  "
+	end
 	for bat in $acpib
 		if test $bat -lt 25
 			set battery "$battery $bat% "
@@ -104,7 +108,7 @@ function getidle
 	if test (pidof swayidle)
 		set idle
 	else
-		set idle " "
+		set idle "  "
 	end
 end
 
