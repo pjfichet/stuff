@@ -1,1 +1,6 @@
 dotfiles/secret.mk
+neat/diff/neatmail-conf.h
+neat/diff/pop3-conf.diff
+neat/diff/smtp-conf.diff
+
+
