@@ -15,7 +15,7 @@ set -x XDG_DATA_HOME $HOME/.local/share
 set -x XDG_DESKTOP_DIR $HOME
 set -x XDG_DOCUMENTS_DIR $HOME/doc
 set -x XDG_TEMPLATES_DIR $XDG_DOCUMENTS_DIR/tpl
-set -x XDG_MEDIAS_DIR $HOME/var
+set -x XDG_MEDIAS_DIR $HOME/doc
 set -x XDG_MUSIC_DIR $XDG_MEDIAS_DIR/mus
 set -x XDG_PICTURES_DIR $XDG_MEDIAS_DIR/pic
 set -x XDG_PUBLICSHARE_DIR $XDG_MEDIAS_DIR/pub
@@ -296,3 +296,8 @@ fish_vi_key_bindings
 #commands
 # use systemctl enable --user mpd.socket or
 # if test ! -s ~/.config/mpd/pid; mpd; end
+
+if status --is-interactive
+and test (tty) = /dev/tty1
+	sway
+end
