@@ -133,20 +133,23 @@ local M = {}
 --     local ws = token('whitespace', S('\t\v\f\n\r ')^1)
 --
 -- The `lexer` (`l`) module actually provides a convenient list of common token
--- names and common LPeg patterns for you to use. Token names include
+-- names and common LPeg patterns for you to use.
+-- Token names include
 -- [`lexer.DEFAULT`](), [`lexer.WHITESPACE`](), [`lexer.COMMENT`](),
 -- [`lexer.STRING`](), [`lexer.NUMBER`](), [`lexer.KEYWORD`](),
 -- [`lexer.IDENTIFIER`](), [`lexer.OPERATOR`](), [`lexer.ERROR`](),
 -- [`lexer.PREPROCESSOR`](), [`lexer.CONSTANT`](), [`lexer.VARIABLE`](),
 -- [`lexer.FUNCTION`](), [`lexer.CLASS`](), [`lexer.TYPE`](), [`lexer.LABEL`](),
--- [`lexer.REGEX`](), and [`lexer.EMBEDDED`](). Patterns include
+-- [`lexer.REGEX`](), and [`lexer.EMBEDDED`]().
+-- Patterns include
 -- [`lexer.any`](), [`lexer.ascii`](), [`lexer.extend`](), [`lexer.alpha`](),
 -- [`lexer.digit`](), [`lexer.alnum`](), [`lexer.lower`](), [`lexer.upper`](),
 -- [`lexer.xdigit`](), [`lexer.cntrl`](), [`lexer.graph`](), [`lexer.print`](),
 -- [`lexer.punct`](), [`lexer.space`](), [`lexer.newline`](),
 -- [`lexer.nonnewline`](), [`lexer.nonnewline_esc`](), [`lexer.dec_num`](),
 -- [`lexer.hex_num`](), [`lexer.oct_num`](), [`lexer.integer`](),
--- [`lexer.float`](), and [`lexer.word`](). You may use your own token names if
+-- [`lexer.float`](), and [`lexer.word`]().
+-- You may use your own token names if
 -- none of the above fit your language, but an advantage to using predefined
 -- token names is that your lexer's tokens will inherit the universal syntax
 -- highlighting color theme used by your text editor.

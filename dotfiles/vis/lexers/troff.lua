@@ -56,6 +56,17 @@ local troff_request = word_match({
     }, nil, false)
 local request = token(l.KEYWORD, l.starts_line('.' * l.space^0) * (P(troff_request) + P('.')) )
 
+local neatroff_request = word_match({
+	'blm', 'chop', 'cl', 'co', 'co+', 'co>', 'co<',
+	'char', 'ochar', 'rchar', 'eos', 'fzoom', 'fp',
+	'ff', 'ffsc', 'fspecial', 'fmap', 'hycost', 'hlm',
+	'hydash', 'hystop', 'hpf', 'hpfa', 'hcode', 'in2',
+	'ti2', 'kn', 'lsm', 'pmll', '>>', '<<', 'shift',
+	'ssh', 'ss', 'tkf',
+     }, nil, false)
+local neatroff = token(l.KEYWORD, l.starts_line('.' * l.space^0) * (P(neatroff_request) + P('.')) )
+
+
 -- macros
 local macro = token(l.FUNCTION, l.starts_line('.' * l.space^0) * (l.nonnewline - '\\' - l.space)^0)
 
@@ -93,6 +104,7 @@ M._rules = {
   --{'whitespace', ws},
   {'comment', comment},
   {'request', request},
+  {'neatroff', neatroff},
   {'macro', macro},
   {'escape_key', escape_key},
   {'escape_apo', escape_apo},
