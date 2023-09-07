@@ -13,6 +13,8 @@ vis.events.subscribe(vis.events.WIN_OPEN, function(win)
 	vis:command('set tabwidth 4')
 	vis:command('set cursorline')
 	vis:command('set autoindent')
+	vis:command('set number')
+	vis:command('set ignorecase')
 	vis:command('map! normal <C-h> <C-w>h')
 	vis:command('map! normal <C-j> <C-w>j')
 	vis:command('map! normal <C-k> <C-w>k')
@@ -29,6 +31,9 @@ vis.events.subscribe(vis.events.WIN_OPEN, function(win)
 	end
 	if win.file.name:find(".tin") then
 		win:set_syntax("tintin")
+	end
+	if win.file.name:find(".fish") then
+		win:set_syntax("fish")
 	end
 if win.syntax == 'python' or win.syntax == 'rust' then
 	 	local tabwidth = 4
