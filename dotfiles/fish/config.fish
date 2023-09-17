@@ -27,11 +27,17 @@ set -x XDG_DOWNLOAD_DIR $HOME/dld
 #set -x XDG_CONFIG_DIRS "/etc/xdg:$XDG_CONFIG_DIRS"
 #set -x XDG_RUNTIME_DIR
 set -x CDPATH .:~:$XDG_DOCUMENTS_DIR
-set -x XKB_DEFAULT_LAYOUT fr,fr
-#set -x XKB_DEFAULT_VARIANT oss,bepo
-set -x XKB_DEFAULT_MODEL pc101
-#set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
-#set -x XKB_DEFAULT_OPTIONS grp:shifts_toggle
+if test "$HOSTNAME" = "t480"
+	set -x XKB_DEFAULT_MODEL thinkpad
+	set -x XKB_DEFAULT_LAYOUT fr
+	set -x XKB_DEFAULT_VARIANT oss
+else
+	set -x XKB_DEFAULT_MODEL pc101
+	set -x XKB_DEFAULT_LAYOUT fr,fr
+	set -x XKB_DEFAULT_VARIANT oss,bepo
+	set -x XKB_DEFAULT_OPTIONS grp:alt_shift_toggle
+	set -x XKB_DEFAULT_OPTIONS grp:shifts_toggle
+end
 set -x PASSWORD_STORE_DIR $XDG_DOCUMENTS_DIR/pass
 set -x PASSWORD_STORE_CHARACTER_SET '[:alnum:],?*%~./'
 set -x VCARD_DIR $XDG_DOCUMENTS_DIR/dav/card/
