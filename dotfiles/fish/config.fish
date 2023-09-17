@@ -3,7 +3,7 @@
 set -x PATH $PATH $HOME/.local/bin
 set -x HOSTNAME (cat /proc/sys/kernel/hostname)
 set -x TERM xterm-256color
-set -x EDITOR vim
+set -x EDITOR vis
 set -x LESSCHARSET utf-8
 set -x G_FILENAME_ENCODING @locale,UTF-8
 set -x LC_ALL fr_FR.UTF-8

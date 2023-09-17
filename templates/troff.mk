@@ -61,7 +61,7 @@ last:
 	@echo $(LAST).tr
 
 vi:
-	vim $(LAST).tr
+	@$$EDITOR $(LAST).tr
 
 spell:
 	aspell -n check $(LAST).tr
