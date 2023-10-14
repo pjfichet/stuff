@@ -17,27 +17,33 @@ include /home/pj/.config/sway/color
 
 
 # output (swaymsg -t get_outputs)
-# set $output eDP-1
-# output $output resolution 1366x768 position 0,0
-# wallpaper 
+
+output * position 0,0
 output * bg /home/pj/doc/pic/background.png fill
 
 
-### Input configuration
-#
-# Example configuration:
-#
-#  set $input "eglax 3823:1/eGalax_Inc._USB_TouchControll"
-#   input "2:14:SynPS/2_Synaptics_TouchPad" {
-#       dwt enabled
-#       tap enabled
-#       natural_scroll enabled
-#       middle_emulation enabled
-#   }
-#
 # You can get the names of your inputs by running: swaymsg -t get_inputs
 # Read `man 5 sway-input` for more information about this section.
-#
+
+input type:Mouse {
+	events enabled
+	dwt enabled
+}
+
+input type:Touchpad {
+	events enabled
+	click_method none
+	drag disabled
+	drag_lock disabled
+	dwt enabled
+	dwtp enabled
+	left_handed disabled
+	natural_scroll disabled
+	scroll_method two_finger
+	tap disabled
+}
+
+seat seat0 hide_cursor when-typing enable
 
 # swayidle
 exec wlsunset -l 45.6 -L 0.15
