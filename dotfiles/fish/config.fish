@@ -132,8 +132,11 @@ end
 
 function backup
 	if test -d $XDG_DOCUMENTS_DIR/$argv[1]
+		set -l before (du -sh $BUP_DIR | cut -f 1)
 		bup index $XDG_DOCUMENTS_DIR/$argv[1]
 		bup save -n (basename $argv[1]) $XDG_DOCUMENTS_DIR/$argv[1]
+		set -l after (du -sh $BUP_DIR | cut -f 1)
+		echo "$BUP_DIR: $before -> $after."
 	else
 		echo "$argv[1] not in $XDG_DOCUMENT_DIR/."
 	end
