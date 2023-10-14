@@ -47,7 +47,6 @@ set -x PHONE_CARD storage/7FDD-280D
 set -x PHONE_CAM sdcard/DCIM/Camera
 #set -x EXINIT "/etc/vi.my"
 set -x BUP_DIR $XDG_CACHE_HOME/bup
-set -x BACKUP $XDG_DOCUMENTS_DIR
 set -x SAL_USE_VCLPLUGIN gtk3
 set -x QT_QPA_PLATFORM wayland
 set -x CLUTTER_BACKEND wayland
@@ -132,14 +131,11 @@ function vid2ogg
 end
 
 function backup
-	if test -d $HOME/$argv[1]
-		set -l before (du -sh $BUP_DIR | cut -f 1)
-		bup index $HOME/$argv[1]
-		bup save -n (basename $argv[1]) $HOME/$argv[1]
-		set -l after (du -sh $BUP_DIR | cut -f 1)
-		echo $BUP_DIR: $before '->' $after
+	if test -d $XDG_DOCUMENTS_DIR/$argv[1]
+		bup index $XDG_DOCUMENTS_DIR/$argv[1]
+		bup save -n (basename $argv[1]) $XDG_DOCUMENTS_DIR/$argv[1]
 	else
-		echo "$argv[1] not in $HOME/."
+		echo "$argv[1] not in $XDG_DOCUMENT_DIR/."
 	end
 end
 
@@ -148,11 +144,11 @@ function restore
 end
 
 function mailo
-	if test -d $HOME/doc/$argv[1]
-		backup doc
-		rclone copy -P $HOME/doc/$argv[1] mailo:doc/$argv[1]
+	if test -d $XDG_DOCUMENTS_DIR/$argv[1]
+		backup $argv[1]
+		rclone copy -P $XDG_DOCUMENTS_DIR/$argv[1] mailo:doc/$argv[1]
 	else
-		echo "$argv[1] not in $HOME/doc/"
+		echo "$argv[1] not in $XDG_DOCUMENT_DIR/."
 	end
 end
 
