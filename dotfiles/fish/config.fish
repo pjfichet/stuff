@@ -215,6 +215,18 @@ function urldecode
 	python -c "import sys; from urllib.parse import unquote; print(unquote(sys.stdin.read()), end='')"
 end
 
+function node --description "Mount node desktop over ssh"
+	if test -z "$argv"
+		if not test -d $HOME/node
+			mkdir $HOME/node
+			sshfs $USER@192.168.1.82:/home/$USER $HOME/node -C -p 22
+		end
+	else
+		fusermount3 -u $HOME/node
+		rmdir $HOME/node
+	end
+end
+
 # prompt
 if string match --quiet --entire --regex "\(.+\)" (who -m)
 	# login from ssh
