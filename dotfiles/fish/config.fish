@@ -156,26 +156,8 @@ function mailo
 end
 
 
-function ppause
-	set -l ispause (alsaplayer --status | sed -n -e "s/speed: \([0-9]*\)%/\1/p")
-	if test $ispaused -gt 0
-		alsaplayer --pause
-	else
-		alsaplayer --start
-	end
-end
-
 function bk --description "make a backup of a file"
 	cp -a "$argv[1]" "$argv[1]"_(dater)
-end
-
-function oldlsl
-	set -l file (/usr/bin/ls -t $argv[1] | head -1)
-	if test $argv[1]
-		echo $argv[1]"/"$file
-	else
-		echo $file
-	end
 end
 
 function lsl
@@ -233,14 +215,28 @@ function urldecode
 	python -c "import sys; from urllib.parse import unquote; print(unquote(sys.stdin.read()), end='')"
 end
 
-# default prompt
-function fish_prompt --description 'Write out the prompt'
-	echo -n -s \
-	(set_color brblack) "$USER" @ (prompt_hostname) \
-	(set_color green) ' ' (prompt_pwd) ' ' \
-	(set_color brblack) "$status> " \
-	(set_color normal)
+# prompt
+if string match --quiet --entire --regex "\(.+\)" (whoami)
+	# login from ssh
+	function fish_prompt --description 'write out the prompt'
+		echo -n -s \
+		(set_color brblack) "$USER" @ (prompt_hostname) \
+		(set_color blue) ' ' (prompt_pwd) ' ' \
+		(set_color brblack) "$status> " \
+		(set_color normal)
+	end
+else
+	# normal login
+	function fish_prompt --description 'Write out the prompt'
+		echo -n -s \
+		(set_color brblack) "$USER" @ (prompt_hostname) \
+		(set_color green) ' ' (prompt_pwd) ' ' \
+		(set_color brblack) "$status> " \
+		(set_color normal)
+	end
 end
+
+
 
 # vi mode prompt 
 function fish_default_mode_prompt --description 'Display the default mode for the prompt'
