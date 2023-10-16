@@ -216,7 +216,7 @@ function urldecode
 end
 
 # prompt
-if string match --quiet --entire --regex "\(.+\)" (whoami)
+if string match --quiet --entire --regex "\(.+\)" (who -m)
 	# login from ssh
 	function fish_prompt --description 'write out the prompt'
 		echo -n -s \
