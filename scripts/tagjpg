@@ -1,0 +1,65 @@
+#! /usr/bin/fish
+# write a comment in a jpg file
+
+function usage
+	set_color --bold
+	echo "Usage:" (set_color normal)\
+	(basename (status -f)) "[-r <tag>] [-a <tag>] [-s <tag>] <file> [<file2>...]"
+	echo "        -r/--remove        remove tags"
+	echo "        -a/--add           add tags"
+	echo "        -s/--search        search tags"
+exit
+end
+
+argparse "h/help" "s/search=" "r/remove=" "a/add=" -- $argv
+or usage
+
+if test -n "$flag_help"
+	usage
+end
+
+if test -n "$imv_current_file"
+	set file $imv_current_file
+else
+	set file $argv
+end
+set tmpfile "/tmp/tagjpg-$fish_pid.jpg"
+
+if test -n "$_flag_search"
+	for f in $file
+		set tags (rdjpgcom $f)
+		for tag in $_flag_search
+			if string match -q -e "$tag" "$tags"
+				echo $f
+			end
+		end
+	end
+	exit
+end
+
+
+if not test -e $file
+	echo $file does not exist.
+	exit 1
+end
+
+if test -n "$_flag_remove"
+	set tags (rdjpgcom $file)
+	for tag in $_flag_remove
+		set tags (string replace -a -r "\s*$tag" "" $tags)
+	end
+	wrjpgcom -r -c "$tags" $file > $tmpfile
+	mv $tmpfile $file
+	exit
+end
+
+if test -n "$_flag_add"
+	wrjpgcom -c "$_flag_add" $file > $tmpfile
+	mv $tmpfile $file
+	exit
+end
+
+
+rdjpgcom $file
+
+
