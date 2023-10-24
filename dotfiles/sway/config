@@ -4,32 +4,26 @@
 #
 # Read `man 5 sway` for a complete reference.
 
-# Logo key. Use Mod1 for Alt.
+# keys
 set $mod Mod4
-# Home row direction keys, like vim
 set $left h
 set $down j
 set $up k
 set $right l
 
 # solarized colors
-include /home/pj/.config/sway/color
-
+include ~/.config/sway/color
 
 # output (swaymsg -t get_outputs)
-
 output * position 0,0
-output * bg /home/pj/doc/pic/background.png fill
+output * bg ~/doc/pic/background.jpg fill
 
 
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
-
+# inputs (swaymsg -t get_inputs)
 input type:Mouse {
 	events enabled
 	dwt enabled
 }
-
 input type:Touchpad {
 	events enabled
 	click_method none
@@ -42,16 +36,19 @@ input type:Touchpad {
 	scroll_method two_finger
 	tap disabled
 }
-
 seat seat0 hide_cursor when-typing enable
 
-# swayidle
+### daemons
+
+xwayland enable
 exec wlsunset -l 45.6 -L 0.15
-
-set $swayidle swayidle timeout 90 'swaylock -c 000000' timeout 120 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -c 000000'
-exec $swayidle
-
 exec dunst
+exec swayidle \
+	timeout 90 'swaylock -c 000000' \
+	timeout 120 'swaymsg "output * dpms off"' \
+	resume 'swaymsg "output * dpms on"' \
+	before-sleep 'swaylock -c 000000'
+
 
 ### Key bindings
 #
@@ -165,12 +162,13 @@ bar {
 
 # window decoration
 default_border pixel 5
-#for_window [class=".*"] border pixel 5
+for_window [app_id="mpv"] inhibit_idle visible
 #for_window [floating=true] move down 30px
 #for_window [app_id="zoom"] floating enable
 
 # border, background, text, indicator, childborder
 client.focused $bg_dark $bg_dark $fg_normal $bg_light $bg_light
 client.unfocused $bg_dark $bg_dark $fg_normal $bg_dark $bg_dark
+
 
 # include /etc/sway/config.d/*
