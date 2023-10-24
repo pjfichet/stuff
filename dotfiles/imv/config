@@ -1,5 +1,12 @@
 [options]
 suppress_default_binds = true
+overlay_text = $imv_current_index/$imv_file_count $(echo; rdjpgcom $imv_current_file)
+
+[aliases]
+tag = exec tagjpg -a
+strip = exec tagjpg -r 
+rm = exec mv $imv_current_file /tmp/
+index = exec echo $imv_current_index > index
 
 [binds]
 q = quit
@@ -9,10 +16,11 @@ h = zoom -1
 j = next
 k = prev
 l = zoom 1
-<Shift+H> = pan -10 0
+t = overlay
+<Shift+H> = pan 10 0
 <Shift+J> = pan 0 -10
 <Shift+K> = pan 0 10
-<Shift+L> = pan 10 0
+<Shift+L> = pan -10 0
 p = exec echo $imv_current_file
 f = fullscreen
 x = toggle_playing
