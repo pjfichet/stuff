@@ -1,0 +1,62 @@
+#! /usr/bin/fish
+
+function usage
+	set_color --bold
+	echo "Usage:" (set_color normal)\
+	(basename (status -f)) " [-l] [-c <device>] [-d <device>]"
+	echo "    -l/--list                list known devices"
+	echo "    -c/--connect <device>    connect to <device>"
+	echo "    -d/--disconnect <device> disconnect from <device>"
+	exit 1
+end
+
+if test (count $argv) -eq 0
+	usage
+end
+
+argparse "l/list" "c/connect" "d/disconnect" -- $argv
+#or usage
+
+set keys
+set vals
+
+function add --argument-names key value
+	set -a keys $key
+	set -a vals $value
+end
+
+function get --argument-names key
+	set index (contains -i $key $keys)
+	if contains $key $keys
+		set index (contains -i $key $keys)
+		echo $vals[$index]
+	else
+		echo "Unknown device: $key."
+		exit 1
+	end
+end
+		
+add tangeant FC:58:FA:D3:F0:05
+add pjphone unset
+
+if test -n "$_flag_list"
+	# print list of devices
+	echo Known devices: $keys
+	exit
+end
+
+if test -n "$_flag_connect"
+	set device (get $argv[1])
+	bluetoothctl -- power on
+	bluetoothctl -- pair $device
+	bluetoothctl -- connect $device
+	exit
+end
+
+if test -n "$_flag_disconnect"
+	set device (get $argv[1])
+	bluetoothctl -- disconnect $device
+	bluetoothctl -- power off
+	exit
+end
+

@@ -10,7 +10,7 @@ COLORIZE=sway_menu
 FILES=backupusb translate.fish installfont typo gcard \
 	temp sway_bar sway_menu sway_screensaver \
 	ydl video videocat videotomp4 ripdvd ripdvd2  \
-	omw evoke colortil tagjpg
+	omw evoke colortil tagjpg bt
 
 OLDFILES=m mkmime.py unmime.py smartmail mime_alternative.py \
 	
