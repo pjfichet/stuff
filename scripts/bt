@@ -3,59 +3,84 @@
 function usage
 	set_color --bold
 	echo "Usage:" (set_color normal)\
-	(basename (status -f)) " [-l] [-c <device>] [-d <device>]"
-	echo "    -l/--list                list known devices"
-	echo "    -c/--connect <device>    connect to <device>"
-	echo "    -d/--disconnect <device> disconnect from <device>"
-	exit 1
+	(basename (status -f)) " [-a <device> <device_mac>] [-c <device>] [-d <device>] [-h] [-l]"
+	echo "    -a/--add <device> <device_mac>  record <device> with <device_mac> address."
+	echo "    -c/--connect <device>           connect to <device>"
+	echo "    -d/--disconnect <device>        disconnect from <device>"
+	echo "    -h/--help                       show this help"
+	echo "    -l/--list                       list known devices"
 end
 
 if test (count $argv) -eq 0
 	usage
+	exit 1
 end
 
-argparse "l/list" "c/connect" "d/disconnect" -- $argv
-#or usage
-
-set keys
-set vals
-
-function add --argument-names key value
-	set -a keys $key
-	set -a vals $value
+argparse "a/add=" "c/connect=" "d/disconnect=" "h/help" "l/list" -- $argv
+or begin
+	usage
+	exit 1
 end
 
-function get --argument-names key
-	set index (contains -i $key $keys)
-	if contains $key $keys
-		set index (contains -i $key $keys)
-		echo $vals[$index]
-	else
-		echo "Unknown device: $key."
+if test -n "$_flag_help"
+	usage
+	exit
+end
+
+# set config file
+if test -n "$XDG_CONFIG_HOME"
+	set config_dir $XDG_CONFIG_HOME/(basename (status -f))
+else
+	set config_dir $HOME/.config/(basename (status -f))
+end
+
+if not test -e $config_dir
+	mkdir -p $config_dir
+end
+
+set config_file $config_dir/devices
+
+# global variable containing mac address of a device
+set device_mac
+
+function get --argument-names device
+	set device_mac (grep "$device" $config_file | cut -d " " -f 2)
+	if test -z "$device_mac"
+		echo "Unknown device $device. Aborting."
 		exit 1
-	end
+	end		
 end
-		
-add tangeant FC:58:FA:D3:F0:05
-add pjphone unset
 
+if test -n "$_flag_add"
+	# add a new device
+	if grep -q "$_flag_add" $config_file
+		echo "Device $_flag_add exists yet. Not adding."
+		exit 1
+	else
+		echo -e "$_flag_add $argv[1]"  >> $config_file
+	end
+	exit
+end
+
+
+		
 if test -n "$_flag_list"
 	# print list of devices
-	echo Known devices: $keys
+	cat $config_file
 	exit
 end
 
 if test -n "$_flag_connect"
-	set device (get $argv[1])
+	get $_flag_connect
 	bluetoothctl -- power on
-	bluetoothctl -- pair $device
-	bluetoothctl -- connect $device
+	bluetoothctl -- pair $device_mac
+	bluetoothctl -- connect $device_mac
 	exit
 end
 
 if test -n "$_flag_disconnect"
-	set device (get $argv[1])
-	bluetoothctl -- disconnect $device
+	get $_flag_disconnect
+	bluetoothctl -- disconnect $device_mac
 	bluetoothctl -- power off
 	exit
 end

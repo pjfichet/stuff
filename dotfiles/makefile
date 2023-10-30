@@ -21,7 +21,8 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	vis/lexers/tintin.lua vis/lexers/troff.lua \
 	alacritty/alacritty.yml \
 	dunst/dunstrc \
-	imv/config
+	imv/config \
+	bt/devices
 
 OLDCONFDIR=termite/config termite/termite.terminfo
 
