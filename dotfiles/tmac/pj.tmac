@@ -1,5 +1,7 @@
 .\" pj.tmac: colorize ul.tmac
 .so \n(.D/ul.tmac
+.\"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+.\" Random colors
 .de pj.random
 .sy shuf -r -i 0-9 -n 999 |  awk -v ln=0 '{print ".ds rand" ln++ " " $0}' > /tmp/pj.random.tr
 \\.so /tmp/pj.random.tr
