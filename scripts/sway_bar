@@ -24,13 +24,13 @@ function getbattery
 	end
 	for bat in $acpib
 		if test $bat -lt 25
-			set battery "$battery $bat% "
+			set battery "$battery$bat% "
 		else if test $bat -lt 50
-			set battery "$battery  "
+			set battery "$battery "
 		else if test $bat -lt 75
-			set battery "$battery  "
+			set battery "$battery "
 		else
-			set battery "$battery  "
+			set battery "$battery "
 		end
 	end
 end
