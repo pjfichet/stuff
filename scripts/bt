@@ -1,5 +1,8 @@
 #! /usr/bin/fish
 
+# https://wiki.archlinux.org/title/Android_tethering#Tethering_via_Bluetooth
+# dbus-send --system --type=method_call --dest=org.bluez /org/bluez/hci0/dev_AA_BB_CC_DD_EE_FF org.bluez.Network1.Connect string:'nap'
+
 function usage
 	set_color --bold
 	echo "Usage:" (set_color normal)\
