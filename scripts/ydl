@@ -1,27 +1,32 @@
 #! /usr/bin/fish
 
-# video format (18)
-set _flag_format 18
-#set ydl youtube-dl
+# video format (old default to 18)
+set _flag_format bv.2+ba.2
+set _flag_lang
 set ydl yt-dlp
 
 function usage
 	echo "Usage:"
-	echo (basename (status -f)) "[-f format] [-h] [-i] [-l] [-m] [-n] [url]" 
-	echo "    f/format: set the format."
+	echo (basename (status -f)) "[-f format] [-h] [-i] [-l] [-m] [-n] [-s] [url]" 
+	echo "    f/format: set the format, default to $_flag_format"
 	echo "    h/help: show this help."
 	echo "    i/info: list available formats."
-	echo "    l/list: download the whole list."
+	echo "    l/lang: set the language."
 	echo "    m/music: download music only."
 	echo "    n/noplay: don't play."
+	echo "    s/series: download the whole series."
 	exit 1
 end
 
-argparse "l/list" "f/format=" "i/info" "m/music" "h/help" "n/noplay" -- $argv
+argparse "f/format=" "i/info" "l/lang=" "m/music" "h/help" "n/noplay" "s/series" -- $argv
 or usage
 
 if test -n "$_flag_help"
 	usage
+end
+
+if test -n "$_flag_lang"
+	set _flag_lang "[language=$_flag_lang]"
 end
 
 if test -n "$argv[1]"
@@ -34,23 +39,23 @@ set id ($ydl -q --no-playlist --get-id "$url")
 
 cd /tmp/
 
-if test -n "$_flag_list"
+if test -n "$_flag_series"
 	if test -n "$_flag_music"
-		$ydl -i -x --format $_flag_format -o '%(playlist_index)s.m4a' "$url"
+		$ydl -i -x --format $_flag_format$_flag_lang -o '%(playlist_index)s.m4a' "$url"
 	else
-		$ydl -i --format $_flag_format  -o '%(playlist_index)s.mp4' "$url"
+		$ydl -i --format $_flag_format$_flag_lang  -o '%(playlist_index)s.mp4' "$url"
 	end
 else if test -n "$_flag_info"
 	$ydl --list-formats "$id"
 else if test -n "$_flag_music"
-   $ydl -x --id --format $_flag_format --no-playlist "$url"
+   $ydl -x --id --format $_flag_format$_flag_lang --no-playlist "$url"
 	if test ! -n "$_flag_noplay"
    		mpv "/tmp/$id.m4a"
 	end
 else
-	$ydl --id --format $_flag_format --no-playlist "$url"
+	$ydl --id --format $_flag_format$_flag_lang --no-playlist "$url"
 	if test ! -n "$_flag_noplay"
-		mpv "/tmp/$id.mp4"
+		mpv "/tmp/$id.*"
 	end
 end
 
