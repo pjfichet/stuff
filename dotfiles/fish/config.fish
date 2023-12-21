@@ -151,7 +151,7 @@ function mailo
 		backup $argv[1]
 		rclone copy -P $XDG_DOCUMENTS_DIR/$argv[1] mailo:doc/$argv[1]
 	else
-		echo "$argv[1] not in $XDG_DOCUMENT_DIR/."
+		echo "$argv[1] not in $XDG_DOCUMENTS_DIR/."
 	end
 end
 
