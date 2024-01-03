@@ -1,7 +1,7 @@
 #! /usr/bin/fish
 
 # video format (old default to 18)
-set _flag_format bv.3+ba.2
+set format bv.3+ba.2
 set ydl yt-dlp
 
 function usage
@@ -18,17 +18,21 @@ function usage
 	exit 1
 end
 
-argparse "f/format=" "i/info" "l/lang=" "s/subs" "m/music" "h/help" "n/noplay" "r/series" -- $argv
+argparse "f/format=" "h/help" "i/info" "l/lang=" "m/music" "n/noplay" "r/series" "s/subs" -- $argv
 or usage
 
 if test -n "$_flag_help"
 	usage
 end
 
+if test -n "$_flag_format"
+	set format $_flag_format
+end
+
 if test -n "$_flag_lang"
-	set option "-f $_flag_format[language=$_flag_lang]"
+	set option "-f $format[language=$_flag_lang]"
 else
-	set option "-f $_flag_format"
+	set option "-f $format"
 end
 
 if test -n "$_flag_subs"
@@ -40,7 +44,7 @@ if test -n "$_flag_music"
 end
 
 if test -n "$_flag_series"
-	set option "$option -i -o '%(playlist_index)s.%(ext)s'"
+	set option "$option --ignore-errors -o '%(playlist_index)s.%(ext)s'"
 else
 	set option "$option --restrict-filenames --no-playlist -o '%(title)s.%(ext)s'"
 end
