@@ -1,24 +1,24 @@
 #! /usr/bin/fish
 
 # video format (old default to 18)
-set _flag_format bv.2+ba.2
-set _flag_lang
+set _flag_format bv.3+ba.2
 set ydl yt-dlp
 
 function usage
 	echo "Usage:"
-	echo (basename (status -f)) "[-f format] [-h] [-i] [-l] [-m] [-n] [-s] [url]" 
+	echo (basename (status -f)) "[-f format] [-h] [-i] [-l] [-m] [-n] [-r] [-s] [url]" 
 	echo "    f/format: set the format, default to $_flag_format"
 	echo "    h/help: show this help."
 	echo "    i/info: list available formats."
 	echo "    l/lang: set the language."
 	echo "    m/music: download music only."
 	echo "    n/noplay: don't play."
-	echo "    s/series: download the whole series."
+	echo "    r/series: download the whole series."
+	echo "    s/subs: download subtitles."
 	exit 1
 end
 
-argparse "f/format=" "i/info" "l/lang=" "m/music" "h/help" "n/noplay" "s/series" -- $argv
+argparse "f/format=" "i/info" "l/lang=" "s/subs" "m/music" "h/help" "n/noplay" "r/series" -- $argv
 or usage
 
 if test -n "$_flag_help"
@@ -26,36 +26,41 @@ if test -n "$_flag_help"
 end
 
 if test -n "$_flag_lang"
-	set _flag_lang "[language=$_flag_lang]"
+	set option "-f $_flag_format[language=$_flag_lang]"
+else
+	set option "-f $_flag_format"
 end
+
+if test -n "$_flag_subs"
+	set option "$option --write-subs"
+end
+
+if test -n "$_flag_music"
+	set option "$option -x"
+end
+
+if test -n "$_flag_series"
+	set option "$option -i -o '%(playlist_index)s.%(ext)s'"
+else
+	set option "$option --restrict-filenames --no-playlist -o '%(title)s.%(ext)s'"
+end
+
+if test -n "$_flag_info"
+	set option '--list-formats'
+end
+
+
 
 if test -n "$argv[1]"
 	set url $argv[1]
 else
 	set url (wl-paste)
 end
-set id ($ydl -q --no-playlist --get-id "$url")
 
 
 cd /tmp/
-
-if test -n "$_flag_series"
-	if test -n "$_flag_music"
-		$ydl -i -x --format $_flag_format$_flag_lang -o '%(playlist_index)s.m4a' "$url"
-	else
-		$ydl -i --format $_flag_format$_flag_lang  -o '%(playlist_index)s.mp4' "$url"
-	end
-else if test -n "$_flag_info"
-	$ydl --list-formats "$id"
-else if test -n "$_flag_music"
-   $ydl -x --id --format $_flag_format$_flag_lang --no-playlist "$url"
-	if test ! -n "$_flag_noplay"
-   		mpv "/tmp/$id.m4a"
-	end
-else
-	$ydl --id --format $_flag_format$_flag_lang --no-playlist "$url"
-	if test ! -n "$_flag_noplay"
-		mpv "/tmp/$id.*"
-	end
+echo "yt-dlp $option"
+$ydl $option $url
+and if test -z "$_flag_series"
+	mpv /tmp/($ydl $option -q -s --print '%(title)s.%(ext)s' "$url")
 end
-
