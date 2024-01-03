@@ -149,9 +149,9 @@ end
 function mailo
 	if test -d $XDG_DOCUMENTS_DIR/$argv[1]
 		backup $argv[1]
-		rclone copy -P $XDG_DOCUMENTS_DIR/$argv[1] mailo:doc/$argv[1]
+		rclone sync -P $XDG_DOCUMENTS_DIR/$argv[1] mailo:doc/$argv[1]
 	else
-		echo "$argv[1] not in $XDG_DOCUMENTS_DIR/."
+		echo "$argv[1] not in $XDG_DOCUMENT_DIR/."
 	end
 end
 
