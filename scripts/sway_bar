@@ -10,6 +10,7 @@ set vol
 set light
 set mpd
 set idle
+set bluetooth
 
 function getdate
 	set date (date +'%A %d %B %Y, %H:%M')
@@ -74,19 +75,23 @@ function gettemp
 	else if test $temp -lt 70
 		set temp " "
 	else
-		set temp "  $temp°C "
+		set temp " $temp°C "
 	end
 end
 
 function getvol
-	set vol (amixer sget Master | awk '/%/ {gsub(/[\[%\]]/,""); print $4}')
+	set vol (pamixer --get-volume-human | tr -d %)
+	if test "$vol" = "muted"
+		set vol 0
+	end
 	if test $vol = 0
-		set vol "  "
+		set vol "  "
 	else if test $vol -lt 50
-		set vol "  "
+		set vol " $vol% "
+	else if test $vol -lt 100
+		set vol "  $vol% "
 	else
 		set vol "  "
-		#  $vol%
 	end
 end
 
@@ -101,7 +106,9 @@ end
 
 function getmpd
 	set mpd (mpc current -f "%album% - %track%")
-	set mpd "$mpd   "
+	if test -n "$mpd"
+		set mpd " $mpd   "
+	end
 end
 
 function getidle
@@ -112,6 +119,13 @@ function getidle
 	end
 end
 
+function getbluetooth
+	set btdevice (bluetoothctl devices Connected | cut -f3 -d ' ')
+	if test -n "$btdevice"
+		#set bluetooth " $btdevice"
+		set bluetooth " "
+	end
+end
 
 
 function show
@@ -119,7 +133,7 @@ function show
 	#set -l infolength (echo "$wifi$cpu$memory$temp$vol$light$idle$mpd" | wc -m)
 	#set -l spacelength "%"(math 165 - $infolength)"s"
 	#echo "$battery$wifi$cpu$memory$temp$vol$light$idle$mpd"(printf "$spacelength" "")"$date "
-	echo "$mpd$battery$wifi$cpu$memory$temp$vol$light$idle | $date "
+	echo "$mpd$bluetooth$battery$wifi$cpu$memory$temp$vol$light$idle | $date "
 
 	#echo "$wifi  $cpu  $memory  $temp  $vol  $light      $mpd                                    $date "
 end
@@ -128,37 +142,41 @@ end
 while true
 	getbattery
 	getdate
+	getvol
+	getlight
+	show
+	sleep 1
+
+	getvol
+	getlight
+	getwifi
 	show
 	sleep 1
 
 	getvol
 	getlight
 	getmpd
-	show
-	sleep 1
-
-	getwifi
-	getvol
-	getlight
 	getidle
 	show
 	sleep 1
 
+	getvol
+	getlight
+	getbluetooth
 	getcpu
-	getvol
-	getlight
 	show
 	sleep 1
 
+	getvol
+	getlight
 	getmemory
-	getvol
-	getlight
+	gettemp
 	show
 	sleep 1
 
-	gettemp
 	getvol
 	getlight
+	getmpd
 	getidle
 	show
 	sleep 1
