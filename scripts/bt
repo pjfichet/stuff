@@ -1,17 +1,14 @@
 #! /usr/bin/fish
 
-# https://wiki.archlinux.org/title/Android_tethering#Tethering_via_Bluetooth
-# dbus-send --system --type=method_call --dest=org.bluez /org/bluez/hci0/dev_AA_BB_CC_DD_EE_FF org.bluez.Network1.Connect string:'nap'
-
 function usage
 	set_color --bold
 	echo "Usage:" (set_color normal)\
-	(basename (status -f)) " [-a <device> <device_mac>] [-c <device>] [-d <device>] [-h] [-l]"
-	echo "    -a/--add <device> <device_mac>  record <device> with <device_mac> address."
+	(basename (status -f)) " [-c <device>] [-d <device>] [-h] [-l] [-t <device>]"
 	echo "    -c/--connect <device>           connect to <device>"
-	echo "    -d/--disconnect <device>        disconnect from <device>"
+	echo "    -d/--disconnect                 disconnect"
 	echo "    -h/--help                       show this help"
 	echo "    -l/--list                       list known devices"
+	echo "    -t/--tethering                  tethering via bluetooth"
 end
 
 if test (count $argv) -eq 0
@@ -19,7 +16,7 @@ if test (count $argv) -eq 0
 	exit 1
 end
 
-argparse "a/add=" "c/connect=" "d/disconnect=" "h/help" "l/list" -- $argv
+argparse "c/connect=" "d/disconnect" "h/help" "l/list" "t/tethering=" -- $argv
 or begin
 	usage
 	exit 1
@@ -30,51 +27,30 @@ if test -n "$_flag_help"
 	exit
 end
 
-# set config file
-if test -n "$XDG_CONFIG_HOME"
-	set config_dir $XDG_CONFIG_HOME/(basename (status -f))
-else
-	set config_dir $HOME/.config/(basename (status -f))
-end
-
-if not test -e $config_dir
-	mkdir -p $config_dir
-end
-
-set config_file $config_dir/devices
-
-# global variable containing mac address of a device
+# global variables containing the device mac and name
 set device_mac
+set device_name
 
-function get --argument-names device
-	set device_mac (grep "$device" $config_file | cut -d " " -f 2)
-	if test -z "$device_mac"
+function get_mac --argument-names device
+	for line in (bluetoothctl devices | grep -i "$device")
+		set device_mac (echo $line | cut -d ' ' -f 2)
+		set device_name (echo $line | cut -d ' ' -f 3)
+	end
+	if test -z "line"
 		echo "Unknown device $device. Aborting."
 		exit 1
 	end		
 end
 
-if test -n "$_flag_add"
-	# add a new device
-	if grep -q "$_flag_add" $config_file
-		echo "Device $_flag_add exists yet. Not adding."
-		exit 1
-	else
-		echo -e "$_flag_add $argv[1]"  >> $config_file
-	end
-	exit
-end
-
-
-		
 if test -n "$_flag_list"
 	# print list of devices
-	cat $config_file
+	bluetoothctl devices
 	exit
 end
 
 if test -n "$_flag_connect"
-	get $_flag_connect
+	get_mac $_flag_connect
+	echo "Pairing with device $device_name."
 	bluetoothctl -- power on
 	bluetoothctl -- pair $device_mac
 	bluetoothctl -- connect $device_mac
@@ -82,9 +58,22 @@ if test -n "$_flag_connect"
 end
 
 if test -n "$_flag_disconnect"
-	get $_flag_disconnect
-	bluetoothctl -- disconnect $device_mac
+	for mac in (bluetoothctl devices Connected | cut -f 2 -d ' ')
+		bluetoothctl -- disconnect $mac
+	end
 	bluetoothctl -- power off
 	exit
 end
 
+if test -n "$_flag_tethering"
+	get_mac $_flag_tethering
+	echo "Tethering with device $device_name."
+	# This will create a network interface
+	# managed by /etc/systemd/network/30-bluetooth.network
+	# https://wiki.archlinux.org/title/Android_tethering#Tethering_via_Bluetooth
+	set interface (echo $device_mac | sed -e 's/:/_/g')
+	dbus-send --system --type=method_call \
+		--dest=org.bluez /org/bluez/hci0/dev_$interface \
+		org.bluez.Network1.Connect string:'nap'
+	exit
+end
