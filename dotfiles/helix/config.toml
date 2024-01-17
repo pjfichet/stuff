@@ -1,0 +1,4 @@
+theme = "my-theme"
+
+[editor]
+shell = ["/usr/bin/fish", "-c"]

@@ -1,0 +1,112 @@
+attribute = "coloperator"
+keyword = "colkeyword"
+"keyword.directive" = "coloperator" # -- preprocessor comments (#if in C)
+namespace = "coloperator"
+punctuation = "colspecial"
+"punctuation.delimiter" = "colspecial"
+operator = "coloperator"
+special = "colspecial"
+"variable.other.member" = "colfunction"
+variable = "fg_normal"
+# variable = "colkeyword" # TODO: metavariables only
+# "variable.parameter" = { fg = "fg_normal", modifiers = ["underlined"] }
+"variable.parameter" = { fg = "fg_normal" }
+"variable.builtin" = "coltype"
+type = "coltype"
+"type.builtin" = "coltype" # TODO: distinguish?
+constructor = "coloperator"
+function = "colfunction"
+"function.macro" = "coloperator"
+"function.builtin" = "colfunction"
+tag = "colkeyword"
+comment = "fg_dark"
+constant = "colfunction"
+"constant.builtin" = "colfunction"
+string = "colstring"
+"constant.numeric" = "colnumeric"
+"constant.character.escape" = "colkeyword"
+# used for lifetimes
+label = "colspecial"
+
+"markup.heading" = "coloperator"
+"markup.bold" = { modifiers = ["bold"] }
+"markup.italic" = { modifiers = ["italic"] }
+"markup.strikethrough" = { modifiers = ["crossed_out"] }
+"markup.link.url" = { fg = "colstring", modifiers = ["underlined"] }
+"markup.link.text" = "colkeyword"
+"markup.raw" = "colkeyword"
+
+"diff.plus" = "#35bf86"
+"diff.minus" = "#f22c86"
+"diff.colinfo" = "#6f44f0"
+
+# TODO: diferentiate doc comment
+# concat (ERROR) @error.syntax and "MISSING ;" selectors for errors
+
+"ui.background" = { bg = "bg_dark" }
+"ui.background.separator" = { fg = "fg_dark" }
+"ui.linenr" = { fg = "fg_dark" }
+"ui.linenr.selected" = { fg = "coloperator" }
+"ui.statusline" = { fg = "coloperator", bg = "bg_lighter" }
+"ui.statusline.inactive" = { fg = "fg_dark", bg = "bg_lighter" }
+"ui.popup" = { bg = "bg_lighter" }
+"ui.window" = { fg = "bg_light" }
+"ui.help" = { bg = "#7958DC", fg = "#171452" }
+
+"ui.text" = { fg = "fg_dark" }
+"ui.text.focus" = { fg = "colfunction" }
+"ui.text.inactive" = "fg_dark"
+"ui.virtual" = { fg = "fg_dark" }
+
+"ui.virtual.indent-guide" = { fg = "fg_dark" }
+
+"ui.selection" = { bg = "#540099" }
+"ui.selection.primary" = { bg = "#540099" }
+# TODO: namespace ui.cursor as ui.selection.cursor?
+"ui.cursor.select" = { bg = "colinfo" }
+"ui.cursor.insert" = { bg = "colfunction" }
+"ui.cursor.match" = { fg = "#212121", bg = "#6C6999" }
+"ui.cursor" = { modifiers = ["reversed"] }
+"ui.cursorline.primary" = { bg = "bg_light" }
+"ui.highlight" = { bg = "bg_light" }
+"ui.highlight.frameline" = { bg = "#634450" }
+"ui.debug" = { fg = "#634450" }
+"ui.debug.breakpoint" = { fg = "colerror" }
+"ui.menu" = { fg = "fg_dark", bg = "bg_lighter" }
+"ui.menu.selected" = { fg = "fg_lighter", bg = "colfunction" }
+"ui.menu.scroll" = { fg = "fg_dark", bg = "bg_lighter" }
+
+"diagnostic.hint" = { underline = { color = "colstring", style = "curl" } }
+"diagnostic.info" = { underline = { color = "colinfo", style = "curl" } }
+"diagnostic.warning" = { underline = { color = "colwarning", style = "curl" } }
+"diagnostic.error" = { underline = { color = "colerror", style = "curl" } }
+
+warning = "colwarning"
+error = "colerror"
+info = "colinfo"
+hint = "colstring"
+
+[palette]
+
+# bg_dark bg_light bg_lighter fg_dark fg_normal fg_light
+# cyan red green yellow blue magenta light_cyan light_red
+# light_green light_yellow light_blue light_magenta
+
+fg_normal = "#@fg_normal"
+fg_dark = "#@fg_dark"
+bg_light = "#@bg_light"
+bg_dark = "#@bg_dark"
+bg_lighter = "#@bg_light"
+
+colfunction = "#@magenta"
+colstring = "#@cyan"
+coloperator = "#@blue"
+coltype = "#@yellow"
+colkeyword = "#@light_blue"
+colnumeric = "#@light_cyan"
+colspecial = "#@fg_dark"
+
+colerror = "#@yellow"
+colwarning = "#@yellow"
+colinfo = "#@green"
+
