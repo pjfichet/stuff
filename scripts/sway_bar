@@ -124,6 +124,8 @@ function getbluetooth
 	if test -n "$btdevice"
 		#set bluetooth " $btdevice"
 		set bluetooth " "
+	else
+		set bluetooth ""
 	end
 end
 
