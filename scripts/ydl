@@ -1,7 +1,6 @@
 #! /usr/bin/fish
 
-# video format (old default to 18)
-set format bv.3+ba.2
+set format bv.3+ba
 set ydl yt-dlp
 
 function usage
@@ -26,13 +25,12 @@ if test -n "$_flag_help"
 end
 
 if test -n "$_flag_format"
-	set format $_flag_format
-end
-
-if test -n "$_flag_lang"
-	set option "-f $format[language=$_flag_lang]"
-else
-	set option "-f $format"
+	set format (string escape "$_flag_format")
+	if test -n "$_flag_lang"
+		set option "-f $format""[language=$_flag_lang]"
+	else
+		set option "-f $format"
+	end
 end
 
 if test -n "$_flag_subs"
@@ -63,8 +61,8 @@ end
 
 
 cd /tmp/
-echo "yt-dlp $option"
-$ydl $option $url
-and if test -z "$_flag_series"
+echo yt-dlp $option
+eval $ydl $option (string escape "$url")
+and if test -z "$_flag_series" -a -z "$_flag_info"
 	mpv /tmp/($ydl $option -q -s --print '%(title)s.%(ext)s' "$url")
 end
