@@ -64,5 +64,5 @@ cd /tmp/
 echo yt-dlp $option
 eval $ydl $option (string escape "$url")
 and if test -z "$_flag_series" -a -z "$_flag_info"
-	mpv /tmp/($ydl $option -q -s --print '%(title)s.%(ext)s' "$url")
+	mpv /tmp/($ydl --print filename -o '%(title)s.%(ext)s' "$url" --restrict-filename)
 end
