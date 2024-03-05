@@ -1,0 +1,39 @@
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.bright]
+black = "#@fg_dark"
+blue = "#@light_blue"
+cyan = "#@light_cyan"
+green = "#@light_green"
+magenta = "#@light_magenta"
+red = "#@light_red"
+white = "#@fg_light"
+yellow = "#@light_yellow"
+
+[colors.normal]
+black = "#@bg_light"
+blue = "#@blue"
+cyan = "#@cyan"
+green = "#@green"
+magenta = "#@magenta"
+red = "#@red"
+white = "#@fg_dark"
+yellow = "#@yellow"
+
+[colors.primary]
+background = "#@bg_dark"
+bright_foreground = "#@fg_light"
+dim_foreground = "#@fg_dark"
+foreground = "#@fg_normal"
+
+[font]
+size = 16.0
+
+[font.normal]
+family = "Liberation Mono"
+style = "Regular"
+
+[font.offset]
+x = 0
+y = 4
