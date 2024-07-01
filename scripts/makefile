@@ -26,6 +26,9 @@ colorfiles: $(COLORIZE)
 help:
 	make install uninstall
 
+diff:
+	for f in $(FILES); do echo "### $$f"; diff $$f $(BINDIR)/$$f; done
+
 clean:
 	rm $(COLORIZE)
 
