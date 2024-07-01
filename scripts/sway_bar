@@ -26,7 +26,7 @@ function getbattery
 	for bat in $acpib
 		if not test "$charging" = " on-line"
 			if test $bat -lt 10
-				dunstify -u critical "Low battery: $bat%"
+				dunstify -u critical "Low battery."
 			end
 		end
 		if test $bat -lt 25
