@@ -1,0 +1,47 @@
+### Gnome configuration
+
+pacman -S gnome
+pacman -S gst-libav # gstreamer plugin for totem
+localectl set-x11-keymap fr # french keyboard on gdm
+vis /usr/share/wayland-sessions/fish.desktop
+	[Desktop Entry]
+	Name=Fish Sway
+	Comment=Fish configuration with Sway
+	Exec=/usr/bin/fish -l -C 'exec sway'
+	Type=Application
+# prevent suspend for ssh
+vis /etc/systemd/sleep.conf
+	[Sleep]
+	AllowSuspend=no
+	AllowHibernation=no
+	AllowSuspendThenHibernate=no
+	AllowHybridSleep=no
+# enable gnome
+systemctl enable gdm.service
+
+# network manager
+pacman -S networkmanager
+systemctl disable systemd-network.service
+systemctl disable iwd.service
+systemctl disable dhpcd.service
+systemctl enable NetworkManager.service
+
+# parental protection with network manager
+vis /etc/NetworkManager/NetworkManager.conf
+	# OpenDNS FamilyShield dns servers for parental control
+	[global-dns-domain-*]
+	servers=208.67.222.123,208.67.220.123
+
+### parental protection using systemd.resolved
+vis /etc/systemd/resolved.conf
+	[Resolve]
+	### OpenDNS FamilyShield parental control
+	### Be sure that /etc/resolve.conf uses them, by linking it to a stub
+	### $ cp /run/systemd/resolve/stub-resolve.conf /etc/resolv.conf
+	### and by preventing overwrites by network managers
+	### $ chattr +i /etc/resolv.conf
+	DNS=208.67.222.123
+	FallbackDNS=208.67.220.123
+	Domains=~.
+cp /run/systemd/resolve/stub-resolve.conf /etc/resolv.conf
+chattr +i /etc/resolv.conf

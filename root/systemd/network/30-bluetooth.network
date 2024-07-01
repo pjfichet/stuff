@@ -1,0 +1,6 @@
+[Match]
+Name=bnep0
+
+[Network]
+DHCP=yes
+IgnoreCarrierLoss=3s

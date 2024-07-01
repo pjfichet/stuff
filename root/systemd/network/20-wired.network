@@ -1,0 +1,11 @@
+[Match]
+Name=enp0s31f6
+
+[Network]
+DHCP=yes
+
+[DHCPv4]
+RouteMetric=100
+
+[IPv6AcceptRA]
+RouteMetric=100

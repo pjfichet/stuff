@@ -1,0 +1,74 @@
+install base linux linux-firmware
+install grub intel-ucode efibootmgr
+install btrfs-progs
+install vim
+
+vim /etc/default/grub --> remove "quiet"
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
+
+install iwd dhcpcd
+vim /etc/systemd/network/20-wired.network
+vim /etc/systemd/network/25-wireless.network
+vim /etc/systemd/network/30-bluetooth.network
+vim /etc/iwd/main.conf
+systemctl enable systemd-network.service
+systemctl enable systemd-resolved.service
+systemctl enable dhcpcd.service
+systemctl enable iwd.service
+
+install nftables
+vim /etc/nftables.conf
+systemctl enable nftables.service
+
+vim /etc/systemd/system/getty@tty1.service.d/noclear.conf
+[service]
+TTYVTDisallocate=no
+
+install acpi brightnessctl
+install alsa-utils
+systemctl enable systemd-timesyncd.service
+timedatectl set-ntp true
+
+# cpu frequency scaling with thermald
+install thermald
+systemctl enable thermald.service
+
+# secure ssd with Trim
+systemctl enable fstrim.timer
+
+#smartmontool
+install smartmontool
+vis /etc/smartd.conf
+vis /usr/share/smartmontools/smartd_warning.d/smartdnotify
+systemctl enable smartd.service
+
+# video acceleration
+install mesa mesa-utils intel-media-driver
+
+install plocate
+vim /etc/updatedb.conf
+systemctl enable plocate-updatedb.timer
+
+install vis
+install polkit sway swaybg swayidle swaylock alacritty dunst bemenu ttf-liberation otf-font-awesome grim wl-clipboard
+install base-devel
+install firefox ttf-dejavu xorg-xwayland fontforge ttf-linux-libertine mupdf mupdf-tools psutils gimp inkscape 
+install mpd mpv imv yt-dlp mencoder libdvdcss ffmpeg android-tools 
+install udisks2
+
+install dropbear dropbear-scp
+vim /usr/lib/systemd/system/dropbear.service
+-> -w to disallow root login
+
+# bluetooth
+install bluez bluez-utils
+modprobe btusb
+systemctl start bluetooth.service
+gpasswd -a pj lp
+gpasswd -a sj lp
+vis /etc/bluetooth/main.conf
+	# don't power on at boot
+	[Policy]
+	AutoEnable=false
+
