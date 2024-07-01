@@ -24,6 +24,11 @@ function getbattery
 		set battery "  "
 	end
 	for bat in $acpib
+		if not test "$charging" = " on-line"
+			if test $bat -lt 10
+				dunstify -u critical "Low battery: $bat%"
+			end
+		end
 		if test $bat -lt 25
 			set battery "$battery$bat% "
 		else if test $bat -lt 50
