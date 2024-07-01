@@ -1,5 +1,6 @@
 #! /usr/bin/fish
 
+# video format (old default to 18)
 set format bv.3+ba
 set ydl yt-dlp
 
@@ -26,11 +27,12 @@ end
 
 if test -n "$_flag_format"
 	set format (string escape "$_flag_format")
-	if test -n "$_flag_lang"
-		set option "-f $format""[language=$_flag_lang]"
-	else
-		set option "-f $format"
-	end
+end
+
+if test -n "$_flag_lang"
+	set option "-f $format""[language=$_flag_lang]"
+else
+	set option "-f $format"
 end
 
 if test -n "$_flag_subs"
@@ -63,6 +65,7 @@ end
 cd /tmp/
 echo yt-dlp $option
 eval $ydl $option (string escape "$url")
+set filename ($ydl --print filename -o '%(title)s.%(ext)s' "$url" --restrict-filename)
 and if test -z "$_flag_series" -a -z "$_flag_info"
-	mpv /tmp/($ydl --print filename -o '%(title)s.%(ext)s' "$url" --restrict-filename)
+	mpv /tmp/$filename
 end
