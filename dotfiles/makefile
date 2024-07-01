@@ -19,7 +19,7 @@ CONFDIR=fish/config.fish fish/completions/mpc.fish\
 	vdirsyncer/config \
 	vis/visrc.lua vis/themes/mine.lua \
 	vis/lexers/mail.lua vis/lexers/pacman.lua \
-	vis/lexers/tintin.lua vis/lexers/troff.lua \
+	vis/lexers/tintin.lua \
 	helix/config.toml helix/themes/my-theme.toml \
 	alacritty/alacritty.toml \
 	dunst/dunstrc \
