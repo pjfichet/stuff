@@ -43,14 +43,19 @@ function list_mod
 	begin
 		set date (date +%Y%m%d)
 		echo "### $argv[1] ($date)"
-		find $argv[1] -iname '*.bsa' \
-			| sed -e "s/^/fallback-archive=/g"
+		# we don't need tamriel data bsa files anymore.
+		#find $argv[1] -iname '*.bsa' \
+		#	| sed -e "s/^/fallback-archive=/g"
 		find $argv[1] -iname '*.esp' \
 			-o -iname '*.esm' \
 			-o -iname 'meshes' \
 			-o -iname 'textures' \
 			-o -iname 'music' \
 			-o -iname 'animations' \
+			-o -iname 'sound' \
+			-o -iname 'shaders' \
+			-o -iname 'splash' \
+			-o -iname 'fonts' \
 			-o -iname '*.omwaddon' \
 			-o -iname '*.omwscripts' \
 			| sed -e 's,^,#data=",g; s,/[^/]*$,",g'
@@ -87,14 +92,14 @@ if test -n "$_flag_extract"
 end
 
 if test -n "$_flag_examine"
-	if test -e $modpath/$argv[1]/$modlist.cfg
-		echo "$argv[1]/$modlist.cfg exists. Aborting."
-		exit
-	else
-		echo $argv[1] >> $modpath/$modlist.cfg
+	if test ! -e $modpath/$argv[1]/$modlist.cfg
 		list_mod $argv[1] > $modpath/$argv[1]/$modlist.cfg
-		vim $argv/$modlist.cfg
 	end
+	if not grep -q $argv[1] $modlist.cfg
+		echo $argv[1] >> $modpath/$modlist.cfg
+	end
+	vim $argv/$modlist.cfg
+	vim $modlist.cfg
 end
 
 if test -n "$_flag_install"
@@ -104,38 +109,19 @@ if test -n "$_flag_install"
 	end
 	echo "Replacing $HOME/.config/openmw-$modlist/openmw.cfg"
 	begin
-		echo "fallback-archive=Morrowind.bsa
-fallback-archive=Tribunal.bsa
-fallback-archive=Bloodmoon.bsa"
-
-		sed -e "/^#/d" $modpath/$modlist.cfg | while read -l dir
-			if test -e $modpath/$dir/$modlist.cfg
-				grep fallback-archive $modpath/$dir/$modlist.cfg
+		sed -e '/^#/d; /^$/d' $modpath/$modlist.cfg | while read -l dir
+			if test -e $modpath/$dir/openmw.cfg
+				cat $modpath/$dir/openmw.cfg
 			end
 		end
-
-		if test "$modlist" = "fr"
-			echo 'data="/home/pj/doc/mor/fr/app/Data Files"'
-		else
-			echo 'data="/home/pj/doc/mor/en/app/Data Files"'
-		end
-
-		echo "content=Morrowind.esm
-content=Tribunal.esm
-content=Bloodmoon.esm"
-
 		sed -e '/^#/d; /^$/d' $modpath/$modlist.cfg | while read -l dir
 			if test -e $modpath/$dir/$modlist.cfg
 				echo -e "\n### $dir"
 				sed -e "/^#/d; /fallback-archive=/d;
 					s,^data=\",data=\"$modpath/,;
-					s,content=.*/\([^/]*\),content=\1," \
+					s,content=.*/\([^/]*\),content=\1,;
+					s,groundcover=.*/\([^/]*\),groundcover=\1," \
 					$modpath/$dir/$modlist.cfg
-			end
-		end
-		sed -e "/^#/d" $modpath/$modlist.cfg | while read -l dir
-			if test -e $modpath/$dir/openmw.cfg
-				cat $modpath/$dir/openmw.cfg
 			end
 		end
 	end > $HOME/.config/openmw-$modlist/openmw.cfg
@@ -144,26 +130,59 @@ end
 
 if test -n "$_flag_clean"
 	set here (pwd)
-	cd $(HOME)/doc/mor/en/app/
+	cd $HOME/doc/mor/en/app/
 	$modbin/tes3cmd clean $modpath/$argv[1]
 	cd $here
 end	
 
 if test -n "$_flag_delta"
-	if test ! -d $modpath/delta
-		mkdir $modpath/delta
+	if test ! -d $modpath/DeltaPlugin
+		mkdir $modpath/DeltaPlugin
+	end
+	if test -e $modpath/DeltaPlugin/delta-$modlist.omwaddon
+		rm $modpath/DeltaPlugin/delta-$modlist.omwaddon
 	end
 	set -x RAYON_NUM_THREADS 1
-	nice ../scripts/delta_plugin -v -v merge --skip-cells $modpath/delta/$modlist-delta.omwaddon
+	nice $modbin/delta_plugin -v -v merge --skip-cells $modpath/DeltaPlugin/delta-$modlist.omwaddon
 	set -u RAYON_NUM_THREADS
-	if test ! -e $modpath/delta/$modlist.cfg
-		list_mod $argv[1] > $modpath/delta/$modlist.cfg
-		echo delta >> $modpath/$modlist.cfg
+	if test ! -e $modpath/DeltaPlugin/$modlist.cfg
+		list_mod $argv[1] > $modpath/DeltaPlugin/$modlist.cfg
+		echo DeltaPlugin >> $modpath/$modlist.cfg
 	end	
+	echo "Created $modpath/DeltaPlugin/delta-$modlist.omwaddon"
+
 	#echo "Creating delta/omwllf.omwaddon"
 	#rm -f delta/omwllf.omwaddon
 	#nice ../scripts/omwllf/omwllf.py -d $modpath/delta -m $modlist-omwllf.omwaddon
 end
+
+if test -n "$_flag_light"
+	if test ! -d $modpath/DeltaPlugin
+		mkdir $modpath/DeltaPlugin
+	end
+	if test -e $modpath/DeltaPlugin/LightFixes-$modlist.esp
+		rm  $modpath/DeltaPlugin/LightFixes-$modlist.esp
+	end
+	set OLDPATH $PATH
+	set -x PATH /home/pj/perl5/bin $PATH 2>/dev/null;
+	set -q PERL5LIB; and set -x PERL5LIB /home/pj/perl5/lib/perl5:$PERL5LIB;
+	set -q PERL5LIB; or set -x PERL5LIB /home/pj/perl5/lib/perl5;
+	set -q PERL_LOCAL_LIB_ROOT; and set -x PERL_LOCAL_LIB_ROOT /home/pj/perl5:$PERL_LOCAL_LIB_ROOT;
+	set -q PERL_LOCAL_LIB_ROOT; or set -x PERL_LOCAL_LIB_ROOT /home/pj/perl5;
+	set -x PERL_MB_OPT --install_base\ \"/home/pj/perl5\";
+	set -x PERL_MM_OPT INSTALL_BASE=/home/pj/perl5;
+
+	$modbin/waza_lightfixes.pl
+	mv LightFixes.esp $modpath/DeltaPlugin/LightFixes-$modlist.esp
+
+	set -x PATH $OLDPATH 2>/dev/null
+	set -u PERL5LIB
+	set -u PERL_LOACAL_LIB_ROOT
+	set -u PERL_MB-OPT
+	set -u PERL_MM_OPT
+end
+
+
 
 if test -n "$_flag_list"
 	if test ! -n "$argv[1]"
@@ -199,9 +218,10 @@ if test -n "$_flag_resize"
 		cat .resized
 		exit
 	else
+		# use `gm` or `magick`
 		magick mogrify -verbose -filter Mitchell -resize $percent *.dds
 		#magick mogrify -verbose -filter Mitchell -resize $percent -path lowdef *.dds
-		set date (date +%Y%m%d)
+		set date (date '+%Y%m%d %H:%M:%S')
 		echo "Resized by $percent on $date." > .resized
 	end
 end
