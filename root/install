@@ -72,3 +72,8 @@ vis /etc/bluetooth/main.conf
 	[Policy]
 	AutoEnable=false
 
+# cups
+install cups cups-pdf
+systemctl start cups.service
+lpadmin -p maison -E -v "ipp://192.168.1.42/ipp/print" -m everywhere
+lpoptions -d maison # set it as default
