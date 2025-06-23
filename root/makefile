@@ -6,7 +6,8 @@ ETCDIR=
 	systemd/network/25-wireless.network \
 	systemd/network/30-bluetooth.network \
 	systemd/system/getty@.service.d/noclear.conf \
-	updatedb.conf
+	updatedb.conf \
+	vconsole.conf
 
 
 
