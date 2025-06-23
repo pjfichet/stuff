@@ -110,7 +110,7 @@ function getlight
 end
 
 function getmpd
-	set mpd (mpc current -f "%album% - %track%")
+	set mpd (mpc current -f "%artist%: %title% - %track%")
 	if test -n "$mpd"
 		set mpd " $mpd   "
 	end
@@ -125,7 +125,7 @@ function getidle
 end
 
 function getbluetooth
-	set btdevice (bluetoothctl devices Connected | cut -f3 -d ' ')
+	set btdevice (bluetoothctl -- devices Connected | grep | Device | cut -f3 -d ' ')
 	if test -n "$btdevice"
 		#set bluetooth " $btdevice"
 		set bluetooth " "

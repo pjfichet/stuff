@@ -32,9 +32,9 @@ set device_mac
 set device_name
 
 function get_mac --argument-names device
-	for line in (bluetoothctl devices | grep -i "$device")
+	for line in (bluetoothctl -- devices | grep -i "$device")
 		set device_mac (echo $line | cut -d ' ' -f 2)
-		set device_name (echo $line | cut -d ' ' -f 3)
+		set device_name (echo $line | cut -d ' ' -f 3-)
 	end
 	if test -z "line"
 		echo "Unknown device $device. Aborting."
@@ -44,7 +44,7 @@ end
 
 if test -n "$_flag_list"
 	# print list of devices
-	bluetoothctl devices
+	bluetoothctl -- devices
 	exit
 end
 
